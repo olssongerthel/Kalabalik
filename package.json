@@ -1,0 +1,9 @@
+{
+  "name": "FDT-REST-API",
+  "version": "0.1.0",
+  "private": "true",
+  "dependencies": {
+    "express": "latest",
+    "mssql": "^2.1.5"
+  }
+}
