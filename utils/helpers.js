@@ -40,6 +40,7 @@ exports.filter = function(params) {
 
 exports.ListMetadata = function(req) {
   var metadata = {};
+  metadata.responseTime = new Date().getTime();
   metadata.totalCount = false;
   metadata.from = false;
   metadata.to = false;
@@ -82,4 +83,8 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
   return metadata;
 };
 
+exports.SingleMetadata = function(req) {
+  var metadata = {};
+  metadata.responseTime = new Date().getTime();
+  return metadata;
 };

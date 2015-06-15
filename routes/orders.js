@@ -33,10 +33,11 @@ exports.findAll = function(req, res) {
     // Fetch the requested orders
     var request = new db.sql.Request(connection);
     request.query(query).then(function(recordset) {
-      // Add pagination metadata
+      // Add metadata
       response._metadata = helpers.ListMetadata.buildPager(meta, req, recordset);
-      // Add the data
-      response.results = recordset;
+      response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+      // Add orders
+      response.response = recordset;
       // Send to the client
       res.send(response);
     }).catch(function(err) {
@@ -46,14 +47,21 @@ exports.findAll = function(req, res) {
 };
 
 exports.findById = function(req, res) {
+  var response = {};
   var orderId = req.params.id;
+  response._metadata = helpers.SingleMetadata();
 
   var getLineItems = function(order) {
     var connection = new db.sql.Connection(db.config, function(err) {
       var request = new db.sql.Request(connection);
       request.query('SELECT * FROM [dbo].[FaktK] WHERE [Ordernr] = ' + orderId, function(err, recordset) {
+        // Add the line items to the order
         order[0].OrderRader = recordset;
-        res.send(order);
+        // Add metadata to the response
+        response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+        // Add the order to the response
+        response.response = order;
+        res.send(response);
       });
     });
   };

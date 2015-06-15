@@ -32,26 +32,36 @@ exports.findAll = function(req, res) {
       console.log(err);
     });
     var request = new db.sql.Request(connection);
-    request.query(query, function(err, recordset) {
-      // Add pagination metadata
+    request.query(query).then(function(recordset) {
+      // Add metadata
       response._metadata = helpers.ListMetadata.buildPager(meta, req, recordset);
-      // Add the data
-      response.results = recordset;
+      response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+      // Add products
+      response.response = recordset;
       // Send to the client
       res.send(response);
+    }).catch(function(err) {
+      res.send(err);
     });
   });
 };
 
 exports.findBySKU = function(req, res) {
+  var response = {};
   var sku = req.params.sku;
+  response._metadata = helpers.SingleMetadata();
 
   var stockStatus = function(product) {
     var connection = new db.sql.Connection(db.config, function(err) {
       var request = new db.sql.Request(connection);
       request.query('SELECT * FROM LagerSaldo WHERE [ArtikelNr] = \'' + sku + '\'', function(err, recordset) {
-        product[0].lager = recordset;
-        res.send(product);
+        // Add the stock data to the product
+        product[0].lagerSaldo = recordset;
+        // Add metadata to the response
+        response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+        // Add the product to the response
+        response.response = product;
+        res.send(response);
       });
     });
   };
