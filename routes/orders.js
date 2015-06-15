@@ -51,10 +51,18 @@ exports.findById = function(req, res) {
   var orderId = req.params.id;
   response._metadata = helpers.SingleMetadata();
 
+  // Make sure we're getting an integet as order ID.
+  if (orderId % 1 !== 0) {
+    res.status(400).send({
+      status: 400,
+      message: "Please supply a valid order number."
+    });
+  }
+
   var getLineItems = function(order) {
     var connection = new db.sql.Connection(db.config, function(err) {
       var request = new db.sql.Request(connection);
-      request.query('SELECT * FROM [dbo].[FaktK] WHERE [Ordernr] = ' + orderId, function(err, recordset) {
+      request.query('SELECT * FROM FaktK WHERE [Ordernr] = ' + orderId, function(err, recordset) {
         // Add the line items to the order
         order[0].OrderRader = recordset;
         // Add metadata to the response
@@ -66,7 +74,7 @@ exports.findById = function(req, res) {
     });
   };
 
-  var query = 'SELECT * FROM [dbo].[FaktH] WHERE [Ordernr] =' + orderId + ';';
+  var query = 'SELECT * FROM FaktH WHERE [Ordernr] =' + orderId + ';';
   var connection = new db.sql.Connection(db.config, function(err) {
     var request = new db.sql.Request(connection);
     request.query(query).then(function(recordset) {
