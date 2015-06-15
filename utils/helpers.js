@@ -7,7 +7,9 @@ exports.filter = function(params) {
   var result = {};
   params.split('|').forEach(function(x){
     var arr = x.split('=');
-    arr[1] && (result[arr[0]] = arr[1]);
+    if (arr[1]) {
+      result[arr[0]] = arr[1];
+    }
   });
   params = result;
   filter.params = params;
@@ -63,7 +65,7 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
     totalResult: metadata.totalCount
   });
 
-  pageData = paginator.getPaginationData()
+  pageData = paginator.getPaginationData();
 
   metadata.from = pageData.fromResult;
   metadata.to = pageData.toResult;
@@ -78,6 +80,6 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
   };
 
   return metadata;
-}
+};
 
 };

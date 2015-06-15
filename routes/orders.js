@@ -33,8 +33,8 @@ exports.findAll = function(req, res) {
   // Connect to the database
   var connection = new db.sql.Connection(db.config, function(err) {
     // Perform a total row count
-    var request = new db.sql.Request(connection);
-    request.query(count).then(function(recordset) {
+    var countRequest = new db.sql.Request(connection);
+    countRequest.query(count).then(function(recordset) {
       // Add metadata
       meta.totalCount = recordset[0][''];
     }).catch(function(err) {
