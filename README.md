@@ -2,6 +2,13 @@ _Kalabalik_ is an **unofficial** REST API implementation for the Swedish ERP sys
 
 It currently supports GET on two entity types: products and orders.
 
+## Prerequisites
+
+- Node.js (to be able to run the REST server)
+- MS SQL access (to be able to get the data)
+
+Kalabalik only supports Avance using MS SQL as data storage.
+
 ## Installation instructions
 
 1. Download the [latest release](https://github.com/olssongerthel/Kalabalik/releases) or clone the repo.
