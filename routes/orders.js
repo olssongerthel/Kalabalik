@@ -51,7 +51,7 @@ exports.findById = function(req, res) {
   var orderId = req.params.id;
   response._metadata = helpers.SingleMetadata();
 
-  // Make sure we're getting an integet as order ID.
+  // Make sure we're getting an integer as order ID.
   if (orderId % 1 !== 0) {
     res.status(400).send({
       status: 400,
