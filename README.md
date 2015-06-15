@@ -14,8 +14,9 @@ Kalabalik only supports Avance using MS SQL as data storage.
 1. Download the [latest release](https://github.com/olssongerthel/Kalabalik/releases) or clone the repo.
 2. Unzip/Unpack and go to the folder
 3. Copy and rename settings.default.js: `cp config/settings.default.js settings.js` and add your database credentials to settings.js.
-4. Run Kalabalik `node server.js`
-5. Go check it out at `http://localhost:3000` in a browser of choice.
+4. Install dependencies: `npm install`
+5. Run Kalabalik: `node server.js`
+6. Go check it out at `http://localhost:3000` in a browser of choice.
 
 ## Filtering responses
 Kalabalik supports filtering on any database column using pipe delimited values.
