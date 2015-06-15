@@ -1,6 +1,6 @@
 var express = require('express'),
     settings = require('./config/settings'),
-    articles = require('./routes/articles'),
+    products = require('./routes/products'),
     orders = require('./routes/orders');
 
 var app = express();
@@ -38,8 +38,8 @@ var welcome = function(req, res) {
   }
 };
 
-app.get('/articles', articles.findAll);
-app.get('/articles/:sku', articles.findBySKU);
+app.get('/products', products.findAll);
+app.get('/products/:sku', products.findBySKU);
 app.get('/orders', orders.findAll);
 app.get('/orders/:id', orders.findById);
 app.get('', welcome);
