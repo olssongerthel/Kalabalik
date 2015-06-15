@@ -45,12 +45,23 @@ exports.findAll = function(req, res) {
 
 exports.findBySKU = function(req, res) {
   var sku = req.params.sku;
-  var query = 'SELECT * FROM Art WHERE [ArtikelNr] = \'' + sku + '\';';
+
+  var stockStatus = function(product) {
+    var connection = new db.sql.Connection(db.config, function(err) {
+      var request = new db.sql.Request(connection);
+      request.query('SELECT * FROM LagerSaldo WHERE [ArtikelNr] = \'' + sku + '\'', function(err, recordset) {
+        product[0].lager = recordset;
+        res.send(product);
+      });
+    });
+  };
+
+  var query = 'SELECT * FROM Art WHERE [ArtikelNr] = \'' + sku + '\'';
   var connection = new db.sql.Connection(db.config, function(err) {
     var request = new db.sql.Request(connection);
     request.query(query, function(err, recordset) {
       if (recordset.length > 0) {
-        res.send(recordset);
+        stockStatus(recordset);
       } else {
         res.status(404).send({
           status: 404,
