@@ -1,4 +1,5 @@
 var express = require('express'),
+    settings = require('./config/settings'),
     articles = require('./routes/articles'),
     orders = require('./routes/orders');
 
@@ -21,5 +22,5 @@ app.get('/orders', orders.findAll);
 app.get('/orders/:id', orders.findById);
 app.get('', welcome);
 
-app.listen(3000);
+app.listen(settings.port);
 console.log(welcome());

@@ -7,3 +7,4 @@ var config = {
 
 exports.sql = sql;
 exports.config = config;
+exports.port = 3000;
