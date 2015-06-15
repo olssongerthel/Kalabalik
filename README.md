@@ -4,7 +4,7 @@ It currently supports GET on two entity types: products and orders.
 
 ## Installation instructions
 
-1. Download the latest release/dev version or clone the repo.
+1. Download the [latest release](https://github.com/olssongerthel/Kalabalik/releases) or clone the repo.
 2. Unzip/Unpack and go to the folder
 3. Copy and rename settings.default.js: `cp config/settings.default.js settings.js` and add your database credentials to settings.js.
 4. Run Kalabalik `node server.js`
