@@ -9,7 +9,29 @@ var welcome = function(req, res) {
   var message = 'Kalabalik is up and running.';
   if (req) {
     res.send({
-      Message: message
+      message: message,
+      endPoints: [
+        {
+          name: 'Orders',
+          url: '/orders',
+          type: 'GET'
+        },
+        {
+          name: 'Order',
+          url: '/orders/ORDERID',
+          type: 'GET'
+        },
+        {
+          name: 'Products',
+          url: '/products',
+          type: 'GET'
+        },
+        {
+          name: 'Product',
+          url: '/products/SKU',
+          type: 'GET'
+        }
+      ]
     });
   } else {
     return message;
