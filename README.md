@@ -10,6 +10,17 @@ It currently supports GET on two entity types: products and orders.
 4. Run Kalabalik `node server.js`
 5. Go check it out at `http://localhost:3000` in a browser of choice.
 
+## Filtering responses
+Kalabalik supports filtering on any database column using pipe delimited values.
+
+Single filter:
+`/orders?filter=|Status=3`
+
+Multiple filters:
+`/orders?filter=|Status=3|Dellevererad=1`
+
+Use 1 or 0 for TRUE/FALSE when filtering.
+
 ## Project status
 
 Kalabalik is currently under development and is subject to change. Not safe for production use.
