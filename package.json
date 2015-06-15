@@ -4,6 +4,7 @@
   "private": "true",
   "dependencies": {
     "express": "latest",
-    "mssql": "^2.1.5"
+    "mssql": "^2.1.5",
+    "pagination": "^0.4.3"
   }
 }

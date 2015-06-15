@@ -2,15 +2,43 @@ var db = require('../config/settings'),
     helpers = require('../utils/helpers');
 
 exports.findAll = function(req, res) {
-  // Only grab the top 20 unless explicitly told otherwise.
-  var top = req.query.top ? req.query.top : 20;
-  // Build the query
-  var query = 'SELECT TOP ' + top + ' * FROM [dbo].[Art] ' + helpers.filter(req.query) + ';';
-  console.log(query);
+  var response = {};
+  var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
+  var meta = helpers.ListMetadata(req);
+  meta.filter = filter.params;
+  meta.perPage = 50;
+
+  // Build a paginated query
+  var query = 'SELECT * ' +
+              'FROM (' +
+                'SELECT ROW_NUMBER() OVER (ORDER BY RevideradDag DESC) AS RowNum, *' +
+                'FROM Art ' +
+                filter.string +
+                ') AS RowConstrainedResult' +
+              ' WHERE RowNum >' + meta.perPage * (meta.currentPage - 1) +
+                ' AND RowNum <= ' + meta.perPage * meta.currentPage +
+              ' ORDER BY RowNum';
+  // Build a count query
+  var count = 'SELECT COUNT(*) FROM Art ' + filter.string;
+
+  // Connect to the database
   var connection = new db.sql.Connection(db.config, function(err) {
+    // Perform a total row count
+    var request = new db.sql.Request(connection);
+    request.query(count).then(function(recordset) {
+      // Add metadata
+      meta.totalCount = recordset[0][''];
+    }).catch(function(err) {
+      console.log(err);
+    });
     var request = new db.sql.Request(connection);
     request.query(query, function(err, recordset) {
-      res.send(recordset);
+      // Add pagination metadata
+      response._metadata = helpers.ListMetadata.buildPager(meta, req, recordset);
+      // Add the data
+      response.results = recordset;
+      // Send to the client
+      res.send(response);
     });
   });
 };

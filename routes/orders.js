@@ -12,21 +12,48 @@ var getLineItems = function(orderId, order, res) {
 };
 
 exports.findAll = function(req, res) {
-  // Only grab the top 20 unless explicitly told otherwise.
-  var top = req.query.top ? req.query.top : 20;
-  // Build the query
-  var query = 'SELECT TOP ' + top + ' * FROM [dbo].[FaktH] ' + helpers.filter(req.query) + ';';
+  var response = {};
+  var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
+  var meta = helpers.ListMetadata(req);
+  meta.filter = filter.params;
+
+  // Build a paginated query
+  var query = 'SELECT * ' +
+              'FROM (' +
+                'SELECT ROW_NUMBER() OVER (ORDER BY Orderdatum DESC) AS RowNum, *' +
+                'FROM FaktH ' +
+                filter.string +
+                ') AS RowConstrainedResult' +
+              ' WHERE RowNum >' + meta.perPage * (meta.currentPage - 1) +
+                ' AND RowNum <= ' + meta.perPage * meta.currentPage +
+              ' ORDER BY RowNum';
+  // Build a count query
+  var count = 'SELECT COUNT(*) FROM FaktH ' + filter.string;
+
   // Connect to the database
   var connection = new db.sql.Connection(db.config, function(err) {
+    // Perform a total row count
+    var request = new db.sql.Request(connection);
+    request.query(count).then(function(recordset) {
+      // Add metadata
+      meta.totalCount = recordset[0][''];
+    }).catch(function(err) {
+      console.log(err);
+    });
+    // Fetch the requested orders
     var request = new db.sql.Request(connection);
     request.query(query).then(function(recordset) {
-      res.send(recordset);
+      // Add pagination metadata
+      response._metadata = helpers.ListMetadata.buildPager(meta, req, recordset);
+      // Add the data
+      response.results = recordset;
+      // Send to the client
+      res.send(response);
     }).catch(function(err) {
       res.send(err);
     });
   });
 };
-
 
 exports.findById = function(req, res) {
   var orderId = req.params.id;
@@ -47,7 +74,3 @@ exports.findById = function(req, res) {
     });
   });
 };
-
-// Statuses:
-// 3 = Plocka
-// 5 = Faktura
