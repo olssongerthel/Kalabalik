@@ -1,16 +1,6 @@
 var db = require('../config/settings'),
     helpers = require('../utils/helpers');
 
-var getLineItems = function(orderId, order, res) {
-  var connection = new db.sql.Connection(db.config, function(err) {
-    var request = new db.sql.Request(connection);
-    request.query('SELECT * FROM [dbo].[FaktK] WHERE [Ordernr] =' + orderId + ';', function(err, recordset) {
-      order[0].OrderRader = recordset;
-      res.send(order);
-    });
-  });
-};
-
 exports.findAll = function(req, res) {
   var response = {};
   var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
@@ -57,12 +47,23 @@ exports.findAll = function(req, res) {
 
 exports.findById = function(req, res) {
   var orderId = req.params.id;
+
+  var getLineItems = function(order) {
+    var connection = new db.sql.Connection(db.config, function(err) {
+      var request = new db.sql.Request(connection);
+      request.query('SELECT * FROM [dbo].[FaktK] WHERE [Ordernr] = ' + orderId, function(err, recordset) {
+        order[0].OrderRader = recordset;
+        res.send(order);
+      });
+    });
+  };
+
   var query = 'SELECT * FROM [dbo].[FaktH] WHERE [Ordernr] =' + orderId + ';';
   var connection = new db.sql.Connection(db.config, function(err) {
     var request = new db.sql.Request(connection);
     request.query(query).then(function(recordset) {
       if (recordset.length > 0) {
-        getLineItems(orderId, recordset, res);
+        getLineItems(recordset);
       } else {
         res.status(404).send({
           status: 404,
