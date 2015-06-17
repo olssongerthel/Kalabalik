@@ -64,11 +64,24 @@ exports.findById = function(req, res) {
       var request = new db.sql.Request(connection);
       request.query('SELECT * FROM FaktK WHERE [Ordernr] = ' + orderId, function(err, recordset) {
         // Add the line items to the order
-        order[0].OrderRader = recordset;
+        order.OrderRader = recordset;
+        getCustomer(order);
+      });
+    });
+  };
+
+  var getCustomer = function(order) {
+    var customerQuery = 'SELECT * FROM Kund WHERE [KundNr] = \'' + order.Kundnr + '\'';
+    var connection = new db.sql.Connection(db.config, function(err) {
+      var request = new db.sql.Request(connection);
+      request.query(customerQuery, function(err, recordset) {
+        // Add the customer data to the order
+        order.kund = recordset[0];
         // Add metadata to the response
         response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
         // Add the order to the response
         response.response = order;
+        // Send it to the client
         res.send(response);
       });
     });
@@ -79,7 +92,7 @@ exports.findById = function(req, res) {
     var request = new db.sql.Request(connection);
     request.query(query).then(function(recordset) {
       if (recordset.length > 0) {
-        getLineItems(recordset);
+        getLineItems(recordset[0]);
       } else {
         res.status(404).send({
           status: 404,
