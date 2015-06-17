@@ -76,7 +76,7 @@ exports.findById = function(req, res) {
       var request = new db.sql.Request(connection);
       request.query(customerQuery, function(err, recordset) {
         // Add the customer data to the order
-        order.kund = recordset[0];
+        order.Kund = recordset[0];
         // Add metadata to the response
         response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
         // Add the order to the response
