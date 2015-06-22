@@ -1,7 +1,8 @@
 var express = require('express'),
     settings = require('./config/settings'),
-    products = require('./routes/products'),
     orders = require('./routes/orders');
+    lineItems = require('./routes/line-items'),
+    products = require('./routes/products');
 
 var app = express();
 
@@ -22,6 +23,11 @@ var welcome = function(req, res) {
           type: 'GET'
         },
         {
+          name: 'Line items',
+          url: '/line-items',
+          type: 'GET'
+        },
+        {
           name: 'Products',
           url: '/products',
           type: 'GET'
@@ -38,10 +44,11 @@ var welcome = function(req, res) {
   }
 };
 
-app.get('/products', products.findAll);
-app.get('/products/:sku', products.findBySKU);
 app.get('/orders', orders.findAll);
 app.get('/orders/:id', orders.findById);
+app.get('/line-items', lineItems.findAll);
+app.get('/products', products.findAll);
+app.get('/products/:sku', products.findBySKU);
 app.get('', welcome);
 
 app.listen(settings.port);
