@@ -1,6 +1,6 @@
 _Kalabalik_ is an **unofficial** REST API implementation for the Swedish ERP system [FDT Avance](http://fdt.se/affarssystem/).
 
-It currently supports GET on two entity types: products and orders.
+It currently supports GET on three entity types: products (artiklar), orders (fakturor) and line items (fakturarader).
 
 ## Prerequisites
 
