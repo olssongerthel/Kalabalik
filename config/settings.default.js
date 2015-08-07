@@ -8,7 +8,7 @@ var config = {
 
 // Add a username and password to enable basic authentication
 var credentials = {
-  userName: '',
+  username: '',
   password: ''
 }
 
