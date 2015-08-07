@@ -1,7 +1,7 @@
 var express = require('express'),
     basicAuth = require('basic-auth-connect'),
     settings = require('./config/settings'),
-    orders = require('./routes/orders');
+    orders = require('./routes/orders'),
     lineItems = require('./routes/line-items'),
     products = require('./routes/products');
 
