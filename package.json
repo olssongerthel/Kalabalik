@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": "true",
   "dependencies": {
+    "basic-auth-connect": "^1.0.0",
     "express": "latest",
     "mssql": "^2.1.5",
     "pagination": "^0.4.3"

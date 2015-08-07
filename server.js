@@ -1,4 +1,5 @@
 var express = require('express'),
+    basicAuth = require('basic-auth-connect'),
     settings = require('./config/settings'),
     orders = require('./routes/orders');
     lineItems = require('./routes/line-items'),
@@ -43,6 +44,11 @@ var welcome = function(req, res) {
     return message;
   }
 };
+
+// Basic authenticator
+if (settings.credentials.username) {
+  app.use(basicAuth(settings.credentials.username, settings.credentials.password));
+}
 
 app.get('/orders', orders.findAll);
 app.get('/orders/:id', orders.findById);

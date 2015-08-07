@@ -18,6 +18,8 @@ Kalabalik only supports Avance using MS SQL as data storage.
 5. Run Kalabalik: `node server.js`
 6. Go check it out at `http://localhost:3000` in a browser of choice.
 
+**Optional**: Add username and password to settings.js to enable basic authentication. If you don’t want to use 3000 as port number you can change that as well in settings.js.
+
 ## Filtering responses
 Kalabalik supports filtering on any database column using pipe delimited values.
 
