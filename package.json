@@ -5,7 +5,7 @@
   "dependencies": {
     "basic-auth-connect": "^1.0.0",
     "express": "latest",
-    "mssql": "^2.1.5",
+    "mssql": "^2.2.0",
     "pagination": "^0.4.3"
   },
   "devDependencies": {
