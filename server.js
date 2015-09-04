@@ -3,6 +3,7 @@ var express = require('express'),
     settings = require('./config/settings'),
     orders = require('./routes/orders'),
     lineItems = require('./routes/line-items'),
+    customers = require('./routes/customers'),
     products = require('./routes/products'),
     stock = require('./routes/stock');
 
@@ -27,6 +28,11 @@ var welcome = function(req, res) {
         {
           name: 'Line items',
           url: '/line-items',
+          type: 'GET'
+        },
+        {
+          name: 'Customers',
+          url: '/customers',
           type: 'GET'
         },
         {
@@ -59,6 +65,7 @@ if (settings.credentials.username) {
 app.get('/orders', orders.findAll);
 app.get('/orders/:id', orders.findById);
 app.get('/line-items', lineItems.findAll);
+app.get('/customers', customers.findAll);
 app.get('/products', products.findAll);
 app.get('/products/:sku', products.findBySKU);
 app.get('/stock', stock.stock);
