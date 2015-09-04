@@ -85,3 +85,16 @@ exports.SingleMetadata = function(req) {
   metadata.responseTime = new Date().getTime();
   return metadata;
 };
+
+exports.PaginatedQuery = function(options) {
+  var query = 'SELECT * ' +
+              'FROM (' +
+                'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ' ASC) AS RowNum, *' +
+                'FROM ' + options.table + ' ' +
+                options.filter +
+                ') AS RowConstrainedResult' +
+              ' WHERE RowNum >' + options.meta.perPage * (options.meta.currentPage - 1) +
+                ' AND RowNum <= ' + options.meta.perPage * options.meta.currentPage +
+              ' ORDER BY RowNum';
+  return query;
+};

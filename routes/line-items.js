@@ -8,15 +8,13 @@ exports.findAll = function(req, res) {
   meta.filters = filter.params;
 
   // Build a paginated query
-  var query = 'SELECT * ' +
-              'FROM (' +
-                'SELECT ROW_NUMBER() OVER (ORDER BY Ordernr DESC) AS RowNum, *' +
-                'FROM FaktK ' +
-                filter.string +
-                ') AS RowConstrainedResult' +
-              ' WHERE RowNum >' + meta.perPage * (meta.currentPage - 1) +
-                ' AND RowNum <= ' + meta.perPage * meta.currentPage +
-              ' ORDER BY RowNum';
+  var query = helpers.PaginatedQuery({
+    table: 'FaktK',
+    orderBy: 'Ordernr',
+    filter: filter.string,
+    meta: meta
+  });
+
   // Build a count query
   var count = 'SELECT COUNT(*) FROM FaktK ' + filter.string;
 
