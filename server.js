@@ -5,7 +5,8 @@ var express = require('express'),
     lineItems = require('./routes/line-items'),
     customers = require('./routes/customers'),
     products = require('./routes/products'),
-    stock = require('./routes/stock');
+    stock = require('./routes/stock'),
+    suppliers = require('./routes/suppliers');
 
 var app = express();
 
@@ -50,6 +51,11 @@ var welcome = function(req, res) {
           name: 'Stock status',
           url: baseUrl + '/stock',
           type: 'GET'
+        },
+        {
+          name: 'Suppliers',
+          url: baseUrl + '/suppliers',
+          type: 'GET'
         }
       ]
     });
@@ -70,6 +76,7 @@ app.get('/customers', customers.findAll);
 app.get('/products', products.findAll);
 app.get('/products/:sku', products.findBySKU);
 app.get('/stock', stock.stock);
+app.get('/suppliers', suppliers.findAll);
 app.get('', welcome);
 
 app.listen(settings.port);

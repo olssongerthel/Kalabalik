@@ -19,7 +19,7 @@ exports.findAll = function(req, res) {
   var count = 'SELECT COUNT(*) FROM Art ' + filter.string;
 
   // Connect to the database
-  var connection = new db.sql.Connection(db.config, function(err) {
+  var connection = new db.sql.Connection(db.invoicing, function(err) {
     // Perform a total row count
     var countRequest = new db.sql.Request(connection);
     countRequest.query(count).then(function(recordset) {
@@ -49,7 +49,7 @@ exports.findBySKU = function(req, res) {
   response._metadata = helpers.SingleMetadata();
 
   var stockStatus = function(product) {
-    var connection = new db.sql.Connection(db.config, function(err) {
+    var connection = new db.sql.Connection(db.invoicing, function(err) {
       var request = new db.sql.Request(connection);
       request.query('SELECT * FROM LagerSaldo WHERE [ArtikelNr] = \'' + sku + '\'', function(err, recordset) {
         // Add the stock data to the product
@@ -64,7 +64,7 @@ exports.findBySKU = function(req, res) {
   };
 
   var query = 'SELECT * FROM Art WHERE [ArtikelNr] = \'' + sku + '\'';
-  var connection = new db.sql.Connection(db.config, function(err) {
+  var connection = new db.sql.Connection(db.invoicing, function(err) {
     var request = new db.sql.Request(connection);
     request.query(query, function(err, recordset) {
       if (recordset.length > 0) {

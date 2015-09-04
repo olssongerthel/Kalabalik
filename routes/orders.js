@@ -19,7 +19,7 @@ exports.findAll = function(req, res) {
   var count = 'SELECT COUNT(*) FROM FaktH ' + filter.string;
 
   // Connect to the database
-  var connection = new db.sql.Connection(db.config, function(err) {
+  var connection = new db.sql.Connection(db.invoicing, function(err) {
     // Perform a total row count
     var countRequest = new db.sql.Request(connection);
     countRequest.query(count).then(function(recordset) {
@@ -58,7 +58,7 @@ exports.findById = function(req, res) {
   }
 
   var getLineItems = function(order) {
-    var connection = new db.sql.Connection(db.config, function(err) {
+    var connection = new db.sql.Connection(db.invoicing, function(err) {
       var request = new db.sql.Request(connection);
       request.query('SELECT * FROM FaktK WHERE [Ordernr] = ' + orderId, function(err, recordset) {
         // Add the line items to the order
@@ -70,7 +70,7 @@ exports.findById = function(req, res) {
 
   var getCustomer = function(order) {
     var customerQuery = 'SELECT * FROM Kund WHERE [KundNr] = \'' + order.Kundnr + '\'';
-    var connection = new db.sql.Connection(db.config, function(err) {
+    var connection = new db.sql.Connection(db.invoicing, function(err) {
       var request = new db.sql.Request(connection);
       request.query(customerQuery, function(err, recordset) {
         // Add the customer data to the order
@@ -86,7 +86,7 @@ exports.findById = function(req, res) {
   };
 
   var query = 'SELECT * FROM FaktH WHERE [Ordernr] =' + orderId + ';';
-  var connection = new db.sql.Connection(db.config, function(err) {
+  var connection = new db.sql.Connection(db.invoicing, function(err) {
     var request = new db.sql.Request(connection);
     request.query(query).then(function(recordset) {
       if (recordset.length > 0) {

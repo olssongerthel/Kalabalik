@@ -9,17 +9,17 @@ exports.findAll = function(req, res) {
 
   // Build a paginated query
   var query = helpers.PaginatedQuery({
-    table: 'Kund',
-    orderBy: 'Namn',
+    table: 'Lev',
+    orderBy: 'LevNr',
     filter: filter.string,
     meta: meta
   });
 
   // Build a count query
-  var count = 'SELECT COUNT(*) FROM Kund ' + filter.string;
+  var count = 'SELECT COUNT(*) FROM Lev ' + filter.string;
 
   // Connect to the database
-  var connection = new db.sql.Connection(db.invoicing, function(err) {
+  var connection = new db.sql.Connection(db.supplier, function(err) {
     // Perform a total row count
     var countRequest = new db.sql.Request(connection);
     countRequest.query(count).then(function(recordset) {

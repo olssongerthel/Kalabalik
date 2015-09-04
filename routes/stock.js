@@ -19,7 +19,7 @@ exports.stock = function(req, res) {
   var count = 'SELECT COUNT(*) FROM LagerSaldo ' + filter.string;
 
   // Connect to the database
-  var connection = new db.sql.Connection(db.config, function(err) {
+  var connection = new db.sql.Connection(db.invoicing, function(err) {
     // Perform a total row count
     var countRequest = new db.sql.Request(connection);
     countRequest.query(count).then(function(recordset) {
