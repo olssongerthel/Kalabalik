@@ -50,6 +50,7 @@ exports.ListMetadata = function(req) {
 };
 
 exports.ListMetadata.buildPager = function(metadata, req, results) {
+  var baseUrl = req.protocol + '://' + req.get('host');
 
   if (!req.query.page) {
     req.query.page = 1;
@@ -70,11 +71,11 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
   metadata.lastPage = pageData.pageCount;
 
   metadata.links = {
-    self: pageData.current ? req.url.replace(/\page=[0-9]+/, 'page=' + pageData.current) : false,
-    first: pageData.first ? req.url.replace(/\page=[0-9]+/, 'page=' + pageData.first) : req.url.replace(/\page=[0-9]+/, 'page=' + 1),
-    previous: pageData.previous ? req.url.replace(/\page=[0-9]+/, 'page=' + pageData.previous) : false,
-    next: pageData.next ? req.url.replace(/\page=[0-9]+/, 'page=' + pageData.next) : false,
-    last: pageData.pageCount ? req.url.replace(/\page=[0-9]+/, 'page=' + pageData.pageCount) : false,
+    self: pageData.current ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.current) : false,
+    first: pageData.first ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.first) : baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + 1),
+    previous: pageData.previous ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.previous) : false,
+    next: pageData.next ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.next) : false,
+    last: pageData.pageCount ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.pageCount) : false,
   };
 
   return metadata;

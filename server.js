@@ -12,42 +12,43 @@ var app = express();
 var welcome = function(req, res) {
   var message = 'Kalabalik is up and running.';
   if (req) {
+    var baseUrl = req.protocol + '://' + req.get('host');
     res.send({
       message: message,
       endPoints: [
         {
           name: 'Orders',
-          url: '/orders',
+          url: baseUrl + '/orders',
           type: 'GET'
         },
         {
           name: 'Order',
-          url: '/orders/ORDERID',
+          url: baseUrl + '/orders/ORDERID',
           type: 'GET'
         },
         {
           name: 'Line items',
-          url: '/line-items',
+          url: baseUrl + '/line-items',
           type: 'GET'
         },
         {
           name: 'Customers',
-          url: '/customers',
+          url: baseUrl + '/customers',
           type: 'GET'
         },
         {
           name: 'Products',
-          url: '/products',
+          url: baseUrl + '/products',
           type: 'GET'
         },
         {
           name: 'Product',
-          url: '/products/SKU',
+          url: baseUrl + '/products/SKU',
           type: 'GET'
         },
         {
           name: 'Stock status',
-          url: '/stock',
+          url: baseUrl + '/stock',
           type: 'GET'
         }
       ]
