@@ -21,15 +21,25 @@ Kalabalik only supports Avance using MS SQL as data storage.
 **Optional**: Add username and password to settings.js to enable basic authentication. If you don’t want to use 3000 as port number you can change that as well in settings.js.
 
 ## Filtering responses
-Kalabalik supports filtering on any database column using pipe delimited values.
+Kalabalik supports filtering on any database column using pipe delimited values. It supports standard SQL operators such as `=`, `>`, `<` etc.
 
-Single filter:
-`/orders?filter=|Status=3`
+Example 1: Single filter
+`/orders?filter=Status=3`
 
-Multiple filters:
-`/orders?filter=|Status=3|Dellevererad=1`
+Example 2: Multiple filters
+`/orders?filter=Status=3|Dellevererad=1|`
 
-Use 1 or 0 for TRUE/FALSE when filtering.
+Example 3: Filter on on orders from a certain date
+`/orders?filter=Orderdatum>"2015-09-04T00:00:00.000Z"`
+
+Use 1 or 0 for TRUE/FALSE when filtering. Use quotes for strings.
+
+## Controlling the pages and results
+
+There are two available parameters related to results:
+
+`PerPage` can be set to any integer below 10.000. Default is 25.
+`page` is the actual page number. This value is available in the metadata on each list result.
 
 ## Project status
 

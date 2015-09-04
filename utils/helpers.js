@@ -4,18 +4,16 @@ exports.filter = function(params) {
   var filter = {};
 
   // Turn the pipe delimited filter into an object for easier processing.
-  var result = {};
+  var result = [];
+
   params.split('|').forEach(function(x){
-    var arr = x.split('=');
-    if (arr[1]) {
-      result[arr[0]] = arr[1];
-    }
+    result.push(x);
   });
   params = result;
   filter.params = params;
 
-  // Bail if there are no queries
-  if (Object.keys(params).length === 0) {
+  // Bail if there are no filters
+  if (params.length === 0) {
     return;
   }
 
@@ -23,12 +21,11 @@ exports.filter = function(params) {
   var amount = Object.keys(params).length;
   var index = 0;
 
-  // Build a valid SQL query from the parameters
-  for (var key in params) {
+  for (var i = 0; i < result.length; i++) {
     index++;
-    filter.string = filter.string + key + "=" + params[key];
+    filter.string = filter.string + result[i];
     if (amount > 1 && index < amount) {
-      filter.string = filter.string + ' and ';
+      filter.string = filter.string + ' AND ';
     }
   }
 
