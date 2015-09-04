@@ -45,7 +45,7 @@ exports.ListMetadata = function(req) {
   metadata.lastPage = false;
   metadata.perPage = (req.query.perPage <= 10000) ? parseInt(req.query.perPage) : 25;
   metadata.links = {};
-  metadata.filter = false;
+  metadata.filters = false;
   return metadata;
 };
 
