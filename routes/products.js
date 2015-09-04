@@ -6,7 +6,6 @@ exports.findAll = function(req, res) {
   var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
   var meta = helpers.ListMetadata(req);
   meta.filter = filter.params;
-  meta.perPage = 50;
 
   // Build a paginated query
   var query = 'SELECT * ' +
