@@ -1,4 +1,11 @@
-var pagination = require('pagination');
+var pagination = require('pagination'),
+    winston = require('winston');
+
+winston.add(winston.transports.File, { filename: 'logs/kalabalik.log' });
+
+exports.log = function(data) {
+  winston.log(data.type, data.msg, data.meta);
+};
 
 exports.filter = function(params) {
   var filter = {};

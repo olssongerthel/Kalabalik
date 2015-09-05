@@ -6,7 +6,8 @@
     "basic-auth-connect": "^1.0.0",
     "express": "latest",
     "mssql": "^2.2.0",
-    "pagination": "^0.4.3"
+    "pagination": "^0.4.3",
+    "winston": "^1.0.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
