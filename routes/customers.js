@@ -10,7 +10,7 @@ exports.findAll = function(req, res) {
   // Build a paginated query
   var query = helpers.PaginatedQuery({
     table: 'Kund',
-    orderBy: 'Namn',
+    orderBy: 'Namn ASC',
     filter: filter.string,
     meta: meta
   });

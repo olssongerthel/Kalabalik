@@ -21,7 +21,7 @@ exports.stock = function(req, res) {
   // Build a paginated query
   var query = helpers.PaginatedQuery({
     table: 'LagerSaldo',
-    orderBy: 'Rörelsedatum',
+    orderBy: 'Rörelsedatum DESC',
     filter: filter.string,
     meta: meta
   });

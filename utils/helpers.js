@@ -97,7 +97,7 @@ exports.SingleMetadata = function(req) {
 exports.PaginatedQuery = function(options) {
   var query = 'SELECT * ' +
               'FROM (' +
-                'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ' ASC) AS RowNum, *' +
+                'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ') AS RowNum, *' +
                 'FROM ' + options.table + ' ' +
                 options.filter +
                 ') AS RowConstrainedResult' +

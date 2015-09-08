@@ -21,7 +21,7 @@ exports.findAll = function(req, res) {
   // Build a paginated query
   var query = helpers.PaginatedQuery({
     table: 'FaktH',
-    orderBy: 'Orderdatum',
+    orderBy: 'Orderdatum DESC',
     filter: filter.string,
     meta: meta
   });
