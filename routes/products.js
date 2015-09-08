@@ -2,6 +2,17 @@ var db = require('../config/settings'),
     helpers = require('../utils/helpers');
 
 exports.findAll = function(req, res) {
+
+  // Log the request
+  helpers.log({
+    type: 'info',
+    msg: 'Request for products.',
+    meta: {
+      ip: req.ip,
+      query: req.query
+    }
+  });
+
   var response = {};
   var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
   var meta = helpers.ListMetadata(req);
@@ -44,6 +55,17 @@ exports.findAll = function(req, res) {
 };
 
 exports.findBySKU = function(req, res) {
+
+  // Log the request
+  helpers.log({
+    type: 'info',
+    msg: 'Request for single product.',
+    meta: {
+      ip: req.ip,
+      query: req.query
+    }
+  });
+
   var response = {};
   var sku = req.params.sku;
   response._metadata = helpers.SingleMetadata();

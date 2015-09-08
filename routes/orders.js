@@ -2,6 +2,17 @@ var db = require('../config/settings'),
     helpers = require('../utils/helpers');
 
 exports.findAll = function(req, res) {
+
+  // Log the request
+  helpers.log({
+    type: 'info',
+    msg: 'Request for orders',
+    meta: {
+      ip: req.ip,
+      query: req.query
+    }
+  });
+
   var response = {};
   var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
   var meta = helpers.ListMetadata(req);
@@ -26,7 +37,16 @@ exports.findAll = function(req, res) {
       // Add metadata
       meta.totalCount = recordset[0][''];
     }).catch(function(err) {
-      console.log(err);
+      // Log the error
+      helpers.log({
+        type: 'error',
+        msg: 'Error when requesting orders: ' + err,
+        meta: {
+          ip: req.ip,
+          query: req.query
+        }
+      });
+      res.send(err);
     });
     // Fetch the requested orders
     var request = new db.sql.Request(connection);
@@ -39,12 +59,32 @@ exports.findAll = function(req, res) {
       // Send to the client
       res.send(response);
     }).catch(function(err) {
+      // Log the error
+      helpers.log({
+        type: 'error',
+        msg: 'Error when requesting orders: ' + err,
+        meta: {
+          ip: req.ip,
+          query: req.query
+        }
+      });
       res.send(err);
     });
   });
 };
 
 exports.findById = function(req, res) {
+
+  // Log the request
+  helpers.log({
+    type: 'info',
+    msg: 'Request for single order.',
+    meta: {
+      ip: req.ip,
+      query: req.query
+    }
+  });
+
   var response = {};
   var orderId = req.params.id;
   response._metadata = helpers.SingleMetadata();
@@ -98,6 +138,15 @@ exports.findById = function(req, res) {
         });
       }
     }).catch(function(err) {
+      // Log the error
+      helpers.log({
+        type: 'error',
+        msg: 'Error when requesting orders: ' + err,
+        meta: {
+          ip: req.ip,
+          query: req.query
+        }
+      });
       res.send(err);
     });
   });

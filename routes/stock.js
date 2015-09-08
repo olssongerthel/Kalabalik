@@ -2,6 +2,17 @@ var db = require('../config/settings'),
     helpers = require('../utils/helpers');
 
 exports.stock = function(req, res) {
+
+  // Log the request
+  helpers.log({
+    type: 'info',
+    msg: 'Request for stock data.',
+    meta: {
+      ip: req.ip,
+      query: req.query
+    }
+  });
+
   var response = {};
   var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
   var meta = helpers.ListMetadata(req);
