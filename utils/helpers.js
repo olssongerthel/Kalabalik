@@ -61,7 +61,7 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
 
   if (!req.query.page) {
     req.query.page = 1;
-    req.url = req.query.filter ? req.url + '&page=1' : req.url + '?page=1';
+    req.url = (req.query.filter || req.query.perPage || req.query.orderBy) ? req.url + '&page=1' : req.url + '?page=1';
   }
 
   var paginator = pagination.create('search', {
