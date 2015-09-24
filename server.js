@@ -25,7 +25,7 @@ var welcome = function(req, res) {
         },
         {
           name: 'Order',
-          url: baseUrl + '/orders/ORDERID',
+          url: baseUrl + '/orders/ORDER-ID',
           type: 'GET'
         },
         {
