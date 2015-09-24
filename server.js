@@ -6,7 +6,8 @@ var express = require('express'),
     customers = require('./routes/customers'),
     products = require('./routes/products'),
     stock = require('./routes/stock'),
-    suppliers = require('./routes/suppliers');
+    suppliers = require('./routes/suppliers'),
+    purchaseOrders = require('./routes/purchase-orders');
 
 var app = express();
 
@@ -56,6 +57,16 @@ var welcome = function(req, res) {
           name: 'Suppliers',
           url: baseUrl + '/suppliers',
           type: 'GET'
+        },
+        {
+          name: 'Purchase orders',
+          url: baseUrl + '/purchase-orders',
+          type: 'GET'
+        },
+        {
+          name: 'Purchase order',
+          url: baseUrl + '/purchase-orders/ORDER-ID',
+          type: 'GET'
         }
       ]
     });
@@ -77,6 +88,8 @@ app.get('/products', products.findAll);
 app.get('/products/:sku', products.findBySKU);
 app.get('/stock', stock.stock);
 app.get('/suppliers', suppliers.findAll);
+app.get('/purchase-orders', purchaseOrders.findAll);
+app.get('/purchase-orders/:id', purchaseOrders.findById);
 app.get('', welcome);
 
 app.listen(settings.port);
