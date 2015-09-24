@@ -115,7 +115,6 @@ exports.findById = function(req, res) {
       request.query(supplierQuery, function(err, recordset) {
         // Add the supplier data to the order
         order.Leverantör = recordset[0];
-        console.log(recordset);
         // Add metadata to the response
         response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
         // Add the order to the response
