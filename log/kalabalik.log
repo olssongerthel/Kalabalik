@@ -1,0 +1,313 @@
+{"ip":"::1","level":"info","message":"Request for orders","timestamp":"2015-09-05T10:12:37.080Z"}
+{"ip":"::1","level":"info","message":"Request for orders","timestamp":"2015-09-05T10:12:39.997Z"}
+{"ip":"::1","params":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:13:36.180Z"}
+{"ip":"::1","params":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:13:37.588Z"}
+{"ip":"::1","params":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:13:42.045Z"}
+{"ip":"::1","params":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:13:54.676Z"}
+{"ip":"::1","params":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:14:01.547Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:14:23.408Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:14:27.249Z"}
+{"ip":"::1","query":{"filter":"|Er_referens=\"Molly\"|"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:14:33.929Z"}
+{"ip":"::1","query":{"filter":"Er_referens=\"Molly\""},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:14:40.018Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:14:51.137Z"}
+{"ip":"::1","query":{"filter":"Ändrad=2"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:15:01.822Z"}
+{"ip":"::1","query":{"filter":"Ändrad=2","page":"1"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:15:14.168Z"}
+{"ip":"::1","query":{"filter":"Ändrad=2","page":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:15:20.077Z"}
+{"ip":"::1","query":{"filter":"Ändrad=2","page":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:16:41.244Z"}
+{"ip":"::1","query":{"filter":"Ändrad=dsads","page":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:16:46.720Z"}
+{"ip":"::1","query":{"filter":"Ändrad=dsads","page":"10"},"level":"error","message":"Error when requesting orders: RequestError: Invalid column name 'dsads'.","timestamp":"2015-09-05T10:16:47.611Z"}
+{"ip":"::1","query":{"filter":"Ändrad=dsads","page":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:19:32.876Z"}
+{"ip":"::1","query":{"filter":"Ändrad=dsads","page":"10"},"level":"error","message":"Error when requesting orders: RequestError: Invalid column name 'dsads'.","timestamp":"2015-09-05T10:19:33.917Z"}
+{"ip":"::1","query":{"filter":"Ändrad=dsads","page":"10"},"level":"error","message":"Error when requesting orders: RequestError: Invalid column name 'dsads'.","timestamp":"2015-09-05T10:19:34.121Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1","page":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:19:38.992Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:19:45.504Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?perPage=2"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:19:55.527Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?perPage=2"},"level":"error","message":"Error when requesting orders: RequestError: Incorrect syntax near '?'.","timestamp":"2015-09-05T10:19:56.543Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?perPage=2"},"level":"error","message":"Error when requesting orders: RequestError: Incorrect syntax near '?'.","timestamp":"2015-09-05T10:19:56.692Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1","perPage":"2"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T10:20:01.872Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T12:01:26.740Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1","perPage":"2"},"level":"info","message":"Request for orders","timestamp":"2015-09-05T12:12:40.002Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1","perPage":"2","page":1},"level":"error","message":"Error when requesting orders: Error: Invalid value for \"totalResult\", expected an integer","timestamp":"2015-09-05T12:12:41.908Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T12:12:52.192Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:14:16.370Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:14:48.210Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:14:49.602Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:14:50.680Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:15:16.776Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:15:17.520Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:15:19.756Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:16:46.401Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:16:47.028Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:16:47.540Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:17:09.698Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-05T12:17:13.971Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-05T15:23:18.152Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-05T15:23:20.714Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-05T15:23:25.565Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-05T15:23:28.659Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"error","message":"Error when requesting orders: RequestError: Invalid column name 'ORDERID'.","timestamp":"2015-09-05T15:23:29.600Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-05T15:23:37.523Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-06T09:44:03.471Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-06T09:44:05.569Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-06T09:44:08.321Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-06T09:44:11.497Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-06T09:44:14.408Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-06T09:44:16.620Z"}
+{"ip":"::ffff:192.168.0.10","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-06T09:44:28.130Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:08.589Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:08.973Z"}
+{"ip":"::1","query":{"page":"2"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:12.178Z"}
+{"ip":"::1","query":{"page":"3"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:13.637Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:16.624Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:21.089Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?page=2"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:24.678Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?page=2"},"level":"error","message":"Error when requesting orders: RequestError: Incorrect syntax near '?'.","timestamp":"2015-09-08T08:07:24.757Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?page=2"},"level":"error","message":"Error when requesting orders: RequestError: Incorrect syntax near '?'.","timestamp":"2015-09-08T08:07:24.772Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?page=2"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:07:59.221Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?page=2"},"level":"error","message":"Error when requesting orders: RequestError: Incorrect syntax near '?'.","timestamp":"2015-09-08T08:07:59.569Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1?page=2"},"level":"error","message":"Error when requesting orders: RequestError: Incorrect syntax near '?'.","timestamp":"2015-09-08T08:07:59.583Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:08:02.021Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:08:21.258Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:08:39.196Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:09:12.228Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:09:49.710Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1","page":"2"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:09:53.598Z"}
+{"ip":"::1","query":{"filter":"Ändrad=1","page":"3"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:09:55.165Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:09:58.310Z"}
+{"ip":"::1","query":{"page":"2"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:00.752Z"}
+{"ip":"::1","query":{"page":"3"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:02.199Z"}
+{"ip":"::1","query":{"page":"3","perPage":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:08.799Z"}
+{"ip":"::1","query":{"page":"1","perPage":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:15.757Z"}
+{"ip":"::1","query":{"page":"2","perPage":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:23.213Z"}
+{"ip":"::1","query":{"page":"3","perPage":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:30.460Z"}
+{"ip":"::1","query":{"page":"4","perPage":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:32.285Z"}
+{"ip":"::1","query":{"page":"5","perPage":"10"},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:10:33.434Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for stock data.","timestamp":"2015-09-08T08:12:08.425Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-08T08:12:12.715Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: RequestError: Invalid column name 'ORDERID'.","timestamp":"2015-09-08T08:12:13.817Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:12:14.622Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for Kund.","timestamp":"2015-09-08T08:12:16.944Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for products.","timestamp":"2015-09-08T08:12:20.528Z"}
+{"ip":"::1","query":{"page":"617"},"level":"info","message":"Request for products.","timestamp":"2015-09-08T08:12:22.769Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for suppliers.","timestamp":"2015-09-08T08:12:28.779Z"}
+{"ip":"::1","query":{"page":"46"},"level":"info","message":"Request for suppliers.","timestamp":"2015-09-08T08:12:35.505Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for stock data.","timestamp":"2015-09-08T08:16:14.111Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for products.","timestamp":"2015-09-08T08:18:46.737Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for products.","timestamp":"2015-09-08T08:18:56.211Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:19:54.719Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-08T08:21:38.490Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-08T08:21:40.823Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for line items.","timestamp":"2015-09-08T08:21:56.417Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for stock data.","timestamp":"2015-09-08T08:32:02.090Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:32:08.915Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:32:10.803Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-08T08:32:11.811Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for stock data.","timestamp":"2015-09-08T13:52:47.678Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-21T09:44:32.763Z"}
+{"ip":"::1","query":{"page":"1"},"level":"info","message":"Request for orders","timestamp":"2015-09-21T09:45:29.714Z"}
+{"ip":"::1","query":{"page":"5"},"level":"info","message":"Request for orders","timestamp":"2015-09-21T09:45:32.208Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-21T10:04:00.950Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-21T10:04:12.051Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: RequestError: Conversion failed when converting the nvarchar value '$MALL$' to data type int.","timestamp":"2015-09-21T10:04:12.575Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-21T10:04:14.459Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: RequestError: Conversion failed when converting the nvarchar value '$MALL$' to data type int.","timestamp":"2015-09-21T10:04:14.597Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-24T20:09:06.796Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: RequestError: Invalid object name 'FaktH'.","timestamp":"2015-09-24T20:09:07.153Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: RequestError: Invalid object name 'FaktH'.","timestamp":"2015-09-24T20:09:07.179Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-24T20:09:36.466Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-24T20:10:02.996Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:11:35.381Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: RequestError: Invalid column name 'Ordernr'.","timestamp":"2015-09-24T20:11:35.902Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:12:08.696Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:12:52.845Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:13:40.945Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:13:43.993Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:13:46.178Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:14:44.730Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:15:09.707Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:15:47.732Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:15:56.370Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:16:21.905Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:17:43.969Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:17:45.737Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:17:47.542Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:17:49.567Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-24T20:17:56.616Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-24T20:17:59.692Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:18:10.997Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-24T20:23:14.017Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-24T20:23:19.139Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-24T20:23:23.876Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-24T20:23:24.023Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: ConnectionError: Connection is closed.","timestamp":"2015-09-24T20:23:26.310Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting orders: ConnectionError: Connection is closed.","timestamp":"2015-09-24T20:23:26.310Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-24T20:23:27.582Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-24T20:23:31.849Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for orders","timestamp":"2015-09-24T20:23:33.654Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:23:38.528Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:23:40.805Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single order.","timestamp":"2015-09-24T20:23:42.528Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-24T20:27:26.141Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting a purchase order: RequestError: Incorrect syntax near the keyword 'ORDER'.","timestamp":"2015-09-24T20:27:26.696Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-24T20:42:36.097Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-24T21:00:43.969Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-24T21:03:07.232Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-24T21:03:58.249Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when updating purchase order: RequestError: Incorrect syntax near 'Extra_1'.","timestamp":"2015-09-24T21:28:31.115Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"error","message":"Error when updating purchase order: ReferenceError: findById is not defined","timestamp":"2015-09-24T21:33:28.855Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"error","message":"Error when updating purchase order: ReferenceError: findById is not defined","timestamp":"2015-09-24T21:33:32.022Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"error","message":"Error when updating purchase order: ReferenceError: findById is not defined","timestamp":"2015-09-24T21:33:48.932Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-24T21:33:56.082Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:03:58.200Z"}
+{"ip":"::1","query":{"filter":"Extra_1=1"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:04:23.699Z"}
+{"ip":"::1","query":{"filter":"Extra_1=1"},"level":"error","message":"Error when requesting purchase orders: RequestError: Conversion failed when converting the nvarchar value 'Ordermail skickat' to data type int.","timestamp":"2015-09-25T10:04:24.133Z"}
+{"ip":"::1","query":{"filter":"Extra_1=1"},"level":"error","message":"Error when requesting purchase orders: RequestError: Conversion failed when converting the nvarchar value 'Ordermail skickat' to data type int.","timestamp":"2015-09-25T10:04:24.209Z"}
+{"ip":"::1","query":{"filter":"Extra_1=\"1\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:04:48.232Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:04:55.217Z"}
+{"ip":"::1","query":{"filter":"Extra_1=\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:05:09.666Z"}
+{"ip":"::1","query":{"filter":"Extra_1!=\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:05:16.189Z"}
+{"ip":"::1","query":{"filter":"Extra_1!=\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:07:43.094Z"}
+{"ip":"::1","query":{"filter":"Extra_1>\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:07:58.806Z"}
+{"ip":"::1","query":{"filter":"Extra_1=\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:08:10.592Z"}
+{"ip":"::1","query":{"filter":"Extra_1=\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:08:29.326Z"}
+{"ip":"::1","query":{"filter":"Extra_1>\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:08:35.907Z"}
+{"ip":"::1","query":{"filter":"Extra_1!=\"Ordermail skickat\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:08:43.434Z"}
+{"ip":"::1","query":{"filter":"Extra_1<0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:11:51.454Z"}
+{"ip":"::1","query":{"filter":"Extra_1<0"},"level":"error","message":"Error when requesting purchase orders: RequestError: Conversion failed when converting the nvarchar value 'Ordermail skickat' to data type int.","timestamp":"2015-09-25T10:11:51.897Z"}
+{"ip":"::1","query":{"filter":"Extra_1<0"},"level":"error","message":"Error when requesting purchase orders: RequestError: Conversion failed when converting the nvarchar value 'Ordermail skickat' to data type int.","timestamp":"2015-09-25T10:11:51.976Z"}
+{"ip":"::1","query":{"filter":"Extra_1<\"ds\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:11:57.347Z"}
+{"ip":"::1","query":{"filter":"Extra_1<null"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:12:06.485Z"}
+{"ip":"::1","query":{"filter":"Extra_1>null"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:12:12.531Z"}
+{"ip":"::1","query":{"filter":"Extra_1=null"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:12:16.715Z"}
+{"ip":"::1","query":{"filter":"Extra_1=\"\""},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:12:21.607Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:12:31.907Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:12:47.889Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:13:29.757Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:14:12.004Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3=false"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:16:46.134Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3=false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:16:46.455Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3=false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:16:46.503Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3=false"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:17:18.516Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3=false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:17:18.753Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3=false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:17:18.799Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3 = false"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:17:38.145Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3 = false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:17:39.679Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|Utskrivet_3 = false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:17:39.890Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status=3|InköpsNr=2004"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:17:57.505Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:18:19.079Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|"},"level":"error","message":"Error when requesting purchase orders: RequestError: Incorrect syntax near 'AND'.","timestamp":"2015-09-25T10:18:19.384Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|"},"level":"error","message":"Error when requesting purchase orders: RequestError: Incorrect syntax near ')'.","timestamp":"2015-09-25T10:18:19.430Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:18:23.007Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 = false"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:18:36.205Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 = false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:18:36.464Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 = false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-25T10:18:36.509Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 IS false"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:18:44.010Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 IS false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Incorrect syntax near 'false'.","timestamp":"2015-09-25T10:18:44.249Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 IS false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Incorrect syntax near 'false'.","timestamp":"2015-09-25T10:18:44.295Z"}
+{"ip":"::1","query":{"filter":"Extra_1%20IS%20null|Status%20=%203|Utskrivet_3%20IS%null"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:18:48.469Z"}
+{"ip":"::1","query":{"filter":"Extra_1%20IS%20null|Status%20=%203|Utskrivet_3%20IS%null"},"level":"error","message":"Error when requesting purchase orders: RequestError: Incorrect syntax near '%'.","timestamp":"2015-09-25T10:18:48.719Z"}
+{"ip":"::1","query":{"filter":"Extra_1%20IS%20null|Status%20=%203|Utskrivet_3%20IS%null"},"level":"error","message":"Error when requesting purchase orders: RequestError: Incorrect syntax near '%'.","timestamp":"2015-09-25T10:18:48.765Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:18:52.151Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 IS null"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:19:00.365Z"}
+{"ip":"::1","query":{"filter":"Extra_1 IS null|Status = 3|Utskrivet_3 = 0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-25T10:19:17.561Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T20:10:00.313Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting a purchase order: RequestError: Incorrect syntax near the keyword 'ORDER'.","timestamp":"2015-09-28T20:10:02.118Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T20:12:18.126Z"}
+{"ip":"::1","query":{},"level":"error","message":"Error when requesting a purchase order: RequestError: Incorrect syntax near the keyword 'ORDER'.","timestamp":"2015-09-28T20:12:19.512Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:26:50.070Z"}
+{"ip":"::1","query":{"filter":"Status=3"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:27:10.581Z"}
+{"ip":"::1","query":{"filter":"Status=4"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:27:14.406Z"}
+{"ip":"::1","query":{"filter":"Status=2"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:27:17.473Z"}
+{"ip":"::1","query":{"filter":"Status=3"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:28:30.196Z"}
+{"ip":"::1","query":{"filter":"Status=3"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:28:44.399Z"}
+{"ip":"::1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:29:30.261Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:32:57.859Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:33:13.473Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:33:33.474Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:34:07.440Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:38:17.558Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:38:55.982Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T20:39:48.656Z"}
+{"ip":"::1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T20:40:13.136Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:43:44.172Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:44:30.349Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:44:42.128Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:45:18.282Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T20:46:46.713Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T20:46:47.170Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:14:27.173Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:14:27.648Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:15:07.483Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:15:07.870Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:15:24.780Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:15:25.155Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:15:49.599Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:15:50.764Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:16:52.094Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:16:53.059Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:17:16.738Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:17:17.874Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:17:49.559Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:17:50.530Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:18:14.260Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:18:15.204Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:19:38.785Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:19:39.220Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:20:00.845Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:20:01.695Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:22:15.194Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:22:16.169Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:23:35.512Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:23:36.525Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:30:54.261Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:30:55.239Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:31:14.962Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:31:15.691Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:33:49.802Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:33:50.220Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:34:34.652Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:34:35.033Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:35:12.677Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:35:13.701Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:56:17.504Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:56:18.003Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:56:47.317Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:56:48.250Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T21:59:02.275Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T21:59:03.678Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:00:01.596Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T22:00:02.210Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:00:27.392Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T22:00:27.993Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:01:20.073Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T22:01:20.499Z"}
+{"ip":"::1","query":{"filter":"Status=3|Utskrivet_3=false"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:01:49.554Z"}
+{"ip":"::1","query":{"filter":"Status=3|Utskrivet_3=false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-28T22:01:49.903Z"}
+{"ip":"::1","query":{"filter":"Status=3|Utskrivet_3=false"},"level":"error","message":"Error when requesting purchase orders: RequestError: Invalid column name 'false'.","timestamp":"2015-09-28T22:01:49.962Z"}
+{"ip":"::1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:01:53.223Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:02:14.706Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T22:02:15.096Z"}
+{"ip":"::1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:02:39.918Z"}
+{"ip":"::1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:03:07.858Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:03:32.897Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:03:44.708Z"}
+{"ip":"::1","query":{"filter":"Status=3","Utskrivet_3":"0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:04:09.798Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:04:33.298Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:05:17.510Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:05:37.361Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:06:11.865Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:06:28.944Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:07:03.245Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:07:29.613Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:09:45.746Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:10:00.746Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:10:15.746Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:10:30.753Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T22:10:31.161Z"}
+{"ip":"::ffff:127.0.0.1","query":{},"level":"info","message":"Request for single purchase order.","timestamp":"2015-09-28T22:10:31.162Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:10:45.758Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:11:00.765Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:11:15.770Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:11:30.777Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:11:45.779Z"}
+{"ip":"::ffff:127.0.0.1","query":{"filter":"Status=3|Utskrivet_3=0"},"level":"info","message":"Request for purchase orders","timestamp":"2015-09-28T22:12:00.782Z"}
