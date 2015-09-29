@@ -151,3 +151,53 @@ exports.findById = function(req, res) {
     });
   });
 };
+
+exports.update = function(req, res) {
+
+  var data = req.body;
+  var orderId = req.params.id;
+  var set = 'SET ';
+  var amount = Object.keys(data).length;
+  var index = 0;
+
+  for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+      index++;
+      var value = (typeof data[key] == 'string') ? '\'' + data[key] + '\'' : data[key];
+      set = set + key + " = " + value;
+      if (amount > 1 && index < amount) {
+        set = set + ', ';
+      }
+    }
+  };
+
+  var query = 'UPDATE InkH ' +
+              set + ' ' +
+              'WHERE InköpsNr = ' + orderId;
+
+  var connection = new db.sql.Connection(db.supplier, function(err) {
+    var request = new db.sql.Request(connection);
+    request.query(query).then(function(recordset) {
+      res.send('Successfully updated purchase order ' + orderId);
+      helpers.log({
+        type: 'info',
+        msg: 'Successfully updated purchase order: ' + orderId,
+        meta: {
+          ip: req.ip,
+          query: req.query
+        }
+      });
+    }).catch(function(err) {
+      // Log the error
+      helpers.log({
+        type: 'error',
+        msg: 'Error when updating purchase order: ' + err,
+        meta: {
+          ip: req.ip,
+          query: req.query
+        }
+      });
+      res.send(err);
+    });
+  });
+};
