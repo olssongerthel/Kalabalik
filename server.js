@@ -1,7 +1,7 @@
 var express = require('express'),
     basicAuth = require('basic-auth-connect'),
     bodyParser = require('body-parser'),
-    settings = require('./config/settings'),
+    settings = require('./config/config'),
     orders = require('./routes/orders'),
     lineItems = require('./routes/line-items'),
     customers = require('./routes/customers'),

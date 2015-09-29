@@ -1,4 +1,4 @@
-var db = require('../config/settings'),
+var db = require('../config/config'),
     helpers = require('../utils/helpers');
 
 exports.stock = function(req, res) {
