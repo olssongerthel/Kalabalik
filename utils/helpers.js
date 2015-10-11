@@ -1,4 +1,5 @@
-var pagination = require('pagination'),
+var db = require('../config/config'),
+    pagination = require('pagination'),
     winston = require('winston');
 
 winston.add(winston.transports.File, { filename: 'log/kalabalik.log' });
@@ -6,7 +7,12 @@ winston.add(winston.transports.File, { filename: 'log/kalabalik.log' });
 exports.log = function(data) {
   winston.log(data.type, data.msg, data.meta);
 };
-
+/**
+ * Produces a valid SQL filter string based on URL params.
+ * @param  {string}   params - A Kalabalik URL filter string.
+ * @return {object}   An object containing the filter string and information
+ * about it.
+ */
 exports.filter = function(params) {
   var filter = {};
 
@@ -88,13 +94,14 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
   return metadata;
 };
 
-exports.SingleMetadata = function(req) {
+exports.SingleMetadata = function() {
   var metadata = {};
   metadata.responseTime = new Date().getTime();
   return metadata;
 };
 
 exports.PaginatedQuery = function(options) {
+  options.filter = options.filter ? options.filter : '';
   var query = 'SELECT * ' +
               'FROM (' +
                 'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ') AS RowNum, *' +
@@ -105,4 +112,200 @@ exports.PaginatedQuery = function(options) {
                 ' AND RowNum <= ' + options.meta.perPage * options.meta.currentPage +
               ' ORDER BY RowNum';
   return query;
+};
+
+/**
+ * Callback for createIndex.
+ *
+ * @callback createIndexCallback
+ * @param {string} err - An error message, if any.
+ * @param {object} index - The complete index including metadata.
+ */
+
+/**
+ * Performs a paginated data request on a given database table.
+ * @param  {object}   options
+ * @param  {string}   options.endpoint - The name of the endpoint, i.e 'Orders'
+ * @param  {string}   options.db - The database to use. Use the same
+ * variables that are used in the config file.
+ * @param  {string}   options.table - The table to query.
+ * @param  {string}   options.orderBy - The column and direction to order by as
+ * a valid SQL string, i.e. 'Orderdatum DESC' or 'ArtikelNr ASC'.
+ * @param  {object}   options.request - An Express req object.
+ * 'WHERE ArtikelNr = "123"' or equivalent. Use the filter() helper.
+ * @param  {createIndexCallback} callback
+ */
+exports.createIndex = function(options, callback) {
+
+  var index = {};
+  var filter = options.request.query.filter ? exports.filter(options.request.query.filter) : '';
+  var meta = exports.ListMetadata(options.request);
+  meta.filters = filter.params;
+
+  console.log(filter);
+
+  // Log the request
+  exports.log({
+    type: 'info',
+    msg: 'Request for ' + options.endpoint,
+    meta: {
+      ip: options.request.ip,
+      query: options.request.query
+    }
+  });
+
+  // Perform a count request in order to get the total
+  // amount of results.
+  exports.countQuery({
+    db: options.db,
+    table: options.table,
+    where: filter.string,
+  }, function(err, recordset) {
+    if (!err) {
+      // Add the count request results to the metadata.
+      meta.totalCount = recordset[0][''];
+      paginatedReq();
+    } else {
+      callback(err, index);
+    }
+  });
+
+  // Create a paginated query string
+  var query = exports.PaginatedQuery({
+    table: options.table,
+    orderBy: options.orderBy,
+    filter: filter.string,
+    meta: meta
+  });
+
+  // Perform the paginated request
+  var paginatedReq = function() {
+    exports.dbRequest({
+      db: options.db,
+      query: query
+    }, function(err, recordset) {
+      if (!err) {
+        httpBody(recordset);
+      } else {
+        callback(err, index);
+      }
+    });
+  };
+
+  // Combine everything in one index object and return it
+  var httpBody = function(data) {
+    // Add metadata
+    index._metadata = exports.ListMetadata.buildPager(meta, options.request, data);
+    index._metadata.responseTime = new Date().getTime() - index._metadata.responseTime + ' ms';
+    // Add the data to the index.
+    index.response = data;
+    var err = null;
+    callback(err, index);
+  };
+
+};
+
+/**
+ * Callback for dbRequest.
+ *
+ * @callback dbRequestCallback
+ * @param {String} err - An error message, if any.
+ * @param {Object} recordset - The data returned by the query.
+ */
+
+/**
+ * Performs a paginated data request on a given database table.
+ * @param  {Object}   options
+ * @param  {String}   options.db - The database to use. Use the same
+ * variables that are used in the config file.
+ * @param  {String}   options.query - The complete paginated db query.
+ * @param  {dbRequestCallback} callback
+ */
+exports.dbRequest = function(options, callback) {
+
+  switch(options.db) {
+    case 'supplier':
+      cred = db.supplier;
+      break;
+    case 'invoicing':
+      cred = db.invoicing;
+      break;
+  }
+
+  // Connect to the database
+  var connection = new db.sql.Connection(cred, function(err) {
+    // Fetch the requested data
+    var request = new db.sql.Request(connection);
+    request.query(options.query).then(function(recordset) {
+      var err = null;
+      // Send to the client
+      callback(err, recordset);
+    }).catch(function(err) {
+      // Log the error
+      exports.log({
+        type: 'error',
+        msg: 'Error when requesting data: ' + err,
+        meta: {
+          query: options.query
+        }
+      });
+      callback(err, recordset);
+    });
+  });
+};
+
+/**
+ * Callback for countQuery.
+ *
+ * @callback countCallback
+ * @param {String} err - An error message, if any.
+ * @param {Object} recordset - The data returned by the query.
+ */
+
+/**
+ * Performs a count on a given database table.
+ * @param  {Object}   options
+ * @param  {String}   options.db - The database to use. Use the same
+ * variables that are used in the config file.
+ * @param  {String}   options.table - The database table to query.
+ * @param  {String}   [options.filter] - A possible 'WHERE' clause.
+ * @param  {countCallback} callback
+ */
+exports.countQuery = function(options, callback) {
+
+  var query = 'SELECT COUNT(*) FROM ' + options.table;
+
+  // Add the 'WHERE' clause to the query if it's there.
+  query = options.where ? query + ' ' + options.where : query;
+
+  switch(options.db) {
+    case 'supplier':
+      cred = db.supplier;
+      break;
+    case 'invoicing':
+      cred = db.invoicing;
+      break;
+  }
+
+  // Connect to the database
+  var connection = new db.sql.Connection(cred, function(err) {
+    // Perform a total row count in order to create a paginated result.
+    var countRequest = new db.sql.Request(connection);
+    countRequest.query(query).then(function(recordset) {
+      var err = null;
+      callback(err, recordset);
+    }).catch(function(err) {
+      // Log the error
+      exports.log({
+        type: 'error',
+        msg: 'Error when counting: ' + err,
+        meta: {
+          error: err,
+          query: query
+        }
+      });
+      recordset = null;
+      callback(err, recordset);
+    });
+  });
 };

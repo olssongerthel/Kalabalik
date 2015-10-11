@@ -84,16 +84,16 @@ var welcome = function(req, res) {
   }
 };
 
-app.get('/orders', orders.findAll);
+app.get('/orders', orders.index);
 app.get('/orders/:id', orders.findById);
-app.get('/line-items', lineItems.findAll);
-app.get('/customers', customers.findAll);
+app.get('/line-items', lineItems.index);
+app.get('/customers', customers.index);
 app.get('/customers/:id', customers.findById);
-app.get('/products', products.findAll);
+app.get('/products', products.index);
 app.get('/products/:sku', products.findBySKU);
 app.get('/stock', stock.stock);
-app.get('/suppliers', suppliers.findAll);
-app.get('/purchase-orders', purchaseOrders.findAll);
+app.get('/suppliers', suppliers.index);
+app.get('/purchase-orders', purchaseOrders.index);
 app.route('/purchase-orders/:id')
   .get(purchaseOrders.findById)
   .put(purchaseOrders.update);

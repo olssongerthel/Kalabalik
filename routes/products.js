@@ -1,57 +1,22 @@
 var db = require('../config/config'),
     helpers = require('../utils/helpers');
 
-exports.findAll = function(req, res) {
+exports.index = function(req, res) {
 
-  // Log the request
-  helpers.log({
-    type: 'info',
-    msg: 'Request for products.',
-    meta: {
-      ip: req.ip,
-      query: req.query
+  helpers.createIndex({
+    endpoint: 'Products',
+    db: 'invoicing',
+    table: 'Art',
+    orderBy: 'RevideradDag DESC',
+    request: req
+  }, function(err, index){
+    if (!err) {
+      res.send(index);
+    } else {
+      res.send(err.message);
     }
   });
 
-  var response = {};
-  var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
-  var meta = helpers.ListMetadata(req);
-  meta.filters = filter.params;
-
-  // Build a paginated query
-  var query = helpers.PaginatedQuery({
-    table: 'Art',
-    orderBy: 'RevideradDag DESC',
-    filter: filter.string,
-    meta: meta
-  });
-
-  // Build a count query
-  var count = 'SELECT COUNT(*) FROM Art ' + filter.string;
-
-  // Connect to the database
-  var connection = new db.sql.Connection(db.invoicing, function(err) {
-    // Perform a total row count
-    var countRequest = new db.sql.Request(connection);
-    countRequest.query(count).then(function(recordset) {
-      // Add metadata
-      meta.totalCount = recordset[0][''];
-    }).catch(function(err) {
-      console.log(err);
-    });
-    var request = new db.sql.Request(connection);
-    request.query(query).then(function(recordset) {
-      // Add metadata
-      response._metadata = helpers.ListMetadata.buildPager(meta, req, recordset);
-      response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-      // Add products
-      response.response = recordset;
-      // Send to the client
-      res.send(response);
-    }).catch(function(err) {
-      res.send(err);
-    });
-  });
 };
 
 exports.findBySKU = function(req, res) {

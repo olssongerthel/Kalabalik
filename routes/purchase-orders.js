@@ -1,76 +1,22 @@
 var db = require('../config/config'),
     helpers = require('../utils/helpers');
 
-exports.findAll = function(req, res) {
+exports.index = function(req, res) {
 
-  // Log the request
-  helpers.log({
-    type: 'info',
-    msg: 'Request for purchase orders',
-    meta: {
-      ip: req.ip,
-      query: req.query
+  helpers.createIndex({
+    endpoint: 'Purchase orders',
+    db: 'supplier',
+    table: 'InkH',
+    orderBy: 'Orderdatum DESC',
+    request: req
+  }, function(err, index){
+    if (!err) {
+      res.send(index);
+    } else {
+      res.send(err.message);
     }
   });
 
-  var response = {};
-  var filter = req.query.filter ? helpers.filter(req.query.filter) : '';
-  var meta = helpers.ListMetadata(req);
-  meta.filters = filter.params;
-
-  // Build a paginated query
-  var query = helpers.PaginatedQuery({
-    table: 'InkH',
-    orderBy: 'Orderdatum DESC',
-    filter: filter.string,
-    meta: meta
-  });
-
-  // Build a count query
-  var count = 'SELECT COUNT(*) FROM InkH ' + filter.string;
-
-  // Connect to the database
-  var connection = new db.sql.Connection(db.supplier, function(err) {
-    // Perform a total row count
-    var countRequest = new db.sql.Request(connection);
-    countRequest.query(count).then(function(recordset) {
-      // Add metadata
-      meta.totalCount = recordset[0][''];
-    }).catch(function(err) {
-      // Log the error
-      helpers.log({
-        type: 'error',
-        msg: 'Error when requesting purchase orders: ' + err,
-        meta: {
-          ip: req.ip,
-          query: req.query
-        }
-      });
-      res.send(err);
-    });
-    // Fetch the requested orders
-    var request = new db.sql.Request(connection);
-    request.query(query).then(function(recordset) {
-      // Add metadata
-      response._metadata = helpers.ListMetadata.buildPager(meta, req, recordset);
-      response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-      // Add orders
-      response.response = recordset;
-      // Send to the client
-      res.send(response);
-    }).catch(function(err) {
-      // Log the error
-      helpers.log({
-        type: 'error',
-        msg: 'Error when requesting purchase orders: ' + err,
-        meta: {
-          ip: req.ip,
-          query: req.query
-        }
-      });
-      res.send(err);
-    });
-  });
 };
 
 exports.findById = function(req, res) {
@@ -169,7 +115,7 @@ exports.update = function(req, res) {
         set = set + ', ';
       }
     }
-  };
+  }
 
   var query = 'UPDATE InkH ' +
               set + ' ' +
@@ -184,7 +130,7 @@ exports.update = function(req, res) {
         msg: 'Successfully updated purchase order: ' + orderId,
         meta: {
           ip: req.ip,
-          query: req.query
+          query: query
         }
       });
     }).catch(function(err) {
@@ -194,10 +140,13 @@ exports.update = function(req, res) {
         msg: 'Error when updating purchase order: ' + err,
         meta: {
           ip: req.ip,
-          query: req.query
+          query: query
         }
       });
-      res.send(err);
+
+      res.status(400).send({
+        message: err
+      });
     });
   });
 };
