@@ -91,7 +91,7 @@ app.get('/customers', customers.index);
 app.get('/customers/:id', customers.findById);
 app.get('/products', products.index);
 app.get('/products/:sku', products.findBySKU);
-app.get('/stock', stock.stock);
+app.get('/stock', stock.index);
 app.get('/suppliers', suppliers.index);
 app.get('/purchase-orders', purchaseOrders.index);
 app.route('/purchase-orders/:id')
