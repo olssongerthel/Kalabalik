@@ -7,6 +7,7 @@ winston.add(winston.transports.File, { filename: 'log/kalabalik.log' });
 exports.log = function(data) {
   winston.log(data.type, data.msg, data.meta);
 };
+
 /**
  * Produces a valid SQL filter string based on URL params.
  * @param  {string}   params - A Kalabalik URL filter string.
@@ -180,7 +181,7 @@ exports.createIndex = function(options, callback) {
 
   // Perform the paginated request
   var paginatedReq = function() {
-    exports.dbRequest({
+    exports.indexRequest({
       db: options.db,
       query: query
     }, function(err, recordset) {
@@ -206,7 +207,7 @@ exports.createIndex = function(options, callback) {
 };
 
 /**
- * Callback for dbRequest.
+ * Callback for indexRequest.
  *
  * @callback dbRequestCallback
  * @param {String} err - An error message, if any.
@@ -221,7 +222,7 @@ exports.createIndex = function(options, callback) {
  * @param  {String}   options.query - The complete paginated db query.
  * @param  {dbRequestCallback} callback
  */
-exports.dbRequest = function(options, callback) {
+exports.indexRequest = function(options, callback) {
 
   switch(options.db) {
     case 'supplier':
