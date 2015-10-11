@@ -48,6 +48,11 @@ var welcome = function(req, res) {
           type: 'GET'
         },
         {
+          name: 'Customer',
+          url: baseUrl + '/customers/CUSTOMER-ID',
+          type: 'GET'
+        },
+        {
           name: 'Products',
           url: baseUrl + '/products',
           type: 'GET'
