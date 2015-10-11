@@ -1,5 +1,4 @@
-var db = require('../config/config'),
-    helpers = require('../utils/helpers');
+var helpers = require('../utils/helpers');
 
 exports.index = function(req, res) {
 

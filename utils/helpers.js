@@ -126,7 +126,7 @@ exports.PaginatedQuery = function(options) {
 /**
  * Performs a paginated data request on a given database table.
  * @param  {object}   options
- * @param  {string}   options.endpoint - The name of the endpoint, i.e 'Orders'
+ * @param  {string}   options.entity - The name of the entity, i.e 'Orders'
  * @param  {string}   options.db - The database to use. Use the same
  * variables that are used in the config file.
  * @param  {string}   options.table - The table to query.
@@ -143,12 +143,10 @@ exports.createIndex = function(options, callback) {
   var meta = exports.ListMetadata(options.request);
   meta.filters = filter.params;
 
-  console.log(filter);
-
   // Log the request
   exports.log({
     type: 'info',
-    msg: 'Request for ' + options.endpoint,
+    msg: 'Request for ' + options.entity,
     meta: {
       ip: options.request.ip,
       query: options.request.query
@@ -209,7 +207,7 @@ exports.createIndex = function(options, callback) {
 /**
  * Callback for indexRequest.
  *
- * @callback dbRequestCallback
+ * @callback indexRequestCallback
  * @param {String} err - An error message, if any.
  * @param {Object} recordset - The data returned by the query.
  */
@@ -220,18 +218,11 @@ exports.createIndex = function(options, callback) {
  * @param  {String}   options.db - The database to use. Use the same
  * variables that are used in the config file.
  * @param  {String}   options.query - The complete paginated db query.
- * @param  {dbRequestCallback} callback
+ * @param  {indexRequestCallback} callback
  */
 exports.indexRequest = function(options, callback) {
 
-  switch(options.db) {
-    case 'supplier':
-      cred = db.supplier;
-      break;
-    case 'invoicing':
-      cred = db.invoicing;
-      break;
-  }
+  var cred = exports.credentials(options.db);
 
   // Connect to the database
   var connection = new db.sql.Connection(cred, function(err) {
@@ -275,25 +266,15 @@ exports.indexRequest = function(options, callback) {
 exports.countQuery = function(options, callback) {
 
   var query = 'SELECT COUNT(*) FROM ' + options.table;
-
   // Add the 'WHERE' clause to the query if it's there.
   query = options.where ? query + ' ' + options.where : query;
-
-  switch(options.db) {
-    case 'supplier':
-      cred = db.supplier;
-      break;
-    case 'invoicing':
-      cred = db.invoicing;
-      break;
-  }
+  var cred = exports.credentials(options.db);
 
   // Connect to the database
   var connection = new db.sql.Connection(cred, function(err) {
     // Perform a total row count in order to create a paginated result.
     var countRequest = new db.sql.Request(connection);
     countRequest.query(query).then(function(recordset) {
-      var err = null;
       callback(err, recordset);
     }).catch(function(err) {
       // Log the error
@@ -309,4 +290,189 @@ exports.countQuery = function(options, callback) {
       callback(err, recordset);
     });
   });
+};
+
+/**
+ * Callback for entityQuery.
+ *
+ * @callback entityQueryCallback
+ * @param {string} err - An error message, if any.
+ * @param {object} entity - The entity returned by the query, including any
+ * attached content.
+ */
+
+/**
+ * Performs a database query to extract a single entity such as an order.
+ * @param  {object}   options
+ * @param  {object}   options.entity - The name of the requested entity
+ * type i.e. "Order" or "Customer" etc.
+ * @param  {string}   options.db - The database to use. Use the same
+ * variables that are used in the config file.
+ * @param  {string}   options.table - The database table to query.
+ * @param  {string}   options.baseProperty - The DB column that contains the
+ * key value of the table row.
+ * @param  {string/number}   options.id - The entity ID (KundNr or Ordernr etc.)
+ * @param  {object}   options.request - An Express req object.
+ * @param  {entityQueryCallback} callback
+ */
+exports.entityQuery = function(options, callback) {
+
+  var response = {};
+  response._metadata = exports.SingleMetadata();
+
+  // Log the request
+  exports.log({
+    type: 'info',
+    msg: 'Request for single ' + options.entity,
+    meta: {
+      ip: options.request.ip,
+      query: options.request.query
+    }
+  });
+
+  var cred = exports.credentials(options.db);
+  var id = exports.purger(options.baseProperty, options.id);
+  var query = 'SELECT * FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id + ';';
+
+  // Connect to the database
+  var connection = new db.sql.Connection(cred, function(err) {
+    var request = new db.sql.Request(connection);
+    request.query(query).then(function(recordset) {
+      // Fetch additonal data if requested.
+      if (options.attach.length && recordset.length > 0) {
+        exports.attach(recordset[0], options.attach, function(entity){
+          response.response = entity;
+          response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+          callback(err, response);
+        });
+      } else {
+        response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+        response,response = recordset[0];
+        callback(err, response);
+      }
+
+    }).catch(function(err) {
+      // Log the error
+      exports.log({
+        type: 'error',
+        msg: 'Error when fetching single entity: ' + err,
+        meta: {
+          error: err,
+          query: query
+        }
+      });
+      recordset = null;
+      callback(err, recordset);
+    });
+  });
+
+};
+
+/**
+ * Given an entity, such as an order or a customer, fetches additional data
+ * and returns the entity with the additional data attached.
+ * @param  {object}         entity - The base entity.
+ * @param  {Array<Object>}  objects
+ * @param  {string}         objects[*].db - The database to query.
+ * @param  {string}         objects[*].table - The table to query.
+ * @param  {string}         objects[*].baseProperty - The DB column that contains the
+ * key value of the entity, used as reference for other queries.
+ * @param  {string}         [objects[*].value] - The key name as string on the
+ * base entity. Useful when the baseproperty isn't aligned with the columns.
+ * @param  {string}         objects[*].attachTo - The property on the base entity
+ * on which to attach the fetched data.
+ * @param  {joinCallback} callback
+ */
+exports.attach = function(entity, objects, callback) {
+
+  var countdown = objects.length;
+
+  var request = function(options, cb) {
+    var cred = exports.credentials(options.database);
+
+    // Connect to the database
+    var connection = new db.sql.Connection(cred, function(err) {
+
+      var attachRequest = new db.sql.Request(connection);
+      attachRequest.query(options.query).then(function(recordset) {
+        cb(recordset, options.attachTo);
+      }).catch(function(err) {
+        // Failure
+        exports.log({
+          type: 'error',
+          msg: 'Error when attaching: ' + err,
+          meta: {
+            error: err,
+            query: options.query
+          }
+        });
+      });
+
+    });
+  }
+
+  // Loop through all of the requested extra data and query the database,
+  // then add the content to the entity and return it via callback.
+  for (var i = 0; i < objects.length; i++) {
+    // Use value instead of base property if supplied
+    var key = objects[i].value ? objects[i].value : objects[i].baseProperty;
+    // Purge the entity ID
+    var id = exports.purger(objects[i].baseProperty, entity[key]);
+    // Create the query string
+    var query = 'SELECT * FROM ' + objects[i].table + ' WHERE ' + objects[i].baseProperty + ' = ' + id;
+    // Perform asynchronous DB requests to fetch the data
+    request({
+      query: query,
+      attachTo: objects[i].attachTo,
+      database: objects[i].db
+    }, function(data, attachTo) {
+      entity[attachTo] = data;
+      countdown--;
+      // Make sure that all reqests have been performed.
+      if (countdown === 0) {
+        // Return the entity in a callback
+        callback(entity);
+      }
+    });
+
+  }
+
+};
+
+/**
+ * Validates various entity IDs. Some system IDs in FDT are integers while some
+ * are strings. This function helps keep track of which are which and silently
+ * converts them to their proper type.
+ * @param  {string}     property - The column name.
+ * @param  {string/int} id - The ID to be purged.
+ * @return {string/int} The entity ID as string or integer
+ */
+exports.purger = function(property, id) {
+  switch(property) {
+    case 'KundNr':
+    case 'Kundnr':
+    case 'ArtikelNr':
+    case 'Artikelnr':
+    case 'LevNr':
+    case 'Levnr':
+      return '\'' + id + '\'';
+      break;
+    default:
+      return id;
+  }
+};
+
+/**
+ * Helper for a common need: To get the database credentials from the config
+ * file by using the name of the database.
+ */
+exports.credentials = function(dbName) {
+  switch(dbName) {
+    case 'supplier':
+      return db.supplier;
+      break;
+    case 'invoicing':
+      return db.invoicing;
+      break;
+  }
 };

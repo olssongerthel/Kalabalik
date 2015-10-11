@@ -1,5 +1,4 @@
-var db = require('../config/config'),
-    helpers = require('../utils/helpers');
+var helpers = require('../utils/helpers');
 
 exports.index = function(req, res) {
 
@@ -21,47 +20,36 @@ exports.index = function(req, res) {
 
 exports.findBySKU = function(req, res) {
 
-  // Log the request
-  helpers.log({
-    type: 'info',
-    msg: 'Request for single product.',
-    meta: {
-      ip: req.ip,
-      query: req.query
+  var sku = req.params.sku;
+
+  helpers.entityQuery({
+    entity: 'Product',
+    db: 'invoicing',
+    table: 'Art',
+    baseProperty: 'ArtikelNr',
+    id: sku,
+    request: req,
+    attach: [
+      {
+        db: 'invoicing',
+        table: 'LagerSaldo',
+        baseProperty: 'ArtikelNr',
+        attachTo: 'lagerSaldo'
+      }
+    ]
+  }, function(err, entity){
+    if (!err && entity) {
+      res.send(entity);
+    }
+    else if (!err && !entity) {
+      res.status(404).send({
+      status: 404,
+      message: "Couldn't find any products with that SKU."
+    });
+    }
+    else {
+      res.send(err.message);
     }
   });
 
-  var response = {};
-  var sku = req.params.sku;
-  response._metadata = helpers.SingleMetadata();
-
-  var stockStatus = function(product) {
-    var connection = new db.sql.Connection(db.invoicing, function(err) {
-      var request = new db.sql.Request(connection);
-      request.query('SELECT * FROM LagerSaldo WHERE [ArtikelNr] = \'' + sku + '\'', function(err, recordset) {
-        // Add the stock data to the product
-        product[0].lagerSaldo = recordset;
-        // Add metadata to the response
-        response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-        // Add the product to the response
-        response.response = product;
-        res.send(response);
-      });
-    });
-  };
-
-  var query = 'SELECT * FROM Art WHERE [ArtikelNr] = \'' + sku + '\'';
-  var connection = new db.sql.Connection(db.invoicing, function(err) {
-    var request = new db.sql.Request(connection);
-    request.query(query, function(err, recordset) {
-      if (recordset.length > 0) {
-        stockStatus(recordset);
-      } else {
-        res.status(404).send({
-          status: 404,
-          message: "Couldn't find a product with a matching SKU."
-        });
-      }
-    });
-  });
 };
