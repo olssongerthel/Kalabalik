@@ -40,7 +40,7 @@ exports.findById = function(req, res) {
         db: 'invoicing',
         table: 'FaktHstH',
         baseProperty: 'Kundnr',
-        attachTo: 'orderHistorik'
+        attachTo: 'OrderHistorik'
       }
     ]
   }, function(err, entity){
