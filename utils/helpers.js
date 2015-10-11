@@ -313,6 +313,9 @@ exports.countQuery = function(options, callback) {
  * key value of the table row.
  * @param  {string/number}   options.id - The entity ID (KundNr or Ordernr etc.)
  * @param  {object}   options.request - An Express req object.
+ * @param  {array}    [options.attach] - An array of objects that follow the
+ * attach() objects requirements. Can be used to attach additional info to the
+ * entity before it is returned in the callback.
  * @param  {entityQueryCallback} callback
  */
 exports.entityQuery = function(options, callback) {
@@ -369,6 +372,13 @@ exports.entityQuery = function(options, callback) {
 };
 
 /**
+ * Callback for attach.
+ *
+ * @callback attachCallback
+ * @param {object} entity - The entity along with its attached content.
+ */
+
+/**
  * Given an entity, such as an order or a customer, fetches additional data
  * and returns the entity with the additional data attached.
  * @param  {object}         entity - The base entity.
@@ -381,7 +391,7 @@ exports.entityQuery = function(options, callback) {
  * base entity. Useful when the baseproperty isn't aligned with the columns.
  * @param  {string}         objects[*].attachTo - The property on the base entity
  * on which to attach the fetched data.
- * @param  {joinCallback} callback
+ * @param  {attachCallback} callback
  */
 exports.attach = function(entity, objects, callback) {
 
