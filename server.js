@@ -3,6 +3,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     settings = require('./config/config'),
     orders = require('./routes/orders'),
+    orderHistory = require('./routes/order-history'),
     lineItems = require('./routes/line-items'),
     customers = require('./routes/customers'),
     products = require('./routes/products'),
@@ -35,6 +36,16 @@ var welcome = function(req, res) {
         {
           name: 'Order',
           url: baseUrl + '/orders/ORDER-ID',
+          type: 'GET'
+        },
+        {
+          name: 'Order history',
+          url: baseUrl + '/order-history',
+          type: 'GET'
+        },
+        {
+          name: 'Order history order',
+          url: baseUrl + '/order-history/ORDER-ID',
           type: 'GET'
         },
         {
@@ -91,6 +102,8 @@ var welcome = function(req, res) {
 
 app.get('/orders', orders.index);
 app.get('/orders/:id', orders.findById);
+app.get('/order-history', orderHistory.index);
+app.get('/order-history/:id', orderHistory.findById);
 app.get('/line-items', lineItems.index);
 app.get('/customers', customers.index);
 app.get('/customers/:id', customers.findById);

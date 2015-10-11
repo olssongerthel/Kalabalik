@@ -35,6 +35,12 @@ exports.findById = function(req, res) {
         table: 'FaktH',
         baseProperty: 'Kundnr',
         attachTo: 'Ordrar'
+      },
+      {
+        db: 'invoicing',
+        table: 'FaktHstH',
+        baseProperty: 'Kundnr',
+        attachTo: 'orderHistorik'
       }
     ]
   }, function(err, entity){

@@ -3,9 +3,9 @@ var helpers = require('../utils/helpers');
 exports.index = function(req, res) {
 
   helpers.createIndex({
-    endpoint: 'Orders',
+    endpoint: 'Order history',
     db: 'invoicing',
-    table: 'FaktH',
+    table: 'FaktHstH',
     orderBy: 'Orderdatum DESC',
     request: req
   }, function(err, index){
@@ -31,10 +31,10 @@ exports.findById = function(req, res) {
   }
 
   helpers.entityQuery({
-    entity: 'Order',
+    entity: 'Order history',
     db: 'invoicing',
-    table: 'FaktH',
-    baseProperty: 'Ordernr',
+    table: 'FaktHstH',
+    baseProperty: 'InköpsNr',
     id: orderId,
     request: req,
     attach: [
@@ -46,7 +46,7 @@ exports.findById = function(req, res) {
       },
       {
         db: 'invoicing',
-        table: 'FaktK',
+        table: 'FaktHstK',
         baseProperty: 'Ordernr',
         attachTo: 'OrderRader'
       }
