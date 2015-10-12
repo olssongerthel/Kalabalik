@@ -1,6 +1,13 @@
 _Kalabalik_ is an **unofficial** REST API implementation for the Swedish ERP system [FDT Avance](http://fdt.se/affarssystem/).
 
-It currently supports GET on a couple of entity types: products (artiklar), orders (fakturor), line items (fakturarader), customers (kunder) and stock data (lagersaldo).
+It exposes a number of entities that may be relevant to other systems, and makes it possible to build applications around it or connect FDT with external systems. Entities exposed are (among others):
+
+- products (artiklar)
+- orders (fakturor)
+- customers (kunder)
+- purchase orders (inköpsorder)
+
+..and more. Launch Kalabalik and visit the frontpage of the API to see all endpoints.
 
 ## Prerequisites
 
@@ -40,6 +47,26 @@ There are two available parameters related to results:
 
 `PerPage` can be set to any integer below 10.000. Default is 25.
 `page` is the actual page number. This value is available in the metadata on each list result.
+
+## Updating entities
+
+Updating an entity is risky since we're dealing with direct database access. If an endpooint supports PUT, then use it carefully. *Extra* fields might be easy and risk free to update, but keep in mind that there might be a lot of things going around when for example an order is saved in FDT Avance - stuff that is not taken into account for in this API.
+
+To update an entity, submit the changes in JSON format as request body, i.e:
+
+**Method**
+PUT
+
+**URL**
+http://api.example.com/purchase-orders/2004
+
+**Body**
+```
+{
+  "Notat": "This is an example text added to the notat field on the purchase order with id 2004."
+}
+```
+Note: Sub-entities (such as line items) cannot be updated this way.
 
 ## Project status
 
