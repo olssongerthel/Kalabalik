@@ -50,7 +50,7 @@ There are two available parameters related to results:
 
 ## Updating entities
 
-Updating an entity is risky since we're dealing with direct database access. If an endpooint supports PUT, then use it carefully. *Extra* fields might be easy and risk free to update, but keep in mind that there might be a lot of things going around when for example an order is saved in FDT Avance - stuff that is not taken into account for in this API.
+Updating an entity is risky since we're dealing with direct database access. If an endpoint supports PUT, then use it carefully. *Extra* fields might be easy and risk free to update, but keep in mind that there might be a lot of things going around when for example an order is saved in FDT Avance - stuff that is not taken into account for in this API.
 
 To update an entity, submit the changes in JSON format as request body, i.e:
 
