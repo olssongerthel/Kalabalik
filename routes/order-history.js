@@ -34,7 +34,7 @@ exports.findById = function(req, res) {
     entity: 'Order history',
     db: 'invoicing',
     table: 'FaktHstH',
-    baseProperty: 'InköpsNr',
+    baseProperty: 'OrderNr',
     id: orderId,
     request: req,
     attach: [
