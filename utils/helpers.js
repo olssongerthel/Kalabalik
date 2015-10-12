@@ -474,6 +474,9 @@ exports.updateEntity = function(options, callback) {
 
   var response = {};
 
+  // Purge the ID
+  options.id = exports.purger(options.baseProperty, options.id);
+
   // Build a SET query string based on the data
   var set = 'SET ';
   var amount = Object.keys(options.data).length;

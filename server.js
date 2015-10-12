@@ -106,7 +106,9 @@ app.get('/order-history', orderHistory.index);
 app.get('/order-history/:id', orderHistory.findById);
 app.get('/line-items', lineItems.index);
 app.get('/customers', customers.index);
-app.get('/customers/:id', customers.findById);
+app.route('/customers/:id')
+  .get(customers.findById)
+  .put(customers.update);
 app.get('/products', products.index);
 app.get('/products/:sku', products.findBySKU);
 app.get('/stock', stock.index);

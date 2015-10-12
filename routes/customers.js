@@ -59,3 +59,18 @@ exports.findById = function(req, res) {
   });
 
 };
+
+exports.update = function(req, res) {
+
+  helpers.updateEntity({
+    entity: 'Customer',
+    db: 'invoicing',
+    table: 'Kund',
+    baseProperty: 'KundNr',
+    id: req.params.id,
+    data: req.body
+  }, function(response) {
+    res.status(response.status).send(response);
+  });
+
+}
