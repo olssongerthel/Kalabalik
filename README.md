@@ -54,11 +54,11 @@ Updating an entity is risky since we're dealing with direct database access. If 
 
 To update an entity, submit the changes in JSON format as request body, i.e:
 
-**Method**
-PUT
+**Content type:** application/json
 
-**URL**
-http://api.example.com/purchase-orders/2004
+**Method:** PUT
+
+**URL:** http://api.example.com/purchase-orders/2004
 
 **Body**
 ```
