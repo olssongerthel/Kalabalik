@@ -450,6 +450,88 @@ exports.attach = function(entity, objects, callback) {
 };
 
 /**
+ * Callback for updateEntity.
+ *
+ * @callback updateEntityCallback
+ * @param {object} response
+ * @param {string} response.message - Success/Failure message.
+ * @param {string} response.status - The HTTP status.
+ */
+
+/**
+ * Updates an entity.
+ * @param  {object}   options
+ * @param  {string}   options.entity - The name of the entity type i.e.
+ * "Order" or "Customer" etc.
+ * @param  {string}   options.db - The database to query.
+ * @param  {string}   options.table - The table to query.
+ * @param  {string}   options.baseProperty - The DB column to match the id to.
+ * @param  {string}   options.id - The entity id.
+ * @param  {object}   options.data - JSON data containing the changes.
+ * @param  {updateEntityCallback} callback
+ */
+exports.updateEntity = function(options, callback) {
+
+  var response = {};
+
+  // Build a SET query string based on the data
+  var set = 'SET ';
+  var amount = Object.keys(options.data).length;
+  var index = 0;
+
+  for (var key in options.data) {
+    if (options.data.hasOwnProperty(key)) {
+      index++;
+      var value = (typeof options.data[key] == 'string') ? '\'' + options.data[key] + '\'' : options.data[key];
+      set = set + key + " = " + value;
+      if (amount > 1 && index < amount) {
+        set = set + ', ';
+      }
+    }
+  }
+
+  // Assemble the whole query
+  var query = 'UPDATE ' + options.table + ' ' +
+              set + ' ' +
+              'WHERE ' + options.baseProperty + ' = ' + options.id;
+
+  var cred = exports.credentials(options.db);
+
+  // Perform the update
+  var connection = new db.sql.Connection(cred, function(err) {
+    var request = new db.sql.Request(connection);
+    request.query(query).then(function(recordset) {
+      // Success
+      response.status = 200;
+      response.message = 'Successfully updated ' + options.entity + ' ' + options.id;
+      response.response = recordset;
+      exports.log({
+        type: 'info',
+        msg: response.message,
+        meta: {
+          query: query
+        }
+      });
+      callback(response);
+    }).catch(function(err) {
+      // Fail
+      response.status = 400;
+      response.message = 'Error when updating ' + options.entity + ' ' + options.id;
+      response.error = err;
+      exports.log({
+        type: 'error',
+        msg: response.message,
+        meta: {
+          query: query
+        }
+      });
+      callback(response);
+    });
+  });
+
+};
+
+/**
  * Validates various entity IDs. Some system IDs in FDT are integers while some
  * are strings. This function helps keep track of which are which and silently
  * converts them to their proper type.
