@@ -61,7 +61,7 @@ var welcome = function(req, res) {
         {
           name: 'Customer',
           url: baseUrl + '/customers/CUSTOMER-ID',
-          type: 'GET'
+          type: 'GET, PUT'
         },
         {
           name: 'Products',
