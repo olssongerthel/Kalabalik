@@ -126,7 +126,7 @@ exports.PaginatedQuery = function(options) {
 /**
  * Performs a paginated data request on a given database table.
  * @param  {object}   options
- * @param  {string}   options.entity - The name of the entity, i.e 'Orders'
+ * @param  {string}   options.endpoint - The name of the entity, i.e 'Orders'
  * @param  {string}   options.db - The database to use. Use the same
  * variables that are used in the config file.
  * @param  {string}   options.table - The table to query.
@@ -146,7 +146,7 @@ exports.createIndex = function(options, callback) {
   // Log the request
   exports.log({
     type: 'info',
-    msg: 'Request for ' + options.entity,
+    msg: 'Request for ' + options.endpoint,
     meta: {
       ip: options.request.ip,
       query: options.request.query
