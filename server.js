@@ -13,6 +13,12 @@ var express = require('express'),
 
 var app = express();
 
+// Set content type to JSON for all requests.
+app.use(function (req, res, next) {
+  res.contentType('application/json');
+  next();
+});
+
 // Basic authenticator.
 if (settings.credentials.username) {
   app.use(basicAuth(settings.credentials.username, settings.credentials.password));
