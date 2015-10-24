@@ -1,11 +1,25 @@
-var db = require('../config/config'),
+var config = require('../config/config'),
     pagination = require('pagination'),
     winston = require('winston');
 
-winston.add(winston.transports.File, { filename: 'log/kalabalik.log' });
+// Default to using logfile if no other Winston transport has been selected.
+if (!config.winstonTransport.module) {
+  winston.add(winston.transports.File, { filename: 'log/kalabalik.log' });
+} else {
+  winston.add(config.winstonTransport.module, config.winstonTransport.options);
+}
 
+/**
+ * Generates a log entry.
+ * @param  {Object} data - A Winston log object.
+ * @param  {Object} data.meta
+ * @param  {String} data.meta.plugin - The human readable name of your plugin,
+ * i.e the same as exports.label from your plugin.
+ */
 exports.log = function(data) {
-  winston.log(data.type, data.msg, data.meta);
+  data.level = data.level ? data.level : 'info';
+  data.meta = data.meta ? data.meta : null;
+  winston.log(data.level, data.msg, data.meta);
 };
 
 /**
@@ -145,7 +159,7 @@ exports.createIndex = function(options, callback) {
 
   // Log the request
   exports.log({
-    type: 'info',
+    level: 'info',
     msg: 'Request for ' + options.endpoint,
     meta: {
       ip: options.request.ip,
@@ -225,9 +239,9 @@ exports.indexRequest = function(options, callback) {
   var cred = exports.credentials(options.db);
 
   // Connect to the database
-  var connection = new db.sql.Connection(cred, function(err) {
+  var connection = new config.sql.Connection(cred, function(err) {
     // Fetch the requested data
-    var request = new db.sql.Request(connection);
+    var request = new config.sql.Request(connection);
     request.query(options.query).then(function(recordset) {
       var err = null;
       // Send to the client
@@ -235,7 +249,7 @@ exports.indexRequest = function(options, callback) {
     }).catch(function(err) {
       // Log the error
       exports.log({
-        type: 'error',
+        level: 'error',
         msg: 'Error when requesting data: ' + err,
         meta: {
           query: options.query
@@ -271,15 +285,15 @@ exports.countQuery = function(options, callback) {
   var cred = exports.credentials(options.db);
 
   // Connect to the database
-  var connection = new db.sql.Connection(cred, function(err) {
+  var connection = new config.sql.Connection(cred, function(err) {
     // Perform a total row count in order to create a paginated result.
-    var countRequest = new db.sql.Request(connection);
+    var countRequest = new config.sql.Request(connection);
     countRequest.query(query).then(function(recordset) {
       callback(err, recordset);
     }).catch(function(err) {
       // Log the error
       exports.log({
-        type: 'error',
+        level: 'error',
         msg: 'Error when counting: ' + err,
         meta: {
           error: err,
@@ -325,7 +339,7 @@ exports.entityQuery = function(options, callback) {
 
   // Log the request
   exports.log({
-    type: 'info',
+    level: 'info',
     msg: 'Request for single ' + options.entity,
     meta: {
       ip: options.request.ip,
@@ -338,8 +352,8 @@ exports.entityQuery = function(options, callback) {
   var query = 'SELECT * FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id + ';';
 
   // Connect to the database
-  var connection = new db.sql.Connection(cred, function(err) {
-    var request = new db.sql.Request(connection);
+  var connection = new config.sql.Connection(cred, function(err) {
+    var request = new config.sql.Request(connection);
     request.query(query).then(function(recordset) {
       // Fetch additonal data if requested.
       if (options.attach.length && recordset.length > 0) {
@@ -357,7 +371,7 @@ exports.entityQuery = function(options, callback) {
     }).catch(function(err) {
       // Log the error
       exports.log({
-        type: 'error',
+        level: 'error',
         msg: 'Error when fetching single entity: ' + err,
         meta: {
           error: err,
@@ -401,15 +415,15 @@ exports.attach = function(entity, objects, callback) {
     var cred = exports.credentials(options.database);
 
     // Connect to the database
-    var connection = new db.sql.Connection(cred, function(err) {
+    var connection = new config.sql.Connection(cred, function(err) {
 
-      var attachRequest = new db.sql.Request(connection);
+      var attachRequest = new config.sql.Request(connection);
       attachRequest.query(options.query).then(function(recordset) {
         cb(recordset, options.attachTo);
       }).catch(function(err) {
         // Failure
         exports.log({
-          type: 'error',
+          level: 'error',
           msg: 'Error when attaching: ' + err,
           meta: {
             error: err,
@@ -501,15 +515,15 @@ exports.updateEntity = function(options, callback) {
   var cred = exports.credentials(options.db);
 
   // Perform the update
-  var connection = new db.sql.Connection(cred, function(err) {
-    var request = new db.sql.Request(connection);
+  var connection = new config.sql.Connection(cred, function(err) {
+    var request = new config.sql.Request(connection);
     request.query(query).then(function(recordset) {
       // Success
       response.status = 200;
       response.message = 'Successfully updated ' + options.entity + ' ' + options.id;
       response.response = recordset;
       exports.log({
-        type: 'info',
+        level: 'info',
         msg: response.message,
         meta: {
           query: query
@@ -522,7 +536,7 @@ exports.updateEntity = function(options, callback) {
       response.message = 'Error when updating ' + options.entity + ' ' + options.id;
       response.error = err;
       exports.log({
-        type: 'error',
+        level: 'error',
         msg: response.message,
         meta: {
           query: query
@@ -564,10 +578,10 @@ exports.purger = function(property, id) {
 exports.credentials = function(dbName) {
   switch(dbName) {
     case 'supplier':
-      return db.supplier;
+      return config.supplier;
       break;
     case 'invoicing':
-      return db.invoicing;
+      return config.invoicing;
       break;
   }
 };
