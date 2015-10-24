@@ -42,7 +42,8 @@ exports.findById = function(req, res) {
         db: 'invoicing',
         table: 'Kund',
         baseProperty: 'Kundnr',
-        attachTo: 'Kund'
+        attachTo: 'Kund',
+        multiple: false
       },
       {
         db: 'invoicing',

@@ -405,6 +405,9 @@ exports.entityQuery = function(options, callback) {
  * base entity. Useful when the baseproperty isn't aligned with the columns.
  * @param  {string}         objects[*].attachTo - The property on the base entity
  * on which to attach the fetched data.
+ * @param  {boolean}        [objects[*].multiple] - If true, returns data as
+ * an array. Otherwise as an object. Useful if you know that it will only return
+ * a single entity and want to avoid useless arrays. Defaults to true.
  * @param  {attachCallback} callback
  */
 exports.attach = function(entity, objects, callback) {
@@ -419,7 +422,7 @@ exports.attach = function(entity, objects, callback) {
 
       var attachRequest = new config.sql.Request(connection);
       attachRequest.query(options.query).then(function(recordset) {
-        cb(recordset, options.attachTo);
+        cb(recordset, options);
       }).catch(function(err) {
         // Failure
         exports.log({
@@ -438,6 +441,8 @@ exports.attach = function(entity, objects, callback) {
   // Loop through all of the requested extra data and query the database,
   // then add the content to the entity and return it via callback.
   for (var i = 0; i < objects.length; i++) {
+    // Default to TRUE for multiple
+    objects[i].multiple = objects[i].multiple == undefined ? true : objects[i].multiple;
     // Use value instead of base property if supplied
     var key = objects[i].value ? objects[i].value : objects[i].baseProperty;
     // Purge the entity ID
@@ -448,9 +453,15 @@ exports.attach = function(entity, objects, callback) {
     request({
       query: query,
       attachTo: objects[i].attachTo,
-      database: objects[i].db
-    }, function(data, attachTo) {
-      entity[attachTo] = data;
+      database: objects[i].db,
+      multiple: objects[i].multiple
+    }, function(data, options) {
+      // Attach as array if multiple is true, otherwise as an object.
+      if (options.multiple) {
+        entity[options.attachTo] = data;
+      } else {
+        entity[options.attachTo] = data[0];
+      }
       countdown--;
       // Make sure that all reqests have been performed.
       if (countdown === 0) {

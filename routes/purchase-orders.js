@@ -50,7 +50,8 @@ exports.findById = function(req, res) {
         table: 'Lev',
         baseProperty: 'LevNr',
         value: 'Levnr',
-        attachTo: 'Leverantör'
+        attachTo: 'Leverantör',
+        multiple: false
       }
     ]
   }, function(err, entity){
