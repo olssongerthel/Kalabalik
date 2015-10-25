@@ -34,7 +34,13 @@ exports.findBySKU = function(req, res) {
         db: 'invoicing',
         table: 'LagerSaldo',
         baseProperty: 'ArtikelNr',
-        attachTo: 'lagerSaldo'
+        attachTo: 'Lagersaldo'
+      },
+      {
+        db: 'invoicing',
+        table: 'ArtLev',
+        baseProperty: 'ArtikelNr',
+        attachTo: 'Leverantör'
       }
     ]
   }, function(err, entity){
