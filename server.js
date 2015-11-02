@@ -9,7 +9,8 @@ var express = require('express'),
     products = require('./routes/products'),
     stock = require('./routes/stock'),
     suppliers = require('./routes/suppliers'),
-    purchaseOrders = require('./routes/purchase-orders');
+    purchaseOrders = require('./routes/purchase-orders'),
+    purchaseOrderLineItems = require('./routes/purchase-order-line-items');
 
 var app = express();
 
@@ -98,6 +99,11 @@ var welcome = function(req, res) {
           name: 'Purchase order',
           url: baseUrl + '/purchase-orders/ORDER-ID',
           type: 'GET, PUT'
+        },
+        {
+          name: 'Purchase order line items',
+          url: baseUrl + '/purchase-order-line-items',
+          type: 'GET'
         }
       ]
     });
@@ -123,6 +129,7 @@ app.get('/purchase-orders', purchaseOrders.index);
 app.route('/purchase-orders/:id')
   .get(purchaseOrders.findById)
   .put(purchaseOrders.update);
+app.get('/purchase-order-line-items', purchaseOrderLineItems.index);
 app.get('', welcome);
 
 app.listen(settings.port);
