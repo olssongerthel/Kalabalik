@@ -1,8 +1,13 @@
+// Require modules
 var express = require('express'),
     basicAuth = require('basic-auth-connect'),
-    bodyParser = require('body-parser'),
-    settings = require('./config/config'),
-    orders = require('./routes/orders'),
+    bodyParser = require('body-parser');
+
+// Require settings and helpers
+var settings = require('./config/config');
+
+// Require views
+var orders = require('./routes/orders'),
     orderHistory = require('./routes/order-history'),
     lineItems = require('./routes/line-items'),
     customers = require('./routes/customers'),
