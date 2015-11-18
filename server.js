@@ -4,7 +4,8 @@ var express = require('express'),
     bodyParser = require('body-parser');
 
 // Require settings and helpers
-var settings = require('./config/config');
+var settings = require('./config/config'),
+    helpers = require('./utils/helpers');
 
 // Require views
 var orders = require('./routes/orders'),
@@ -137,5 +138,10 @@ app.route('/purchase-orders/:id')
 app.get('/purchase-order-line-items', purchaseOrderLineItems.index);
 app.get('', welcome);
 
+// Initiate server
 app.listen(settings.port);
-console.log(welcome());
+
+helpers.log({
+  level: 'info',
+  msg: welcome()
+});
