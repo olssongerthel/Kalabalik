@@ -49,7 +49,7 @@ var welcome = function(req, res) {
         {
           name: 'Order',
           url: baseUrl + '/orders/ORDER-ID',
-          type: 'GET'
+          type: 'GET, PUT'
         },
         {
           name: 'Order history',
@@ -119,7 +119,9 @@ var welcome = function(req, res) {
 };
 
 app.get('/orders', orders.index);
-app.get('/orders/:id', orders.findById);
+app.route('/orders/:id')
+  .get(orders.findById)
+  .put(orders.update);
 app.get('/order-history', orderHistory.index);
 app.get('/order-history/:id', orderHistory.findById);
 app.get('/line-items', lineItems.index);

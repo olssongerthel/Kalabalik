@@ -68,3 +68,18 @@ exports.findById = function(req, res) {
   });
 
 };
+
+exports.update = function(req, res) {
+
+  helpers.updateEntity({
+    entity: 'Order',
+    db: 'invoicing',
+    table: 'FaktH',
+    baseProperty: 'Ordernr',
+    id: req.params.id,
+    data: req.body
+  }, function(response) {
+    res.status(response.status).send(response);
+  });
+
+};
