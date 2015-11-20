@@ -325,7 +325,11 @@ exports.countQuery = function(options, callback) {
  * @param  {string}   options.table - The database table to query.
  * @param  {string}   options.baseProperty - The DB column that contains the
  * key value of the table row.
+ * @param  {string}   [options.secondaryProperty] - A secondary property to
+ * filter on when fetching the entity. Will be used as 'AND' in the query.
  * @param  {string/number}   options.id - The entity ID (KundNr or Ordernr etc.)
+ * @param  {string/number}   options.secondaryValue - The value of the secondary
+ * property.
  * @param  {object}   options.request - An Express req object.
  * @param  {array}    [options.attach] - An array of objects that follow the
  * attach() objects requirements. Can be used to attach additional info to the
@@ -349,23 +353,38 @@ exports.entityQuery = function(options, callback) {
 
   var cred = exports.credentials(options.db);
   var id = exports.purger(options.baseProperty, options.id);
-  var query = 'SELECT * FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id + ';';
+  var query = 'SELECT * FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id;
+
+  // Add secondary query param
+  query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
 
   // Connect to the database
   var connection = new config.sql.Connection(cred, function(err) {
     var request = new config.sql.Request(connection);
     request.query(query).then(function(recordset) {
       // Fetch additonal data if requested.
-      if (options.attach.length && recordset.length > 0) {
+      if (options.attach && recordset.length > 0) {
         exports.attach(recordset[0], options.attach, function(entity){
           response.response = entity;
           response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
           callback(err, response);
         });
-      } else {
+      }
+      // Return multiple entities as array
+      else if (recordset.length > 1) {
+        response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+        response.response = recordset;
+        callback(err, response);
+      }
+      // Single entity
+      else if (recordset.length === 1) {
         response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
         response.response = recordset[0];
         callback(err, response);
+      }
+      // No results
+      else {
+        callback(err);
       }
 
     }).catch(function(err) {
@@ -491,8 +510,12 @@ exports.attach = function(entity, objects, callback) {
  * @param  {string}   options.db - The database to query.
  * @param  {string}   options.table - The table to query.
  * @param  {string}   options.baseProperty - The DB column to match the id to.
- * @param  {string}   options.id - The entity id.
- * @param  {object}   options.data - JSON data containing the changes.
+ * @param  {string}   [options.secondaryProperty] - A secondary column to match
+ * with. Can be useful if there is no single unique value to use.
+ * @param  {string/number}   options.id - The entity id.
+ * @param  {string/number}   [options.secondaryValue] - The value of the secondary
+ * property used to identify the entity we're updating.
+ * @param  {object}   options.data - An object containing the new data to save.
  * @param  {updateEntityCallback} callback
  */
 exports.updateEntity = function(options, callback) {
@@ -518,10 +541,15 @@ exports.updateEntity = function(options, callback) {
     }
   }
 
+  console.log(set);
+
   // Assemble the whole query
   var query = 'UPDATE ' + options.table + ' ' +
               set + ' ' +
               'WHERE ' + options.baseProperty + ' = ' + options.id;
+
+  // Add secondary query param
+  query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
 
   var cred = exports.credentials(options.db);
 

@@ -48,7 +48,7 @@ var welcome = function(req, res) {
         },
         {
           name: 'Order',
-          url: baseUrl + '/orders/ORDER-ID',
+          url: baseUrl + '/orders/:ORDER-ID',
           type: 'GET, PUT'
         },
         {
@@ -58,7 +58,7 @@ var welcome = function(req, res) {
         },
         {
           name: 'Order history order',
-          url: baseUrl + '/order-history/ORDER-ID',
+          url: baseUrl + '/order-history/:ORDER-ID',
           type: 'GET'
         },
         {
@@ -67,13 +67,23 @@ var welcome = function(req, res) {
           type: 'GET'
         },
         {
+          name: 'Line items per order',
+          url: baseUrl + '/line-items/:ORDER-ID',
+          type: 'GET'
+        },
+        {
+          name: 'Line item',
+          url: baseUrl + '/line-items/:ORDER-ID/:ROW',
+          type: 'GET, PUT'
+        },
+        {
           name: 'Customers',
           url: baseUrl + '/customers',
           type: 'GET'
         },
         {
           name: 'Customer',
-          url: baseUrl + '/customers/CUSTOMER-ID',
+          url: baseUrl + '/customers/:CUSTOMER-ID',
           type: 'GET, PUT'
         },
         {
@@ -83,7 +93,7 @@ var welcome = function(req, res) {
         },
         {
           name: 'Product',
-          url: baseUrl + '/products/SKU',
+          url: baseUrl + '/products/:SKU',
           type: 'GET'
         },
         {
@@ -103,7 +113,7 @@ var welcome = function(req, res) {
         },
         {
           name: 'Purchase order',
-          url: baseUrl + '/purchase-orders/ORDER-ID',
+          url: baseUrl + '/purchase-orders/:ORDER-ID',
           type: 'GET, PUT'
         },
         {
@@ -125,6 +135,10 @@ app.route('/orders/:id')
 app.get('/order-history', orderHistory.index);
 app.get('/order-history/:id', orderHistory.findById);
 app.get('/line-items', lineItems.index);
+app.get('/line-items/:order', lineItems.findByOrder);
+app.route('/line-items/:order/:row')
+  .get(lineItems.findByOrderAndRow)
+  .put(lineItems.update);
 app.get('/customers', customers.index);
 app.route('/customers/:id')
   .get(customers.findById)
