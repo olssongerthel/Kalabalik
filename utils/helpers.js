@@ -364,7 +364,7 @@ exports.entityQuery = function(options, callback) {
         });
       } else {
         response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-        response,response = recordset[0];
+        response.response = recordset[0];
         callback(err, response);
       }
 
@@ -436,13 +436,13 @@ exports.attach = function(entity, objects, callback) {
       });
 
     });
-  }
+  };
 
   // Loop through all of the requested extra data and query the database,
   // then add the content to the entity and return it via callback.
   for (var i = 0; i < objects.length; i++) {
     // Default to TRUE for multiple
-    objects[i].multiple = objects[i].multiple == undefined ? true : objects[i].multiple;
+    objects[i].multiple = objects[i].multiple === undefined ? true : objects[i].multiple;
     // Use value instead of base property if supplied
     var key = objects[i].value ? objects[i].value : objects[i].baseProperty;
     // Purge the entity ID
@@ -576,7 +576,6 @@ exports.purger = function(property, id) {
     case 'LevNr':
     case 'Levnr':
       return '\'' + id + '\'';
-      break;
     default:
       return id;
   }
@@ -590,9 +589,7 @@ exports.credentials = function(dbName) {
   switch(dbName) {
     case 'supplier':
       return config.supplier;
-      break;
     case 'invoicing':
       return config.invoicing;
-      break;
   }
 };

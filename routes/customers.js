@@ -73,4 +73,4 @@ exports.update = function(req, res) {
     res.status(response.status).send(response);
   });
 
-}
+};
