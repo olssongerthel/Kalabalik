@@ -541,8 +541,6 @@ exports.updateEntity = function(options, callback) {
     }
   }
 
-  console.log(set);
-
   // Assemble the whole query
   var query = 'UPDATE ' + options.table + ' ' +
               set + ' ' +
