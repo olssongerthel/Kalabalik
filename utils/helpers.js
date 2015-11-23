@@ -255,7 +255,6 @@ exports.indexRequest = function(options, callback) {
           query: options.query
         }
       });
-      connection.close();
       callback(err, recordset);
     });
   });
@@ -302,7 +301,6 @@ exports.countQuery = function(options, callback) {
         }
       });
       recordset = null;
-      connection.close();
       callback(err, recordset);
     });
   });
@@ -400,7 +398,6 @@ exports.entityQuery = function(options, callback) {
         }
       });
       recordset = null;
-      connection.close();
       callback(err, recordset);
     });
   });
@@ -456,6 +453,7 @@ exports.attach = function(entity, objects, callback) {
           }
         });
       });
+
     });
   };
 
@@ -487,7 +485,6 @@ exports.attach = function(entity, objects, callback) {
       // Make sure that all reqests have been performed.
       if (countdown === 0) {
         // Return the entity in a callback
-        connection.close();
         callback(entity);
       }
     });
@@ -569,7 +566,6 @@ exports.updateEntity = function(options, callback) {
           query: query
         }
       });
-      connection.close();
       callback(response);
     }).catch(function(err) {
       // Fail
@@ -583,7 +579,6 @@ exports.updateEntity = function(options, callback) {
           query: query
         }
       });
-      connection.close();
       callback(response);
     });
   });
