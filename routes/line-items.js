@@ -26,7 +26,8 @@ exports.findByOrder = function(req, res) {
     table: 'FaktK',
     baseProperty: 'Ordernr',
     id: req.params.order,
-    request: req
+    request: req,
+    multiple: true
   }, function(err, entity){
     if (!err && entity.response.length > 0) {
       res.send(entity);

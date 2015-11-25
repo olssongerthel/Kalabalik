@@ -325,6 +325,9 @@ exports.countQuery = function(options, callback) {
  * @param  {string}   options.table - The database table to query.
  * @param  {string}   options.baseProperty - The DB column that contains the
  * key value of the table row.
+ * @param  {boolean}  [options.multiple=false]  - If the request returns multiple
+ * entities, such as multiple line items for one order, this settings should be
+ * set to true.
  * @param  {string}   [options.secondaryProperty] - A secondary property to
  * filter on when fetching the entity. Will be used as 'AND' in the query.
  * @param  {string/number}   options.id - The entity ID (KundNr or Ordernr etc.)
@@ -351,6 +354,8 @@ exports.entityQuery = function(options, callback) {
     }
   });
 
+  options.multiple = (options.multiple === true) ? true : false;
+
   var cred = exports.credentials(options.db);
   var id = exports.purger(options.baseProperty, options.id);
   var query = 'SELECT * FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id;
@@ -371,7 +376,7 @@ exports.entityQuery = function(options, callback) {
         });
       }
       // Return multiple entities as array
-      else if (recordset.length > 1) {
+      else if (recordset.length > 1 || options.multiple) {
         response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
         response.response = recordset;
         callback(err, response);
