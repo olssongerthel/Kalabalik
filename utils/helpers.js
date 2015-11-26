@@ -60,6 +60,10 @@ exports.filter = function(params) {
   // Turn double quotes into singles quotes to avoid SQL errors.
   filter.string = filter.string.replace(/"/gi, '\'');
 
+  // Replace $ with %. This is needed because using % in the URL
+  // will break the filter.
+  filter.string = filter.string.replace(/\$/g, '%')
+
   return filter;
 };
 

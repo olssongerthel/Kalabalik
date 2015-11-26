@@ -28,7 +28,7 @@ Kalabalik only supports Avance using MS SQL as data storage.
 **Optional**: Add username and password to config.js to enable basic authentication. If you don’t want to use 3000 as port number you can change that as well in config.js.
 
 ## Filtering responses
-Kalabalik supports filtering on any database column using pipe delimited values. It supports standard SQL operators such as `=`, `>`, `<` etc.
+Kalabalik supports filtering on any database column using pipe delimited values. It supports standard SQL operators such as `=`, `>`, `<`, `LIKE`, `IS NOT` etc. There are some caveats, for example using `LIKE` with `%` would break the URL so use `$` should be used instead of `%`.
 
 Example 1: Single filter
 `/orders?filter=Status=3`
