@@ -45,9 +45,16 @@ var winstonTransport = {
   // options: {}
 }
 
+/**
+ * CORS settings
+ * Set to true to allow cross-origin resource sharing.
+ */
+var cors = false;
+
 exports.port = 3000; // Select the port to run Kalabalik on.
 exports.sql = sql;
 exports.invoicing = invoicing;
 exports.supplier = supplier;
 exports.credentials = credentials;
 exports.winstonTransport = winstonTransport;
+exports.cors = cors;

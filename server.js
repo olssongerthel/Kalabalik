@@ -23,6 +23,11 @@ var app = express();
 // Set content type to JSON for all requests.
 app.use(function (req, res, next) {
   res.contentType('application/json');
+  // CORS settings
+  if (config.cors) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  }
   next();
 });
 
