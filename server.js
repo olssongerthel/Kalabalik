@@ -24,7 +24,7 @@ var app = express();
 app.use(function (req, res, next) {
   res.contentType('application/json');
   // CORS settings
-  if (config.cors) {
+  if (settings.cors) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   }
