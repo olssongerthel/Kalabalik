@@ -539,6 +539,13 @@ exports.updateEntity = function(options, callback) {
   var amount = Object.keys(options.data).length;
   var index = 0;
 
+  // Bail if there are no updates to be made.
+  if (!amount) {
+    response.message = 'You haven\'t supplied any data';
+    response.status = 400;
+    return callback(response);
+  }
+
   for (var key in options.data) {
     if (options.data.hasOwnProperty(key)) {
       index++;
@@ -553,6 +560,7 @@ exports.updateEntity = function(options, callback) {
   // Assemble the whole query
   var query = 'UPDATE ' + options.table + ' ' +
               set + ' ' +
+              ", Ändrad = Ändrad + 1 " + // Update the Ändrad value in order to prevent clashes with other updates.
               'WHERE ' + options.baseProperty + ' = ' + options.id;
 
   // Add secondary query param
