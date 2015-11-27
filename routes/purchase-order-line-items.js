@@ -10,9 +10,9 @@ exports.index = function(req, res) {
     request: req
   }, function(err, index){
     if (!err) {
-      res.send(index);
+      res.jsonp(index);
     } else {
-      res.send(err.message);
+      res.jsonp(err.message);
     }
   });
 
@@ -30,7 +30,7 @@ exports.findByOrder = function(req, res) {
     multiple: true
   }, function(err, entity){
     if (!err && entity.response.length > 0) {
-      res.send(entity);
+      res.jsonp(entity);
     }
     else if (!err && entity.response.length === 0) {
       res.status(404).send({
@@ -39,7 +39,7 @@ exports.findByOrder = function(req, res) {
     });
     }
     else {
-      res.send(err.message);
+      res.jsonp(err.message);
     }
   });
 };
@@ -57,7 +57,7 @@ exports.findByOrderAndRow = function(req, res) {
     request: req
   }, function(err, entity){
     if (!err && entity.response) {
-      res.send(entity);
+      res.jsonp(entity);
     }
     else if (!err && !entity.response) {
       res.status(404).send({
@@ -66,7 +66,7 @@ exports.findByOrderAndRow = function(req, res) {
     });
     }
     else {
-      res.send(err.message);
+      res.jsonp(err.message);
     }
   });
 };

@@ -10,9 +10,9 @@ exports.index = function(req, res) {
     request: req
   }, function(err, index){
     if (!err) {
-      res.send(index);
+      res.jsonp(index);
     } else {
-      res.send(err.message);
+      res.jsonp(err.message);
     }
   });
 
@@ -45,7 +45,7 @@ exports.findBySKU = function(req, res) {
     ]
   }, function(err, entity){
     if (!err && entity) {
-      res.send(entity);
+      res.jsonp(entity);
     }
     else if (!err && !entity) {
       res.status(404).send({
@@ -54,7 +54,7 @@ exports.findBySKU = function(req, res) {
     });
     }
     else {
-      res.send(err.message);
+      res.jsonp(err.message);
     }
   });
 

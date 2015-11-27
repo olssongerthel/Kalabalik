@@ -22,7 +22,6 @@ var app = express();
 
 // Set content type to JSON for all requests.
 app.use(function (req, res, next) {
-  res.contentType('application/json');
   // CORS settings
   if (settings.cors) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -44,7 +43,7 @@ var welcome = function(req, res) {
   var message = 'Kalabalik is up and running.';
   if (req) {
     var baseUrl = req.protocol + '://' + req.get('host');
-    res.send({
+    res.jsonp({
       message: message,
       endPoints: [
         {

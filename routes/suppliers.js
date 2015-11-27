@@ -10,9 +10,9 @@ exports.index = function(req, res) {
     request: req
   }, function(err, index){
     if (!err) {
-      res.send(index);
+      res.jsonp(index);
     } else {
-      res.send(err.message);
+      res.jsonp(err.message);
     }
   });
 
