@@ -125,6 +125,16 @@ var welcome = function(req, res) {
           name: 'Purchase order line items',
           url: baseUrl + '/purchase-order-line-items',
           type: 'GET'
+        },
+        {
+          name: 'Purchase order line items per order',
+          url: baseUrl + '/purchase-order-line-items/:ORDER-ID',
+          type: 'GET'
+        },
+        {
+          name: 'Purchase order line item',
+          url: baseUrl + '/purchase-order-line-items/:ORDER-ID/:ROW',
+          type: 'GET, PUT'
         }
       ]
     });
@@ -157,6 +167,10 @@ app.route('/purchase-orders/:id')
   .get(purchaseOrders.findById)
   .put(purchaseOrders.update);
 app.get('/purchase-order-line-items', purchaseOrderLineItems.index);
+app.get('/purchase-order-line-items/:order', purchaseOrderLineItems.findByOrder);
+app.route('/purchase-order-line-items/:order/:row')
+  .get(purchaseOrderLineItems.findByOrderAndRow)
+  .put(purchaseOrderLineItems.update);
 app.get('', welcome);
 
 // Initiate server
