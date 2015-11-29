@@ -30,7 +30,7 @@ Kalabalik only supports Avance using MS SQL as data storage.
 If you want to run Kalabalik on a Windows server, [IIS Node](https://github.com/tjanczuk/iisnode) is recommended as it makes Node.js and Windows work very well together.
 
 ## Filtering responses
-Kalabalik supports filtering on any database column using pipe delimited values. It supports standard SQL operators such as `=`, `>`, `<`, `LIKE`, `IS NOT` etc. There are some caveats, for example using `LIKE` with `%` would break the URL so use `$` should be used instead of `%`.
+Kalabalik supports filtering on any database column using pipe delimited values. It supports standard SQL operators such as `=`, `>`, `<`, `LIKE`, `IS NOT` etc. There are some caveats, for example using `LIKE` with the wildcard sign `%` would break the URL so `$` is used instead of `%`.
 
 Example 1: Single filter
 `/orders?filter=Status=3`
