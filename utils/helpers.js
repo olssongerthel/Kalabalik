@@ -79,7 +79,7 @@ exports.ListMetadata = function(req) {
   metadata.lastPage = false;
   metadata.perPage = (req.query.perPage <= 10000) ? parseInt(req.query.perPage) : 25;
   metadata.links = {};
-  metadata.filters = false;
+  metadata.params = req.query;
   return metadata;
 };
 
@@ -127,7 +127,7 @@ exports.PaginatedQuery = function(options) {
   options.filter = options.filter ? options.filter : '';
   var query = 'SELECT * ' +
               'FROM (' +
-                'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ') AS RowNum, *' +
+                'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ' ' + options.orderDirection +') AS RowNum, *' +
                 'FROM ' + options.table + ' ' +
                 options.filter +
                 ') AS RowConstrainedResult' +
@@ -152,18 +152,24 @@ exports.PaginatedQuery = function(options) {
  * @param  {string}   options.db - The database to use. Use the same
  * variables that are used in the config file.
  * @param  {string}   options.table - The table to query.
- * @param  {string}   options.orderBy - The column and direction to order by as
- * a valid SQL string, i.e. 'Orderdatum DESC' or 'ArtikelNr ASC'.
+ * @param  {string}   options.orderBy - The property to order by.
+ * @param  {string}   [options.orderDirection] - The direction to order by.
+ * Defaults to DESC.
  * @param  {object}   options.request - An Express req object.
  * 'WHERE ArtikelNr = "123"' or equivalent. Use the filter() helper.
  * @param  {createIndexCallback} callback
  */
 exports.createIndex = function(options, callback) {
 
+  // Default to DESC ordering
+  options.orderDirection = options.orderDirection ? options.orderDirection : 'DESC';
+
   var index = {};
   var filter = options.request.query.filter ? exports.filter(options.request.query.filter) : '';
   var meta = exports.ListMetadata(options.request);
-  meta.filters = filter.params;
+
+  // Add filter parameters to the response metadata
+  meta.params.filter = filter.params;
 
   // Log the request
   exports.log({
@@ -195,6 +201,7 @@ exports.createIndex = function(options, callback) {
   var query = exports.PaginatedQuery({
     table: options.table,
     orderBy: options.orderBy,
+    orderDirection: options.orderDirection,
     filter: filter.string,
     meta: meta
   });

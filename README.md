@@ -39,16 +39,18 @@ Example 2: Multiple filters
 `/orders?filter=Status=3|Dellevererad=1|`
 
 Example 3: Filter on on orders from a certain date
-`/orders?filter=Orderdatum>"2015-09-04T00:00:00.000Z"`
+`/orders?filter=Orderdatum>"2015-09-04"`
 
 Use 1 or 0 for TRUE/FALSE when filtering. Use quotes for strings.
 
 ## Controlling the pages and results
 
-There are two available parameters related to results:
+There are four available parameters related to results:
 
-`PerPage` can be set to any integer below 10.000. Default is 25.
+`perPage` can be set to any integer below 10.000. Default is 25.
 `page` is the actual page number. This value is available in the metadata on each list result.
+`orderBy` is the property you wish to order the results by. Some indexes have a default that is hidden.
+`direction` used in combination with orderBy. `ASC` or `DESC` ar e valid options here, and `DESC` is mostly the default.
 
 ## Updating entities
 

@@ -6,7 +6,8 @@ exports.index = function(req, res) {
     endpoint: 'Purchase order line items',
     db: 'supplier',
     table: 'InkK',
-    orderBy: 'InköpsNr DESC',
+    orderBy: req.query.orderBy ? req.query.orderBy : 'InköpsNr',
+    orderDirection: req.query.direction,
     request: req
   }, function(err, index){
     if (!err) {
