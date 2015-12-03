@@ -41,6 +41,9 @@ Example 2: Multiple filters
 Example 3: Filter on on orders from a certain date
 `/orders?filter=Orderdatum>"2015-09-04"`
 
+Example 4: Filter on on products containing the word _chair_
+`/products?filter=Benämning_0 LIKE "$chair$"`
+
 Use 1 or 0 for TRUE/FALSE when filtering. Use quotes for strings.
 
 ## Controlling the pages and results
