@@ -74,6 +74,8 @@ exports.ListMetadata = function(req) {
   metadata.from = false;
   metadata.to = false;
   metadata.currentPage = req.query.page ? parseInt(req.query.page) : 1;
+  metadata.previousPage = false;
+  metadata.nextPage = false;
   metadata.lastPage = false;
   metadata.perPage = (req.query.perPage <= 10000) ? parseInt(req.query.perPage) : 25;
   metadata.links = {};
@@ -100,6 +102,8 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
 
   metadata.from = pageData.fromResult;
   metadata.to = pageData.toResult;
+  metadata.previousPage = pageData.previous;
+  metadata.nextPage = pageData.next;
   metadata.lastPage = pageData.pageCount;
 
   metadata.links = {
