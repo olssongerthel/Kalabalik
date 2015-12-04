@@ -62,7 +62,7 @@ exports.filter = function(params) {
 
   // Replace $ with %. This is needed because using % in the URL
   // will break the filter.
-  filter.string = filter.string.replace(/\$/g, '%')
+  filter.string = filter.string.replace(/\$/g, '%');
 
   return filter;
 };
