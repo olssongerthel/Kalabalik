@@ -82,7 +82,12 @@ exports.update = function(req, res) {
     secondaryProperty: 'Rad',
     secondaryValue: req.params.row,
     id: req.params.order,
-    data: req.body
+    data: req.body,
+    parent: {
+      id: req.params.order,
+      baseProperty: 'InköpsNr',
+      table: 'InkH'
+    }
   }, function(response) {
     res.status(response.status).send(response);
   });

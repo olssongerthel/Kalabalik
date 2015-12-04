@@ -524,6 +524,7 @@ exports.attach = function(entity, objects, callback) {
 
 /**
  * Updates an entity.
+ *
  * @param  {object}   options
  * @param  {string}   options.entity - The name of the entity type i.e.
  * "Order" or "Customer" etc.
@@ -535,6 +536,11 @@ exports.attach = function(entity, objects, callback) {
  * @param  {string/number}   options.id - The entity id.
  * @param  {string/number}   [options.secondaryValue] - The value of the secondary
  * property used to identify the entity we're updating.
+ * @param  {object}   [parent] - Required to use if the entity that is being updated
+ * has a parent, such as when updating a line item that belongs to an order.
+ * @param  {string}   parent.table - The table that the parent is in.
+ * @param  {string}   parent.baseProperty - The column to match the ID to.
+ * @param  {string}   parent.id - The parent's entity ID.
  * @param  {object}   options.data - An object containing the new data to save.
  * @param  {updateEntityCallback} callback
  */
@@ -557,6 +563,7 @@ exports.updateEntity = function(options, callback) {
     return callback(response);
   }
 
+  // Create a SET query string for the properties that are being updated.
   for (var key in options.data) {
     if (options.data.hasOwnProperty(key)) {
       index++;
@@ -568,14 +575,26 @@ exports.updateEntity = function(options, callback) {
     }
   }
 
-  // Assemble the whole query
+  // Build the update query
   var query = 'UPDATE ' + options.table + ' ' +
               set + ' ' +
               ", Ändrad = Ändrad + 1 " + // Update the Ändrad value in order to prevent clashes with other updates.
               'WHERE ' + options.baseProperty + ' = ' + options.id;
 
-  // Add secondary query param
+  // Add secondary query param if needed
   query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
+
+  // If we're updating a sub-entity such as a line item, we need to update the
+  // 'Ändrad' value of its parent as well to prevent the changes from being
+  // overridden by other clients. If an entity is being edited in Avance while
+  // Kalabalik is editing the same entity, this keeps the last edit from being
+  // permitted as it would have erased the initial change.
+  if (options.parent) {
+    var parentQuery = 'UPDATE ' + options.parent.table + ' ' +
+                      'SET Ändrad = Ändrad + 1 ' +
+                      'WHERE ' + options.parent.baseProperty + ' = ' + options.parent.id;
+    query = exports.transaction(query, parentQuery);
+  }
 
   var cred = exports.credentials(options.db);
 
@@ -646,4 +665,21 @@ exports.credentials = function(dbName) {
     case 'invoicing':
       return config.invoicing;
   }
+};
+
+/**
+ * Helper that wraps two SQL queries into a single transaction.
+ * This is useful when you want to perform two different
+ * updates in a single database request.
+ *
+ * @param  {string} queryOne - The first query string
+ * @param  {string} queryTwo - The second query string
+ * @return {string} The complete transaction string.
+ */
+exports.transaction = function(queryOne, queryTwo) {
+  var transaction = 'BEGIN TRANSACTION ' +
+                    queryOne + ' ' +
+                    queryTwo + ' ' +
+                    'COMMIT';
+  return transaction;
 };
