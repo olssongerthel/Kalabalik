@@ -10,7 +10,7 @@ var mssql = {
   port: 1433,
   options: {
     encrypt: false // Set to true if server is on Azure.
-  }
+  },
   databases: {
     invoicing: '', // Usually Fakt000
     supplier: '', // Usually Lres000
