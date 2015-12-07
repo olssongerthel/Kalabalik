@@ -1,5 +1,3 @@
-var sql = require('mssql');
-
 /**
  * MS SQL database credentials.
  */
@@ -49,7 +47,6 @@ var winstonTransport = {
 var cors = false;
 
 exports.port = 3000; // Select the port to run Kalabalik on.
-exports.sql = sql;
 exports.mssql = mssql;
 exports.credentials = credentials;
 exports.winstonTransport = winstonTransport;

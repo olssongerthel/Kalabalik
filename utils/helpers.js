@@ -1,4 +1,5 @@
 var config = require('../config/config'),
+    sql = require('mssql'),
     pagination = require('pagination'),
     winston = require('winston');
 
@@ -254,9 +255,9 @@ exports.indexRequest = function(options, callback) {
   var cred = exports.credentials(options.db);
 
   // Connect to the database
-  var connection = new config.sql.Connection(cred, function(err) {
+  var connection = new sql.Connection(cred, function(err) {
     // Fetch the requested data
-    var request = new config.sql.Request(connection);
+    var request = new sql.Request(connection);
     request.query(options.query).then(function(recordset) {
       var err = null;
       // Send to the client
@@ -300,9 +301,9 @@ exports.countQuery = function(options, callback) {
   var cred = exports.credentials(options.db);
 
   // Connect to the database
-  var connection = new config.sql.Connection(cred, function(err) {
+  var connection = new sql.Connection(cred, function(err) {
     // Perform a total row count in order to create a paginated result.
-    var countRequest = new config.sql.Request(connection);
+    var countRequest = new sql.Request(connection);
     countRequest.query(query).then(function(recordset) {
       callback(err, recordset);
     }).catch(function(err) {
@@ -379,8 +380,8 @@ exports.entityQuery = function(options, callback) {
   query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
 
   // Connect to the database
-  var connection = new config.sql.Connection(cred, function(err) {
-    var request = new config.sql.Request(connection);
+  var connection = new sql.Connection(cred, function(err) {
+    var request = new sql.Request(connection);
     request.query(query).then(function(recordset) {
       // Fetch additonal data if requested.
       if (options.attach && recordset.length > 0) {
@@ -457,9 +458,9 @@ exports.attach = function(entity, objects, callback) {
     var cred = exports.credentials(options.database);
 
     // Connect to the database
-    var connection = new config.sql.Connection(cred, function(err) {
+    var connection = new sql.Connection(cred, function(err) {
 
-      var attachRequest = new config.sql.Request(connection);
+      var attachRequest = new sql.Request(connection);
       attachRequest.query(options.query).then(function(recordset) {
         cb(recordset, options);
       }).catch(function(err) {
@@ -599,8 +600,8 @@ exports.updateEntity = function(options, callback) {
   var cred = exports.credentials(options.db);
 
   // Perform the update
-  var connection = new config.sql.Connection(cred, function(err) {
-    var request = new config.sql.Request(connection);
+  var connection = new sql.Connection(cred, function(err) {
+    var request = new sql.Request(connection);
     request.query(query).then(function(recordset) {
       // Success
       response.status = 200;
