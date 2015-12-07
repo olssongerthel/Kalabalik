@@ -12,6 +12,9 @@ if (!config.winstonTransport.module) {
 
 /**
  * Generates a log entry.
+ *
+ * Will only log error level messages unless debugging is enabled in config.
+ *
  * @param  {Object} data - A Winston log object.
  * @param  {Object} data.meta
  * @param  {String} data.meta.plugin - The human readable name of your plugin,
@@ -20,7 +23,11 @@ if (!config.winstonTransport.module) {
 exports.log = function(data) {
   data.level = data.level ? data.level : 'info';
   data.meta = data.meta ? data.meta : null;
-  winston.log(data.level, data.msg, data.meta);
+  if ((data.level == 'info' && config.debug) || data.level == 'error') {
+    winston.log(data.level, data.msg, data.meta);
+  } else {
+    return;
+  };
 };
 
 /**
