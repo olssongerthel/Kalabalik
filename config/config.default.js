@@ -1,31 +1,28 @@
 var sql = require('mssql');
 
-// Add mssql database config here as per instructions from:
-// https://www.npmjs.com/package/mssql
-// 'invoicing' is the Avance Fakturering database (usually 'Fakt000')
-// and 'supplier' should be the Avance Leverantör database (usually 'lres000')
-
-var invoicing = {
-  // user: '',
-  // password: '',
-  // server: '',
-  // database: '',
-  // options: {
-  //     encrypt: true
-  // }
+/**
+ * MS SQL database credentials.
+ */
+var mssql = {
+  user: '',
+  password: '',
+  server: '',
+  port: 1433,
+  options: {
+    encrypt: false // Set to true if server is on Azure.
+  }
+  databases: {
+    invoicing: '', // Usually Fakt000
+    supplier: '', // Usually Lres000
+    license: 'fdtlic'
+  }
 }
 
-var supplier = {
-  // user: '',
-  // password: '',
-  // server: '',
-  // database: '',
-  // options: {
-  //     encrypt: true
-  // }
-}
-
-// Add a username and password to enable basic authentication for the API.
+/**
+ * HTTP Basic Authentication
+ *
+ * Add a username and password to enable basic authentication for the API.
+ */
 var credentials = {
   username: '',
   password: ''
@@ -53,8 +50,7 @@ var cors = false;
 
 exports.port = 3000; // Select the port to run Kalabalik on.
 exports.sql = sql;
-exports.invoicing = invoicing;
-exports.supplier = supplier;
+exports.mssql = mssql;
 exports.credentials = credentials;
 exports.winstonTransport = winstonTransport;
 exports.cors = cors;

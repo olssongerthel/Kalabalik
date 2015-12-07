@@ -659,12 +659,11 @@ exports.purger = function(property, id) {
  * file by using the name of the database.
  */
 exports.credentials = function(dbName) {
-  switch(dbName) {
-    case 'supplier':
-      return config.supplier;
-    case 'invoicing':
-      return config.invoicing;
-  }
+  // Copy the db credentials object
+  var options = JSON.parse(JSON.stringify(config.mssql));
+  // Add the database name
+  options.database = options.databases[dbName];
+  return options;
 };
 
 /**
