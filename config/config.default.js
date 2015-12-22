@@ -17,16 +17,6 @@ var mssql = {
 }
 
 /**
- * HTTP Basic Authentication
- *
- * Add a username and password to enable basic authentication for the API.
- */
-var credentials = {
-  username: '',
-  password: ''
-}
-
-/**
  * Optional Winston logging transport. Defaults to file logging if not
  * specified. You can add a logging transport by installing it as a module,
  * i.e.'npm install winston-slack' and add its options to this variable.

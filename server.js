@@ -1,6 +1,7 @@
 // Require modules
 var express = require('express'),
-    basicAuth = require('basic-auth-connect'),
+    passport = require('passport');
+    Strategy = require('passport-http').DigestStrategy;
     bodyParser = require('body-parser');
 
 // Require settings and helpers
@@ -31,10 +32,22 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Basic authenticator.
-if (settings.credentials.username) {
-  app.use(basicAuth(settings.credentials.username, settings.credentials.password));
-}
+// Configure Basic Authentication via Passport.
+passport.use(new Strategy({ qop: 'auth' },
+  function(username, cb) {
+    helpers.authenticate(username, function(err, user) {
+      if (err) {
+        return cb(err);
+      }
+      if (!user) {
+        return cb(null, false);
+      }
+      return cb(null, user, user['Lösenord']);
+    })
+  }));
+
+// Tell Express to use Passport.
+app.use(passport.authenticate('digest', {session: false}));
 
 // Use json bodyparser for PUT and POST requests.
 app.use(bodyParser.json());

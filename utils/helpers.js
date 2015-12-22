@@ -690,3 +690,29 @@ exports.transaction = function(queryOne, queryTwo) {
                     'COMMIT';
   return transaction;
 };
+
+exports.authenticate = function(username, callback) {
+  var query = 'SELECT * FROM Använd WHERE Användare = \'' + username + '\'';
+  var cred = exports.credentials('license');
+
+  // Connect to the database to get the user
+  var connection = new sql.Connection(cred, function(err) {
+    var userRequest = new sql.Request(connection);
+    userRequest.query(query).then(function(recordset) {
+      var user = recordset[0];
+      callback(null, user);
+    }).catch(function(err) {
+      // Log the error
+      exports.log({
+        level: 'error',
+        msg: 'Error when authenticating: ' + err,
+        meta: {
+          error: err,
+          query: query
+        }
+      });
+      return callback(err, null);
+    });
+  });
+
+}
