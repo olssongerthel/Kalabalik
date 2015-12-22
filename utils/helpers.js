@@ -691,6 +691,21 @@ exports.transaction = function(queryOne, queryTwo) {
   return transaction;
 };
 
+/**
+ * Callback for authenticate.
+ *
+ * @callback authenticateCallback
+ * @param {string} err - A possible error.
+ * @param {object} user - The user object.
+ */
+
+/**
+ * Helper for Passport Basic authentication. Retrieves
+ * a user object from the database based on the username
+ * provided.
+ * @param  {string}   username
+ * @param  {authenticateCallback} callback
+ */
 exports.authenticate = function(username, callback) {
   var query = 'SELECT * FROM Använd WHERE Användare = \'' + username + '\'';
   var cred = exports.credentials('license');
