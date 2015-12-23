@@ -1,7 +1,7 @@
 // Require modules
 var express = require('express'),
     passport = require('passport');
-    Strategy = require('passport-http').DigestStrategy;
+    Strategy = require('passport-http').BasicStrategy;
     bodyParser = require('body-parser');
 
 // Require settings and helpers
@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
 
 // Configure Basic Authentication via Passport.
 passport.use(new Strategy({ qop: 'auth' },
-  function(username, cb) {
+  function(username, password, cb) {
     helpers.authenticate(username, function(err, user) {
       if (err) {
         return cb(err);
@@ -42,12 +42,15 @@ passport.use(new Strategy({ qop: 'auth' },
       if (!user) {
         return cb(null, false);
       }
-      return cb(null, user, user['Lösenord']);
+      if (user['Lösenord'] != password) {
+        return cb(null, false);
+      }
+      return cb(null, user);
     })
   }));
 
 // Tell Express to use Passport.
-app.use(passport.authenticate('digest', {session: false}));
+app.use(passport.authenticate('basic', {session: false}));
 
 // Use json bodyparser for PUT and POST requests.
 app.use(bodyParser.json());
