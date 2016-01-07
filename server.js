@@ -196,6 +196,8 @@ if (settings.mssql.databases.invoicing) {
 
 if (settings.mssql.databases.supplier) {
   app.get('/suppliers', suppliers.index);
+  app.route('/suppliers/:id')
+    .get(suppliers.findById);
   app.get('/purchase-orders', purchaseOrders.index);
   app.route('/purchase-orders/:id')
     .get(purchaseOrders.findById)
