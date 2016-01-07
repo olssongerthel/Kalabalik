@@ -84,8 +84,8 @@ var welcome = function(req, res) {
         type: 'GET'
       },
       {
-        name: 'Order history order',
-        url: baseUrl + '/order-history/:ORDER-ID',
+        name: 'Order receipt / invoice',
+        url: baseUrl + '/order-history/:FakturaNr',
         type: 'GET'
       },
       {

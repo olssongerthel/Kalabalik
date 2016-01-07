@@ -21,13 +21,13 @@ exports.index = function(req, res) {
 
 exports.findById = function(req, res) {
 
-  var orderId = req.params.id;
+  var invoiceID = req.params.id;
 
   // Make sure we're getting an integer as order ID.
-  if (orderId % 1 !== 0) {
+  if (invoiceID % 1 !== 0) {
     res.status(400).send({
       status: 400,
-      message: "Please supply a valid order number."
+      message: "Please supply a valid invoice / receipt number."
     });
   }
 
@@ -35,8 +35,8 @@ exports.findById = function(req, res) {
     entity: 'Order history',
     db: 'invoicing',
     table: 'FaktHstH',
-    baseProperty: 'OrderNr',
-    id: orderId,
+    baseProperty: 'FakturaNr',
+    id: invoiceID,
     request: req,
     attach: [
       {
@@ -49,7 +49,7 @@ exports.findById = function(req, res) {
       {
         db: 'invoicing',
         table: 'FaktHstK',
-        baseProperty: 'Ordernr',
+        baseProperty: 'FakturaNr',
         attachTo: 'OrderRader'
       }
     ]
@@ -60,7 +60,7 @@ exports.findById = function(req, res) {
     else if (!err && !entity) {
       res.status(404).send({
       status: 404,
-      message: "Couldn't find any orders with that ID."
+      message: "Couldn't find a receipt / invoices for that order ID."
     });
     }
     else {
