@@ -138,6 +138,11 @@ var welcome = function(req, res) {
         type: 'GET'
       },
       {
+        name: 'Supplier',
+        url: baseUrl + '/suppliers/:LEVNR',
+        type: 'GET'
+      },
+      {
         name: 'Purchase orders',
         url: baseUrl + '/purchase-orders',
         type: 'GET'
