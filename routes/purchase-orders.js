@@ -33,7 +33,7 @@ exports.findById = function(req, res) {
   }
 
   helpers.entityQuery({
-    entity: 'Order',
+    entity: 'Purchase Order',
     db: 'supplier',
     table: 'InkH',
     baseProperty: 'InköpsNr',
