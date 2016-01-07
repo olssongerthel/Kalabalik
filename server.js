@@ -75,7 +75,7 @@ var welcome = function(req, res) {
       },
       {
         name: 'Order',
-        url: baseUrl + '/orders/:ORDER-ID',
+        url: baseUrl + '/orders/:Ordernr',
         type: 'GET, PUT'
       },
       {
@@ -95,12 +95,12 @@ var welcome = function(req, res) {
       },
       {
         name: 'Line items per order',
-        url: baseUrl + '/line-items/:ORDER-ID',
+        url: baseUrl + '/line-items/:Ordernr',
         type: 'GET'
       },
       {
         name: 'Line item',
-        url: baseUrl + '/line-items/:ORDER-ID/:ROW',
+        url: baseUrl + '/line-items/:Ordernr/:Rad',
         type: 'GET, PUT'
       },
       {
@@ -110,7 +110,7 @@ var welcome = function(req, res) {
       },
       {
         name: 'Customer',
-        url: baseUrl + '/customers/:CUSTOMER-ID',
+        url: baseUrl + '/customers/:Kundnr',
         type: 'GET, PUT'
       },
       {
@@ -120,7 +120,7 @@ var welcome = function(req, res) {
       },
       {
         name: 'Product',
-        url: baseUrl + '/products/:SKU',
+        url: baseUrl + '/products/:ArtikelNr',
         type: 'GET'
       },
       {
@@ -139,7 +139,7 @@ var welcome = function(req, res) {
       },
       {
         name: 'Supplier',
-        url: baseUrl + '/suppliers/:LEVNR',
+        url: baseUrl + '/suppliers/:LevNr',
         type: 'GET'
       },
       {
@@ -149,7 +149,7 @@ var welcome = function(req, res) {
       },
       {
         name: 'Purchase order',
-        url: baseUrl + '/purchase-orders/:ORDER-ID',
+        url: baseUrl + '/purchase-orders/:InköpsNr',
         type: 'GET, PUT'
       },
       {
@@ -159,12 +159,12 @@ var welcome = function(req, res) {
       },
       {
         name: 'Purchase order line items per order',
-        url: baseUrl + '/purchase-order-line-items/:ORDER-ID',
+        url: baseUrl + '/purchase-order-line-items/:InköpsNr',
         type: 'GET'
       },
       {
         name: 'Purchase order line item',
-        url: baseUrl + '/purchase-order-line-items/:ORDER-ID/:ROW',
+        url: baseUrl + '/purchase-order-line-items/:InköpsNr/:Rad',
         type: 'GET, PUT'
       });
     };
