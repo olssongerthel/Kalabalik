@@ -348,6 +348,8 @@ exports.countQuery = function(options, callback) {
  * @param  {string}   options.table - The database table to query.
  * @param  {string}   options.baseProperty - The DB column that contains the
  * key value of the table row.
+ * @param  {string[]} [options.fields] - A list of the fields to expose. Defaults to all.
+ * The baseProperty will always be included.
  * @param  {boolean}  [options.multiple=false]  - If the request returns multiple
  * entities, such as multiple line items for one order, this settings should be
  * set to true.
@@ -356,7 +358,7 @@ exports.countQuery = function(options, callback) {
  * @param  {string/number}   options.id - The entity ID (KundNr or Ordernr etc.)
  * @param  {string/number}   options.secondaryValue - The value of the secondary
  * property.
- * @param  {object}   options.request - An Express req object.
+ * @param  {object}   [options.request] - An Express req object.
  * @param  {array}    [options.attach] - An array of objects that follow the
  * attach() objects requirements. Can be used to attach additional info to the
  * entity before it is returned in the callback.
@@ -367,21 +369,31 @@ exports.entityQuery = function(options, callback) {
   var response = {};
   response._metadata = exports.SingleMetadata();
 
+  if (options.request) {
+    var meta = {
+      ip: options.request.ip ? options.request.ip : '',
+      query: options.request.query ? options.request.query : ''
+    }
+  }
+
   // Log the request
   exports.log({
     level: 'info',
     msg: 'Request for single ' + options.entity,
-    meta: {
-      ip: options.request.ip,
-      query: options.request.query
-    }
+    meta: meta ? meta : ''
   });
 
   options.multiple = (options.multiple === true) ? true : false;
 
   var cred = exports.credentials(options.db);
   var id = exports.purger(options.baseProperty, options.id);
-  var query = 'SELECT * FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id;
+
+  // Manage which fields to fetch on the main entity
+  options.fields = options.fields ? options.fields : [];
+  options.fields.push(options.baseProperty);
+  var fields = options.fields.length > 1 ? options.fields.join() : '*';
+
+  var query = 'SELECT ' + fields + ' FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id;
 
   // Add secondary query param
   query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
@@ -555,14 +567,10 @@ exports.attach = function(entity, objects, callback) {
 exports.updateEntity = function(options, callback) {
 
   var response = {};
+  var amount = Object.keys(options.data).length;
 
   // Purge the ID
   options.id = exports.purger(options.baseProperty, options.id);
-
-  // Build a SET query string based on the data
-  var set = 'SET ';
-  var amount = Object.keys(options.data).length;
-  var index = 0;
 
   // Bail if there are no updates to be made.
   if (!amount) {
@@ -571,72 +579,146 @@ exports.updateEntity = function(options, callback) {
     return callback(response);
   }
 
-  // Create a SET query string for the properties that are being updated.
-  for (var key in options.data) {
-    if (options.data.hasOwnProperty(key)) {
-      index++;
-      var value = (typeof options.data[key] == 'string') ? '\'' + options.data[key] + '\'' : options.data[key];
-      set = set + key + " = " + value;
-      if (amount > 1 && index < amount) {
-        set = set + ', ';
+  var properties = function() {
+    array = [];
+    for (var key in options.data) {
+      array.push(key);
+    }
+    return array;
+  }
+
+  var compareExisting = function(entity, cb) {
+    var equal = true;
+    var err = 'The properties are identical to the existing entity data. No update has been performed.';
+    for (var key in options.data) {
+      // Check if the values are dates, since they might not be identically
+      // formatted if they are. If so, convert them before comparing values.
+      if (!isNaN(Date.parse(entity[key]))) {
+        if (Date.parse(options.data[key]) !== Date.parse(entity[key])) {
+          equal = false;
+          return cb(null);
+        }
+      }
+      // Treat all other types of values the same, i.e as strings.
+      else {
+        if (options.data[key] !== entity[key]) {
+          equal = false;
+          return cb(null);
+        }
       }
     }
+    return cb(err);
   }
 
-  // Build the update query
-  var query = 'UPDATE ' + options.table + ' ' +
-              set + ' ' +
-              ", Ändrad = Ändrad + 1 " + // Update the Ändrad value in order to prevent clashes with other updates.
-              'WHERE ' + options.baseProperty + ' = ' + options.id;
-
-  // Add secondary query param if needed
-  query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
-
-  // If we're updating a sub-entity such as a line item, we need to update the
-  // 'Ändrad' value of its parent as well to prevent the changes from being
-  // overridden by other clients. If an entity is being edited in Avance while
-  // Kalabalik is editing the same entity, this keeps the last edit from being
-  // permitted as it would have erased the initial change.
-  if (options.parent) {
-    var parentQuery = 'UPDATE ' + options.parent.table + ' ' +
-                      'SET Ändrad = Ändrad + 1 ' +
-                      'WHERE ' + options.parent.baseProperty + ' = ' + options.parent.id;
-    query = exports.transaction(query, parentQuery);
-  }
-
-  var cred = exports.credentials(options.db);
-
-  // Perform the update
-  var connection = new sql.Connection(cred, function(err) {
-    var request = new sql.Request(connection);
-    request.query(query).then(function(recordset) {
-      // Success
-      response.status = 200;
-      response.message = 'Successfully updated ' + options.entity + ' ' + options.id;
-      response.response = recordset;
-      exports.log({
-        level: 'info',
-        msg: response.message,
-        meta: {
-          query: query
+  // Retrieve the existing entity in order to compare the existing data with the
+  // new data. If there are no changes to be made, we'll abort the procedure.
+  exports.entityQuery({
+    entity: options.entity,
+    db: options.db,
+    table: options.table,
+    baseProperty: options.baseProperty,
+    id: options.id,
+    fields: properties()
+  }, function(err, entity){
+    if (!err && entity) {
+      compareExisting(entity.response, function(error) {
+        // Bail
+        if (error) {
+          response.status = 202;
+          response.message = error;
+          exports.log({
+            level: 'info',
+            msg: response.message
+          });
+          callback(response);
+        }
+        // Continue
+        else {
+          buildQuery(entity);
         }
       });
-      callback(response);
-    }).catch(function(err) {
-      // Fail
-      response.status = 400;
-      response.message = 'Error when updating ' + options.entity + ' ' + options.id;
-      response.error = err;
-      exports.log({
-        level: 'error',
-        msg: response.message,
-        meta: {
-          query: query
-        }
-      });
-      callback(response);
-    });
+    }
+    else {
+      callback(err, null);
+    }
   });
+
+
+  // Builds a SET query string based on the data
+  var buildQuery = function() {
+
+    var set = 'SET ';
+    var index = 0;
+
+    for (var key in options.data) {
+      if (options.data.hasOwnProperty(key)) {
+        index++;
+        var value = (typeof options.data[key] == 'string') ? '\'' + options.data[key] + '\'' : options.data[key];
+        set = set + key + " = " + value;
+        if (amount > 1 && index < amount) {
+          set = set + ', ';
+        }
+      }
+    }
+
+    var query = 'UPDATE ' + options.table + ' ' +
+                set + ' ' +
+                ", Ändrad = Ändrad + 1 " + // Update the Ändrad value in order to prevent clashes with other updates.
+                'WHERE ' + options.baseProperty + ' = ' + options.id;
+
+    // Add secondary query param if needed
+    query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
+
+    // If we're updating a sub-entity such as a line item, we need to update the
+    // 'Ändrad' value of its parent as well to prevent the changes from being
+    // overridden by other clients. If an entity is being edited in Avance while
+    // Kalabalik is editing the same entity, this keeps the last edit from being
+    // permitted as it would have erased the initial change.
+    if (options.parent) {
+      var parentQuery = 'UPDATE ' + options.parent.table + ' ' +
+                        'SET Ändrad = Ändrad + 1 ' +
+                        'WHERE ' + options.parent.baseProperty + ' = ' + options.parent.id;
+      query = exports.transaction(query, parentQuery);
+    }
+
+    update(query);
+  }
+
+  var update = function(query) {
+    var cred = exports.credentials(options.db);
+    // Perform the update
+    var connection = new sql.Connection(cred, function(err) {
+      var request = new sql.Request(connection);
+      request.query(query).then(function(recordset) {
+        // Success
+        response.status = 200;
+        response.message = 'Successfully updated ' + options.entity + ' ' + options.id;
+        response.response = recordset;
+        exports.log({
+          level: 'info',
+          msg: response.message,
+          meta: {
+            query: query
+          }
+        });
+        callback(response);
+      }).catch(function(err) {
+        // Fail
+        response.status = 400;
+        response.message = 'Error when updating ' + options.entity + ' ' + options.id;
+        response.error = err;
+        exports.log({
+          level: 'error',
+          msg: response.message,
+          meta: {
+            query: query
+          }
+        });
+        callback(response);
+      });
+    });
+
+  };
 
 };
 
