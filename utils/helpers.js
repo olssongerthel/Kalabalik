@@ -618,6 +618,8 @@ exports.updateEntity = function(options, callback) {
     table: options.table,
     baseProperty: options.baseProperty,
     id: options.id,
+    secondaryProperty: options.secondaryProperty,
+    secondaryValue: options.secondaryValue,
     fields: properties()
   }, function(err, entity){
     if (!err && entity) {
