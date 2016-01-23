@@ -27,7 +27,7 @@ exports.log = function(data) {
     winston.log(data.level, data.msg, data.meta);
   } else {
     return;
-  };
+  }
 };
 
 /**
@@ -164,7 +164,6 @@ exports.PaginatedQuery = function(options) {
  * @param  {string}   [options.orderDirection] - The direction to order by.
  * Defaults to DESC.
  * @param  {object}   options.request - An Express req object.
- * 'WHERE ArtikelNr = "123"' or equivalent. Use the filter() helper.
  * @param  {createIndexCallback} callback
  */
 exports.createIndex = function(options, callback) {
@@ -367,13 +366,14 @@ exports.countQuery = function(options, callback) {
 exports.entityQuery = function(options, callback) {
 
   var response = {};
+  var meta = {};
   response._metadata = exports.SingleMetadata();
 
   if (options.request) {
-    var meta = {
+    meta = {
       ip: options.request.ip ? options.request.ip : '',
       query: options.request.query ? options.request.query : ''
-    }
+    };
   }
 
   // Log the request
@@ -528,9 +528,7 @@ exports.attach = function(entity, objects, callback) {
         callback(entity);
       }
     });
-
   }
-
 };
 
 /**
@@ -585,7 +583,7 @@ exports.updateEntity = function(options, callback) {
       array.push(key);
     }
     return array;
-  }
+  };
 
   var compareExisting = function(entity, cb) {
     var equal = true;
@@ -608,7 +606,7 @@ exports.updateEntity = function(options, callback) {
       }
     }
     return cb(err);
-  }
+  };
 
   // Retrieve the existing entity in order to compare the existing data with the
   // new data. If there are no changes to be made, we'll abort the procedure.
@@ -684,7 +682,7 @@ exports.updateEntity = function(options, callback) {
     }
 
     update(query);
-  }
+  };
 
   var update = function(query) {
     var cred = exports.credentials(options.db);
@@ -814,4 +812,4 @@ exports.authenticate = function(username, callback) {
     });
   });
 
-}
+};

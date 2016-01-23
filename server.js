@@ -46,7 +46,7 @@ passport.use(new Strategy({ qop: 'auth' },
         return cb(null, false);
       }
       return cb(null, user);
-    })
+    });
   }));
 
 // Tell Express to use Passport.
@@ -128,7 +128,7 @@ var welcome = function(req, res) {
         url: baseUrl + '/stock',
         type: 'GET'
       });
-    };
+    }
 
     // Supplier endpoints
     if (settings.mssql.databases.supplier) {
@@ -167,7 +167,7 @@ var welcome = function(req, res) {
         url: baseUrl + '/purchase-order-line-items/:InköpsNr/:Rad',
         type: 'GET, PUT'
       });
-    };
+    }
 
     res.jsonp({
       message: message,
