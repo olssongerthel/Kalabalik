@@ -75,6 +75,83 @@ exports.filter = function(params) {
   return filter;
 };
 
+/**
+ * Callback for subFilter.
+ *
+ * @callback subFilterCallback
+ * @param {string} err - An error message, if any.
+ * @param {object} list - An object containing the string.
+ */
+
+/**
+ * Creates a subfilter query that can be used on its
+ * own or be attached to an existing filter string.
+ * The string should be formatted like so:
+ * Ordernr[invoicing:FaktK:Ordernr][Benämning LIKE \'$string$\'];
+ *
+ * @param  {string} value - the URL query parameter from "subFilter" param.
+ * @param  {subFilterCallback} callback
+ */
+exports.subFilter = function(value, callback) {
+
+  var param = {
+    property: value.split('[')[0],
+    db: value.split('[')[1].split(":")[0],
+    table: value.split('[')[1].split(":")[1],
+    column: value.split(']')[0].split(":")[2],
+    where: value.match(/\[(.*?)\]/g)[1].replace(']', '').replace('[', '')
+  };
+
+  // Turn double quotes into singles quotes to avoid SQL errors.
+  param.where = param.where.replace(/"/gi, '\'');
+
+  // Replace $ with %. This is needed because using % in the URL
+  // will break the filter.
+  param.where = param.where.replace(/\$/g, '%');
+
+  // Assemble the query string;
+  var query = 'SELECT ' + param.property + ' FROM ' + param.table + ' WHERE ' + param.where;
+
+  // Helper to elmininate duplicates from the results array.
+  function eliminateDuplicates(arr) {
+    var i,
+        len=arr.length,
+        out=[],
+        obj={};
+
+    for (i=0;i<len;i++) {
+      obj[arr[i]]=0;
+    }
+    for (i in obj) {
+      // Purge the value before adding it to the list
+      i = exports.purger(param.column, i);
+      out.push(i);
+    }
+    return out;
+  }
+
+  // Connect to the database
+  var connection = new sql.Connection(exports.credentials(param.db), function(err) {
+    // Fetch the requested data
+    var request = new sql.Request(connection);
+    request.query(query).then(function(recordset) {
+      var err = null;
+      // Convert the result into an array of single values
+      var inList = [];
+      for (var i = 0; i < recordset.length; i++) {
+        inList.push(recordset[i][param.column]);
+      };
+      // Reduce dupes and convert the array to a string query
+      inList = eliminateDuplicates(inList);
+      param.string = param.column + ' IN (' + inList.join() + ')';
+      // Return
+      callback(err, param);
+    }).catch(function(err) {
+      callback(err, null);
+    });
+  });
+}
+
 exports.ListMetadata = function(req) {
   var metadata = {};
   metadata.responseTime = new Date().getTime();
@@ -172,7 +249,9 @@ exports.createIndex = function(options, callback) {
   options.orderDirection = options.orderDirection ? options.orderDirection : 'DESC';
 
   var index = {};
-  var filter = options.request.query.filter ? exports.filter(options.request.query.filter) : '';
+  var filter = options.request.query.filter ? exports.filter(options.request.query.filter) : {};
+  var subFilter = options.request.query.subFilter ? options.request.query.subFilter : '';
+
   var meta = exports.ListMetadata(options.request);
 
   // Add filter parameters to the response metadata
@@ -188,36 +267,41 @@ exports.createIndex = function(options, callback) {
     }
   });
 
-  // Perform a count request in order to get the total
+  // Performs a count request in order to get the total
   // amount of results.
-  exports.countQuery({
-    db: options.db,
-    table: options.table,
-    where: filter.string,
-  }, function(err, recordset) {
-    if (!err) {
-      // Add the count request results to the metadata.
-      meta.totalCount = recordset[0][''];
-      paginatedReq();
-    } else {
-      callback(err, index);
-    }
-  });
+  var countQuery = function() {
+    exports.countQuery({
+        db: options.db,
+        table: options.table,
+        where: filter.string,
+      }, function(err, recordset) {
+        if (!err) {
+          // Add the results to the metadata.
+          meta.totalCount = recordset[0][''];
+          // Continue
+          paginatedReq();
+        } else {
+          callback(err, index);
+        }
+      });
+  };
 
-  // Create a paginated query string
-  var query = exports.PaginatedQuery({
-    table: options.table,
-    orderBy: options.orderBy,
-    orderDirection: options.orderDirection,
-    filter: filter.string,
-    meta: meta
-  });
+  // Creates a paginated query string
+  var query = function() {
+    return exports.PaginatedQuery({
+      table: options.table,
+      orderBy: options.orderBy,
+      orderDirection: options.orderDirection,
+      filter: filter.string,
+      meta: meta
+    });
+  };
 
-  // Perform the paginated request
+  // Performs a paginated request
   var paginatedReq = function() {
     exports.indexRequest({
       db: options.db,
-      query: query
+      query: query()
     }, function(err, recordset) {
       if (!err) {
         httpBody(recordset);
@@ -227,7 +311,7 @@ exports.createIndex = function(options, callback) {
     });
   };
 
-  // Combine everything in one index object and return it
+  // Combines everything in one index object and return it
   var httpBody = function(data) {
     // Add metadata
     index._metadata = exports.ListMetadata.buildPager(meta, options.request, data);
@@ -237,6 +321,22 @@ exports.createIndex = function(options, callback) {
     var err = null;
     callback(err, index);
   };
+
+  // Initialize sequence
+  if (subFilter) {
+    exports.subFilter(subFilter, function(error, list) {
+      if (!error) {
+        // Add the subfilter to the existing filter string. Create it from
+        // scratch if there is no other filter.
+        filter.string = filter.string ? filter.string + ' AND ' + list.string : 'WHERE ' + list.string;
+        countQuery();
+      } else {
+        countQuery();
+      }
+    });
+  } else {
+    countQuery();
+  }
 
 };
 
@@ -727,10 +827,10 @@ exports.updateEntity = function(options, callback) {
  * are strings. This function helps keep track of which are which and silently
  * converts them to their proper type.
  * @param  {string}     property - The column name.
- * @param  {string/int} id - The ID to be purged.
- * @return {string/int} The entity ID as string or integer
+ * @param  {string/int} value - The value to be purged.
+ * @return {string/int} The value as string or integer
  */
-exports.purger = function(property, id) {
+exports.purger = function(property, value) {
   switch(property) {
     case 'KundNr':
     case 'Kundnr':
@@ -738,9 +838,9 @@ exports.purger = function(property, id) {
     case 'Artikelnr':
     case 'LevNr':
     case 'Levnr':
-      return '\'' + id + '\'';
+      return '\'' + value + '\'';
     default:
-      return id;
+      return value;
   }
 };
 

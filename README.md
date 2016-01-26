@@ -46,6 +46,26 @@ Example 4: Filter on on products containing the word _chair_
 
 Use 1 or 0 for TRUE/FALSE when filtering. Use quotes for strings.
 
+### Additional filtering
+
+There is another, more advanced form of filtering that can be done if sufficient database knowledge is at hand. It uses "IN" statements based on results of other queries. If, for example you want to filter the order list for orders containing a line item containing the word "bag", you would filter like this:
+
+`/orders?subFilter=InköpsNr[supplier:InkK:InköpsNr][Benämning LIKE "$bag$"]`
+
+or if you'd like to filter products that are in stock:
+
+`/products?subFilter=ArtikelNr[invoicing:LagerSaldo:ArtikelNr][Lager > 0 AND LagerställeID = 1]`
+
+The subFilter value is constructed like this:
+
+`property[database:table:column][where]`
+
+- property: The property to match the resulting value to.
+- database: The "name" of the database, see the config file.
+- table: The database table to perform the query on.
+- column: The column used to extract the value that is matched to the propery.
+- where: An SQL 'WHERE' statement.
+
 ## Controlling the pages and results
 
 There are four available parameters related to results:
