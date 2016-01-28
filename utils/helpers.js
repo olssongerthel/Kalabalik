@@ -92,8 +92,52 @@ exports.filter = function(params) {
  * @param  {string} value - the URL query parameter from "subFilter" param.
  * @param  {subFilterCallback} callback
  */
-exports.subFilter = function(value, callback) {
+exports.subFilter = function(params, callback) {
 
+  // Turn the pipe delimited filter into an object for easier processing.
+  var result = [];
+
+  params.split('|').forEach(function(x){
+    result.push(x);
+  });
+
+  // Convert params into an object since we don't need the original
+  // format any longer and we need something to attach things to.
+  params = {
+    subFilters: result,
+    string: ''
+  };
+
+  // Bail if there are no filters
+  if (params.subFilters.length === 0) {
+    callback('Attempted to create a subfilter with no values supplied.', null);
+  }
+
+  // Create a countdown integer
+  var countdown = params.subFilters.length;
+  var index = 0;
+
+  // Loop through each subfilter parameter and create the 'where'
+  // string for each one.
+  for (var i = 0; i < params.subFilters.length; i++) {
+    exports.subFilterLoop(params.subFilters[i], function(err, param) {
+      if (!err) {
+        index++;
+        params.string = params.string + param.string;
+        if (countdown > 1 && index < countdown) {
+          params.string = params.string + ' AND ';
+        }
+        if (index === countdown) {
+          callback(null, params);
+        }
+      } else {
+        callback('An error occured within exports.subFilter()', null);
+      }
+    });
+  }
+};
+
+exports.subFilterLoop = function(value, callback) {
   var param = {
     property: value.split('[')[0],
     db: value.split('[')[1].split(":")[0],
@@ -140,7 +184,7 @@ exports.subFilter = function(value, callback) {
       var inList = [];
       for (var i = 0; i < recordset.length; i++) {
         inList.push(recordset[i][param.column]);
-      };
+      }
       // Reduce dupes and convert the array to a string query
       inList = eliminateDuplicates(inList);
       param.string = param.column + ' IN (' + inList.join() + ')';
@@ -150,7 +194,7 @@ exports.subFilter = function(value, callback) {
       callback(err, null);
     });
   });
-}
+};
 
 exports.ListMetadata = function(req) {
   var metadata = {};
