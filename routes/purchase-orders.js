@@ -9,6 +9,7 @@ exports.index = function(req, res) {
     table: 'InkH',
     orderBy: req.query.orderBy ? req.query.orderBy : 'Orderdatum',
     orderDirection: req.query.direction,
+    fields: req.query.fields,
     request: req
   }, function(err, index){
     if (!err) {

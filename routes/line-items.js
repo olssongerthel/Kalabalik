@@ -8,6 +8,7 @@ exports.index = function(req, res) {
     table: 'FaktK',
     orderBy: req.query.orderBy ? req.query.orderBy : 'Ordernr',
     orderDirection: req.query.direction,
+    fields: req.query.fields,
     request: req
   }, function(err, index){
     if (!err) {

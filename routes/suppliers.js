@@ -8,6 +8,7 @@ exports.index = function(req, res) {
     table: 'Lev',
     orderBy: req.query.orderBy ? req.query.orderBy : 'LevNr',
     orderDirection: req.query.direction ? req.query.direction : 'ASC',
+    fields: req.query.fields,
     request: req
   }, function(err, index){
     if (!err) {

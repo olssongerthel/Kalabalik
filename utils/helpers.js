@@ -217,7 +217,7 @@ exports.ListMetadata.buildPager = function(metadata, req, results) {
 
   if (!req.query.page) {
     req.query.page = 1;
-    req.url = (req.query.filter || req.query.perPage || req.query.orderBy) ? req.url + '&page=1' : req.url + '?page=1';
+    req.url = (req.query.filter || req.query.perPage || req.query.orderBy || req.query.subFilter || req.query.fields) ? req.url + '&page=1' : req.url + '?page=1';
   }
 
   var paginator = pagination.create('search', {
@@ -252,9 +252,21 @@ exports.SingleMetadata = function() {
   return metadata;
 };
 
+/**
+ * Produces a valid SQL select column string.
+ *
+ * @param  {string}   string - A Kalabalik URL field string (pipe delimited)
+ * @return {string}   - A valid SQL select column string.
+ */
+exports.fieldStringToSQL = function(fields) {
+  var sqlString = fields.split('|');
+  return sqlString;
+};
+
 exports.PaginatedQuery = function(options) {
   options.filter = options.filter ? options.filter : '';
-  var query = 'SELECT * ' +
+  options.fields = options.fields ? exports.fieldStringToSQL(options.fields) : '*';
+  var query = 'SELECT ' + options.fields + ' ' +
               'FROM (' +
                 'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ' ' + options.orderDirection +') AS RowNum, *' +
                 'FROM ' + options.table + ' ' +
@@ -282,6 +294,8 @@ exports.PaginatedQuery = function(options) {
  * variables that are used in the config file.
  * @param  {string}   options.table - The table to query.
  * @param  {string}   options.orderBy - The property to order by.
+ * @param  {string}   [options.fields] - The properties/fields to display.
+ * Defaults to * (i.e. all fields) if not specified.
  * @param  {string}   [options.orderDirection] - The direction to order by.
  * Defaults to DESC.
  * @param  {object}   options.request - An Express req object.
@@ -336,6 +350,7 @@ exports.createIndex = function(options, callback) {
       table: options.table,
       orderBy: options.orderBy,
       orderDirection: options.orderDirection,
+      fields: options.fields,
       filter: filter.string,
       meta: meta
     });

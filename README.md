@@ -68,12 +68,13 @@ The subFilter value is constructed like this:
 
 ## Controlling the pages and results
 
-There are four available parameters related to results:
+There are five additional available parameters related to results:
 
 `perPage` can be set to any integer below 10.000. Default is 25.
 `page` is the actual page number. This value is available in the metadata on each list result.
 `orderBy` is the property you wish to order the results by. Some indexes have a default that is hidden.
 `direction` used in combination with orderBy. `ASC` or `DESC` ar e valid options here, and `DESC` is mostly the default.
+`fields` can be used if you want to display only certain entity properties. The value should be separated by pipes, i.e `fields=Ordernr|Kundnr|Faktmottagare`. Reducing the amount of fields will improve the performance of your query.
 
 ## Updating entities
 
