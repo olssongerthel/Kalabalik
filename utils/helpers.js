@@ -170,7 +170,7 @@ exports.subFilterLoop = function(value, callback) {
       // Convert the result into an array of single values
       var inList = [];
       for (var i = 0; i < recordset.length; i++) {
-        inList.push(recordset[i][param.column]);
+        inList.push(exports.purger(param.column, recordset[i][param.column]));
       }
       // Convert the array to a string query
       param.string = param.column + ' ' + param.statement + ' (' + inList.join() + ')';
