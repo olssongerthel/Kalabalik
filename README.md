@@ -25,7 +25,7 @@ Kalabalik only supports Avance using MS SQL as data storage.
 5. Run Kalabalik: `node server.js`
 6. Go check it out at `http://localhost:3000` in a browser of choice.
 
-**Optional**: Add username and password to config.js to enable basic authentication. If you don’t want to use 3000 as port number you can change that as well in config.js.
+**Optional**: If you don’t want to use 3000 as port number you can change that as well in config.js. If you're using IIS Node you should use `process.env.PORT` as port.
 
 If you want to run Kalabalik on a Windows server, [IIS Node](https://github.com/tjanczuk/iisnode) is recommended as it makes Node.js and Windows work very well together.
 
@@ -61,6 +61,7 @@ The subFilter value is constructed like this:
 `property[database:table:column][where]`
 
 - property: The property to match the resulting value to.
+- statement: Defines whether to perform an `IN` or `NOT IN` statement. Defaults to `IN`. The statement is not visible in the example above, but is used by adding `!` after the property: `property![database:table:column][where]`
 - database: The "name" of the database, see the config file.
 - table: The database table to perform the query on.
 - column: The column used to extract the value that is matched to the propery.
@@ -78,7 +79,7 @@ There are five additional available parameters related to results:
 
 ## Updating entities
 
-Updating an entity is risky since we're dealing with direct database access. If an endpoint supports PUT, then use it carefully. *Extra* fields might be easy and risk free to update, but keep in mind that there might be a lot of things going around when for example an order is saved in FDT Avance - stuff that is not taken into account for in this API.
+Updating an entity is risky since we're dealing with direct database access. If an endpoint supports PUT, then use it carefully. *Extra* fields might be easy and risk free to update, but keep in mind that there might be a lot of things going around when for example an order is saved in FDT Avance - stuff that is not taken into account for in this API. One thing that the API does account for is the `Ändrad` value which will be updated when an entity is updated, in order to prevent clashes with other edits.
 
 To update an entity, submit the changes in JSON format as request body, i.e:
 
