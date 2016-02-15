@@ -141,7 +141,9 @@ exports.subFilter = function(params, callback) {
 };
 
 exports.subFilterLoop = function(value, callback) {
+
   var param = {
+    statement: value.match(/.\!\[/) ? 'NOT IN' : 'IN',
     property: value.split('[')[0],
     db: value.split('[')[1].split(":")[0],
     table: value.split('[')[1].split(":")[1],
@@ -190,7 +192,7 @@ exports.subFilterLoop = function(value, callback) {
       }
       // Reduce dupes and convert the array to a string query
       inList = eliminateDuplicates(inList);
-      param.string = param.column + ' IN (' + inList.join() + ')';
+      param.string = param.column + ' ' + param.statement + ' (' + inList.join() + ')';
       // Return
       callback(err, param);
     }).catch(function(err) {
