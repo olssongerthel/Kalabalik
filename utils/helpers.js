@@ -158,26 +158,8 @@ exports.subFilterLoop = function(value, callback) {
   // will break the filter.
   param.where = param.where.replace(/\$/g, '%');
 
-  // Assemble the query string;
-  var query = 'SELECT ' + param.property + ' FROM ' + param.table + ' WHERE ' + param.where;
-
-  // Helper to elmininate duplicates from the results array.
-  function eliminateDuplicates(arr) {
-    var i,
-        len=arr.length,
-        out=[],
-        obj={};
-
-    for (i=0;i<len;i++) {
-      obj[arr[i]]=0;
-    }
-    for (i in obj) {
-      // Purge the value before adding it to the list
-      i = exports.purger(param.column, i);
-      out.push(i);
-    }
-    return out;
-  }
+  // Assemble the query string
+  var query = 'SELECT ' + param.column + ' FROM ' + param.table + ' WHERE ' + param.where + ' GROUP BY ' + param.column;
 
   // Connect to the database
   var connection = new sql.Connection(exports.credentials(param.db), function(err) {
@@ -190,8 +172,7 @@ exports.subFilterLoop = function(value, callback) {
       for (var i = 0; i < recordset.length; i++) {
         inList.push(recordset[i][param.column]);
       }
-      // Reduce dupes and convert the array to a string query
-      inList = eliminateDuplicates(inList);
+      // Convert the array to a string query
       param.string = param.column + ' ' + param.statement + ' (' + inList.join() + ')';
       // Return
       callback(err, param);
