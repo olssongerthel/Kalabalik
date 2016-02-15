@@ -144,7 +144,7 @@ exports.subFilterLoop = function(value, callback) {
 
   var param = {
     statement: value.match(/.\!\[/) ? 'NOT IN' : 'IN',
-    property: value.split('[')[0],
+    property: value.split('[')[0].replace('!', ''),
     db: value.split('[')[1].split(":")[0],
     table: value.split('[')[1].split(":")[1],
     column: value.split(']')[0].split(":")[2],
