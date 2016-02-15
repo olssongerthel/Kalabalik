@@ -299,8 +299,8 @@ exports.createIndex = function(options, callback) {
   var meta = exports.ListMetadata(options.request);
 
   // Add filter parameters to the response metadata
-  meta.params.filter = filter.params;
-  meta.params.subFilter = subFilter.split('|');
+  if (filter) meta.params.filter = filter.params;
+  if (subFilter) meta.params.subFilter = subFilter.split('|');
 
   // Log the request
   exports.log({
