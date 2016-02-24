@@ -17,6 +17,18 @@ var mssql = {
 }
 
 /**
+ * Basic Authentication login credentials.
+ *
+ * If enabled, the username and password will be used as authentication
+ * for the API. If not, the FDT user base will be used.
+ */
+var simpleAuth = {
+  enabled: false,
+  username: '',
+  password: ''
+}
+
+/**
  * Optional Winston logging transport. Defaults to file logging if not
  * specified. You can add a logging transport by installing it as a module,
  * i.e.'npm install winston-slack' and add its options to this variable.
@@ -44,7 +56,7 @@ var debug = false;
 
 exports.port = 3000; // Select the port to run Kalabalik on.
 exports.mssql = mssql;
-exports.credentials = credentials;
+exports.simpleAuth = simpleAuth;
 exports.winstonTransport = winstonTransport;
 exports.cors = cors;
 exports.debug = debug;

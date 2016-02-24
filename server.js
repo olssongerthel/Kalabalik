@@ -35,18 +35,29 @@ app.use(function (req, res, next) {
 // Configure Basic Authentication via Passport.
 passport.use(new Strategy({ qop: 'auth' },
   function(username, password, cb) {
-    helpers.authenticate(username, function(err, user) {
-      if (err) {
-        return cb(err);
-      }
-      if (!user) {
+    // Simple Authentication
+    if (settings.simpleAuth.enabled) {
+      if (username == settings.simpleAuth.username && password == settings.simpleAuth.password) {
+        return cb(null, true);
+      } else {
         return cb(null, false);
       }
-      if (user['Lösenord'] != password) {
-        return cb(null, false);
-      }
-      return cb(null, user);
-    });
+    }
+    // User based authentication
+    else {
+      helpers.authenticate(username, function(err, user) {
+        if (err) {
+          return cb(err);
+        }
+        if (!user) {
+          return cb(null, false);
+        }
+        if (user['Lösenord'] != password) {
+          return cb(null, false);
+        }
+        return cb(null, user);
+      });
+    }
   }));
 
 // Tell Express to use Passport.
