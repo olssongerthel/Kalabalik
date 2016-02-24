@@ -9,7 +9,8 @@ var settings = require('./config/config'),
     helpers = require('./utils/helpers');
 
 // Require views
-var orders = require('./routes/orders'),
+var login = require('./routes/authentication').login,
+    orders = require('./routes/orders'),
     orderHistory = require('./routes/order-history'),
     lineItems = require('./routes/line-items'),
     customers = require('./routes/customers'),
@@ -225,6 +226,10 @@ if (settings.mssql.databases.supplier) {
     .put(purchaseOrderLineItems.update);
 }
 
+// User authentication URL
+app.post('/login', login);
+
+// Start page
 app.get('', welcome);
 
 // Initiate server

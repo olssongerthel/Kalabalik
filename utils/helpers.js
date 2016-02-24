@@ -938,6 +938,10 @@ exports.authenticate = function(username, callback) {
   var query = 'SELECT * FROM Använd WHERE Användare = \'' + username + '\'';
   var cred = exports.credentials('license');
 
+  if (!username) {
+    return callback('No username supplied', null);
+  }
+
   // Connect to the database to get the user
   var connection = new sql.Connection(cred, function(err) {
     var userRequest = new sql.Request(connection);
