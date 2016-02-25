@@ -928,13 +928,15 @@ exports.transaction = function(queryOne, queryTwo) {
  */
 
 /**
- * Helper for Passport Basic authentication. Retrieves
+ * Helper for user authentication. Retrieves
  * a user object from the database based on the username
- * provided.
+ * and password provided.
+ *
  * @param  {string}   username
+ * @param  {string}   password
  * @param  {authenticateCallback} callback
  */
-exports.authenticate = function(username, callback) {
+exports.authenticate = function(username, password, callback) {
   var query = 'SELECT * FROM Använd WHERE Användare = \'' + username + '\'';
   var cred = exports.credentials('license');
 
@@ -942,12 +944,30 @@ exports.authenticate = function(username, callback) {
     return callback('No username supplied', null);
   }
 
+  if (!password) {
+    return callback('No password supplied', null);
+  }
+
   // Connect to the database to get the user
   var connection = new sql.Connection(cred, function(err) {
     var userRequest = new sql.Request(connection);
     userRequest.query(query).then(function(recordset) {
-      var user = recordset[0];
-      callback(null, user);
+      // Bail if there is no match
+      if (!recordset.length) {
+        return callback('Could not find user ' + username, null);
+      }
+      // Match found
+      else {
+        var user = recordset[0];
+        // Wrong password
+        if (user['Lösenord'] != password) {
+          return callback('Wrong password', null);
+        }
+        // Success
+        else {
+          return callback(null, user);
+        }
+      }
     }).catch(function(err) {
       // Log the error
       exports.log({

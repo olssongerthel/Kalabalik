@@ -46,17 +46,13 @@ passport.use(new Strategy({ qop: 'auth' },
     }
     // User based authentication
     else {
-      helpers.authenticate(username, function(err, user) {
+      helpers.authenticate(username, password, function(err, user) {
         if (err) {
-          return cb(err);
-        }
-        if (!user) {
           return cb(null, false);
         }
-        if (user['Lösenord'] != password) {
-          return cb(null, false);
+        else {
+          return cb(null, user);
         }
-        return cb(null, user);
       });
     }
   }));
