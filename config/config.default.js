@@ -48,6 +48,16 @@ var winstonTransport = {
  */
 var cors = false;
 
+
+/**
+ * IP Filter
+ *
+ * Add IP addresses to the array in order to enable. API requests will only
+ * be allowed from the listed IP addresses. Use '::1' for localhost, i.e. the
+ * client that is hosting Kalabalik.
+ */
+var ipfilter = []
+
 /**
  * Debug mode
  * Set to true to increase verbosity of the logging.
@@ -59,4 +69,5 @@ exports.mssql = mssql;
 exports.simpleAuth = simpleAuth;
 exports.winstonTransport = winstonTransport;
 exports.cors = cors;
+exports.ipfilter = ipfilter;
 exports.debug = debug;

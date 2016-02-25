@@ -1,7 +1,8 @@
 // Require modules
 var express = require('express'),
-    passport = require('passport');
-    Strategy = require('passport-http').BasicStrategy;
+    passport = require('passport'),
+    ipfilter = require('express-ipfilter'),
+    Strategy = require('passport-http').BasicStrategy,
     bodyParser = require('body-parser');
 
 // Require settings and helpers
@@ -32,6 +33,14 @@ app.use(function (req, res, next) {
   }
   next();
 });
+
+// IP restriction
+if (settings.ipfilter.length > 0) {
+  console.log('Restriced access mode enabled');
+  app.use(ipfilter(settings.ipfilter, {
+    mode: 'allow'
+  }));
+}
 
 // Configure Basic Authentication via Passport.
 passport.use(new Strategy({ qop: 'auth' },
