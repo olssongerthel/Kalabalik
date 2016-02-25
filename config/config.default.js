@@ -56,7 +56,7 @@ var cors = false;
  * be allowed from the listed IP addresses. Use '::1' for localhost, i.e. the
  * client that is hosting Kalabalik.
  */
-var ipfilter = []
+var ipfilter = [];
 
 /**
  * Debug mode
