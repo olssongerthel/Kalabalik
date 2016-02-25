@@ -60,7 +60,7 @@ exports.filter = function(params) {
   for (var i = 0; i < result.length; i++) {
     index++;
     // Sanitize single quotes to prevent unclosed quotation mark after the string '
-    result[i] = result[i].replace(/[']/g, "''")
+    result[i] = result[i].replace(/[']/g, "''");
 
     filter.string = filter.string + result[i];
     if (amount > 1 && index < amount) {
