@@ -14,7 +14,10 @@ exports.index = function(req, res) {
     if (!err) {
       res.jsonp(index);
     } else {
-      res.jsonp(err.message);
+      res.status(500).jsonp({
+        status: 500,
+        message: err.message
+      });
     }
   });
 
@@ -52,7 +55,10 @@ exports.findById = function(req, res) {
     });
     }
     else {
-      res.jsonp(err.message);
+      res.status(500).jsonp({
+        status: 500,
+        message: err.message
+      });
     }
   });
 
