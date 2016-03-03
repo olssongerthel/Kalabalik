@@ -172,8 +172,10 @@ exports.subFilterLoop = function(value, callback) {
       for (var i = 0; i < recordset.length; i++) {
         inList.push(exports.purger(param.column, recordset[i][param.column]));
       }
+      // If the result is empty, default to '' otherwise join the values
+      inList = inList.length ? inList.join() : '\'\'';
       // Convert the array to a string query
-      param.string = param.column + ' ' + param.statement + ' (' + inList.join() + ')';
+      param.string = param.column + ' ' + param.statement + ' (' + inList + ')';
       // Return
       callback(err, param);
     }).catch(function(err) {
