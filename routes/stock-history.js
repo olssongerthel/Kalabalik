@@ -6,8 +6,7 @@ exports.index = function(req, res) {
     endpoint: 'Stock history',
     db: 'invoicing',
     table: 'LagerHst',
-    orderBy: req.query.orderBy ? req.query.orderBy : 'Datum',
-    orderDirection: req.query.direction,
+    orderBy: 'Datum DESC, Tid',
     fields: req.query.fields,
     request: req
   }, function(err, index){

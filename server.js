@@ -149,7 +149,8 @@ var welcome = function(req, res) {
       {
         name: 'Stock history',
         url: baseUrl + '/stock-history',
-        type: 'GET'
+        type: 'GET',
+        note: 'Params orderBy and direction not available.'
       }
       );
     }
