@@ -17,6 +17,7 @@ var login = require('./routes/authentication').login,
     customers = require('./routes/customers'),
     products = require('./routes/products'),
     stock = require('./routes/stock'),
+    stockHistory = require('./routes/stock-history'),
     suppliers = require('./routes/suppliers'),
     purchaseOrders = require('./routes/purchase-orders'),
     purchaseOrderLineItems = require('./routes/purchase-order-line-items');
@@ -144,7 +145,13 @@ var welcome = function(req, res) {
         name: 'Stock status',
         url: baseUrl + '/stock',
         type: 'GET'
-      });
+      },
+      {
+        name: 'Stock history',
+        url: baseUrl + '/stock-history',
+        type: 'GET'
+      }
+      );
     }
 
     // Supplier endpoints
@@ -214,6 +221,7 @@ if (settings.mssql.databases.invoicing) {
   app.get('/products', products.index);
   app.get('/products/:sku', products.findBySKU);
   app.get('/stock', stock.index);
+  app.get('/stock-history', stockHistory.index);
 }
 
 if (settings.mssql.databases.supplier) {
