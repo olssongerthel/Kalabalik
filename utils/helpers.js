@@ -941,7 +941,6 @@ exports.transaction = function(queryOne, queryTwo) {
 exports.authenticate = function(username, password, callback) {
   var query = 'SELECT * FROM Använd WHERE Användare = \'' + username + '\'';
   var cred = exports.credentials('license');
-  password = password.toUpperCase(); // FDT Stores all passwords in uppercase
 
   if (!username) {
     return callback('No username supplied', null);
@@ -950,6 +949,8 @@ exports.authenticate = function(username, password, callback) {
   if (!password) {
     return callback('No password supplied', null);
   }
+
+  password = password.toUpperCase(); // FDT Stores all passwords in uppercase
 
   // Connect to the database to get the user
   var connection = new sql.Connection(cred, function(err) {
