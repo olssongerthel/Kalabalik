@@ -9,7 +9,7 @@
     "body-parser": "^1.14.0",
     "express": "latest",
     "express-ipfilter": "0.0.24",
-    "mssql": "^2.3.1",
+    "mssql": "^3.3.0",
     "pagination": "^0.4.3",
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
