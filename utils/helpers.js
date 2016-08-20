@@ -123,20 +123,22 @@ exports.subFilter = function(params, callback) {
   // Loop through each subfilter parameter and create the 'where'
   // string for each one.
   for (var i = 0; i < params.subFilters.length; i++) {
-    exports.subFilterLoop(params.subFilters[i], function(err, param) {
-      if (!err) {
-        index++;
-        params.string = params.string + param.string;
-        if (countdown > 1 && index < countdown) {
-          params.string = params.string + ' AND ';
-        }
-        if (index === countdown) {
-          callback(null, params);
-        }
-      } else {
-        callback('An error occured within exports.subFilter()', null);
+    exports.subFilterLoop(params.subFilters[i], combineSubFilters);
+  }
+
+  function combineSubFilters(err, param) {
+    if (!err) {
+      index++;
+      params.string = params.string + param.string;
+      if (countdown > 1 && index < countdown) {
+        params.string = params.string + ' AND ';
       }
-    });
+      if (index === countdown) {
+        callback(null, params);
+      }
+    } else {
+      callback('An error occured within exports.subFilter()', null);
+    }
   }
 };
 
@@ -662,20 +664,22 @@ exports.attach = function(entity, objects, callback) {
       attachTo: objects[i].attachTo,
       database: objects[i].db,
       multiple: objects[i].multiple
-    }, function(data, options) {
-      // Attach as array if multiple is true, otherwise as an object.
-      if (options.multiple) {
-        entity[options.attachTo] = data;
-      } else {
-        entity[options.attachTo] = data[0];
-      }
-      countdown--;
-      // Make sure that all reqests have been performed.
-      if (countdown === 0) {
-        // Return the entity in a callback
-        callback(entity);
-      }
-    });
+    }, attach);
+  }
+
+  function attach(data, options) {
+    // Attach as array if multiple is true, otherwise as an object.
+    if (options.multiple) {
+      entity[options.attachTo] = data;
+    } else {
+      entity[options.attachTo] = data[0];
+    }
+    countdown--;
+    // Make sure that all reqests have been performed.
+    if (countdown === 0) {
+      // Return the entity in a callback
+      callback(entity);
+    }
   }
 };
 
