@@ -9,7 +9,7 @@ var express = require('express'),
 var settings = require('./config/config'),
     helpers = require('./utils/helpers');
 
-// Require views
+// Require routes
 var login = require('./routes/authentication').login,
     orders = require('./routes/orders'),
     orderHistory = require('./routes/order-history'),
