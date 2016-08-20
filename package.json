@@ -8,7 +8,7 @@
   "dependencies": {
     "body-parser": "^1.14.0",
     "express": "latest",
-    "express-ipfilter": "0.0.24",
+    "express-ipfilter": "^0.1.0",
     "mssql": "^3.3.0",
     "pagination": "^0.4.3",
     "passport": "^0.3.2",
