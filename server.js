@@ -20,9 +20,11 @@ var login = require('./routes/authentication').login,
     stockHistory = require('./routes/stock-history'),
     suppliers = require('./routes/suppliers'),
     purchaseOrders = require('./routes/purchase-orders'),
-    purchaseOrderLineItems = require('./routes/purchase-order-line-items');
+    purchaseOrderLineItems = require('./routes/purchase-order-line-items'),
+    reports = require('./routes/reports');
 
 var app = express();
+var baseUrl = '';
 
 // Set content type to JSON for all requests.
 app.use(function (req, res, next) {
@@ -82,7 +84,7 @@ var welcome = function(req, res) {
   // Create an array that we can store all endpoints in
   var endPoints = [];
   if (req) {
-    var baseUrl = req.protocol + '://' + req.get('host');
+    baseUrl = req.protocol + '://' + req.get('host');
 
     // Invoicing endpoints
     if (settings.mssql.databases.invoicing) {
@@ -194,6 +196,16 @@ var welcome = function(req, res) {
       });
     }
 
+    // Reports
+    var list = reports.reports();
+    if (list) {
+      endPoints.push({
+        name: 'Reports',
+        type: 'GET',
+        urls: buildReportUrls(list)
+      });
+    }
+
     res.jsonp({
       message: message,
       endPoints: endPoints
@@ -240,6 +252,9 @@ if (settings.mssql.databases.supplier) {
     .put(purchaseOrderLineItems.update);
 }
 
+// Reports
+app.get('/reports/:report', reports.report);
+
 // User authentication URL
 app.post('/login', login);
 
@@ -253,3 +268,11 @@ helpers.log({
   level: 'info',
   msg: welcome()
 });
+
+function buildReportUrls(reports) {
+  var list = [];
+  for (var i = 0; i < reports.length; i++) {
+    list.push(baseUrl + '/reports/' + reports[i]);
+  }
+  return list;
+}

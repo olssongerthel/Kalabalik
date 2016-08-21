@@ -991,3 +991,48 @@ exports.authenticate = function(username, password, callback) {
   });
 
 };
+
+/**
+ * Callback for query.
+ *
+ * @callback queryCallback
+ * @param {string} err - An error message, if any.
+ * @param {object} data - The query results.
+ */
+
+/**
+ * Generates a custom report.
+ *
+ * @param  {Object} options
+ * @param  {String} options.db - The database to query, i.e 'invoicing' etc.
+ * @param  {String} query - The SQL query to perform
+ * @param  {Bool}   [options.multiple=false] - If the request returns multiple
+ * rows (i.e. an array), this settings should be set to true.
+ * @param  {queryCallback} callback
+ */
+exports.query = function(options, callback) {
+
+  var response = {};
+  var meta = {};
+  response._metadata = exports.SingleMetadata();
+
+
+  options.multiple = (options.multiple === true) ? true : false;
+
+  // Connect to the database
+  var connection = new sql.Connection(exports.credentials(options.db), function(err) {
+    // Perform the query
+    var request = new sql.Request(connection);
+    request.query(options.query).then(function(recordset) {
+      var err = null;
+      if (!options.multiple) {
+        recordset = recordset[0];
+      }
+      response.response = recordset;
+      response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
+      callback(err, response);
+    }).catch(function(err) {
+      callback(err, null);
+    });
+  });
+};
