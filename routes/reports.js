@@ -16,14 +16,31 @@ function validateQuery(query) {
 }
 
 /*
+ * Converts the parameter value to its type in order
+ * to comply with SQL syntax.
+ */
+function parameterPrepare(parameter) {
+  var value = '';
+  switch(parameter.type) {
+    case 'integer':
+      value = parseInt(parameter.value);
+      break;
+    default:
+      value = '\'' + parameter.value + '\'';
+  }
+  return value;
+}
+
+/*
  * Adds query parameter variables to the query.
  */
 function queryConstructor(query, parameters) {
   for (var property in parameters) {
-    // Convert number from string to integer
-    parameters[property] = isNaN(parameters[property]) ? parameters[property] : parseInt(parameters[property]);
+    // Convert the value to its proper type
+    var value = parameterPrepare(parameters[property]);
     // Replace the variables in the query with the param value
-    query = query.replace('@' + property, parameters[property]);
+    var regex = new RegExp('@' + property, 'g');
+    query = query.replace(regex, value);
   }
   return query;
 }
@@ -53,9 +70,20 @@ exports.report = function(req, res) {
 
   // Loop through available query parameters and replace default
   // values with them.
-  for (var param in req.query) {
-    if (typeof report.parameters[param] != 'undefined') {
-      report.parameters[param] = req.query[param];
+  for (var queryParam in req.query) {
+    if (typeof report.parameters[queryParam] != 'undefined') {
+      report.parameters[queryParam].value = req.query[queryParam];
+    }
+  }
+
+  // Make sure that all required parameters have been set
+  for (var param in report.parameters) {
+    if (report.parameters[param].required && !report.parameters[param].value) {
+      res.jsonp({
+        status: 500,
+        message: 'Missing required query parameter.',
+        param: param
+      });
     }
   }
 
@@ -66,8 +94,9 @@ exports.report = function(req, res) {
       queryString = queryConstructor(queryString, report.parameters);
       // Validate it
       if (!validateQuery(queryString)) {
-        res.jsonp({
-          msg: 'The query does not validate. DELETE or SET is not permitted.'
+        res.status(500).jsonp({
+          status: 500,
+          message: 'The query does not validate. DELETE or SET is not permitted.'
         });
         return;
       }
@@ -76,8 +105,14 @@ exports.report = function(req, res) {
         query: queryString,
         db: 'invoicing'
       }, function(err, data) {
-        data._metadata.params = report.parameters;
-        res.json(data);
+        if (!err) {
+          data._metadata.params = report.parameters;
+          res.json(data);
+        }
+        else {
+          res.jsonp(err);
+        }
+
       });
     }
     else {

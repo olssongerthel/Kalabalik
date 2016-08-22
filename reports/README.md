@@ -9,25 +9,46 @@ Place the files in a folder named `<report-name>` in the `/reports` directory an
 
 ## Reports and query parameters
 
-Reports support query parameters. Add the variables wherever needed in the sql query and prefix the value with `@`. The value will then be replaced when a query parameter with the same name is used. Parameters must have default values, which are set in the `<report-name>.report.js` file.
+Reports support query parameters. Add the variables wherever needed in the sql query and prefix the value with `@`. The value will then be replaced when a query parameter with the same name is used. Parameters must have default values unless they are required, which are set in the `<report-name>.report.js` file.
 
 ## Example report
 
-An example report that displays the number of active products in the database. The query parameter `sortimentstatus` that is used in the example has a default value of `70`.
+An example report that displays the total order value of a specific customer (both finished and ongoing orders). The query parameter `customerID` that is used in the example does not have a default value.
 
 **example.report.js**
 ```
 exports.report = {
-  name: 'Products',
+  name: 'Customer total',
   parameters: {
-    'sortimentstatus': 70
+    customerID: {
+      value: null, // Leave this empty if your report requires a parameter value.
+      type: 'string', // Can also be set to 'integer'
+      required: true // This parameter is required because it doesn't have a default value.
+    }
   }
 }
 ```
 
 **example.report.sql**
 ```
-SELECT TOP 1000 COUNT("Art"."ArtikelNr") AS "Artiklar"
-FROM "dbo". "Art"
-WHERE "Art"."SortimentStatus" <> @sortimentstatus
+SELECT (
+  (
+    SELECT ISNULL(SUM(BeloppExkl), 0)
+    FROM "FaktK"
+    INNER JOIN "FaktH"
+      ON FaktK.Ordernr = FaktH.Ordernr
+    WHERE FaktH.Kundnr = @customerID
+    AND FaktH.status != 1 /* Ignore quotes */
+    AND FaktK.Typ IN (0,1)
+  )
+  +
+  (
+    SELECT ISNULL(SUM(Belopp - MomsBelopp), 0)
+    FROM "FaktHstK"
+    INNER JOIN "FaktHstH"
+      ON FaktHstK.FakturaNr = FaktHstH.FakturaNr
+    WHERE FaktHstH.Kundnr = @customerID
+    AND FaktHstK.Typ IN (0,1)
+  )
+) as Total
 ```
