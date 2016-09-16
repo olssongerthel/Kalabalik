@@ -180,8 +180,10 @@ exports.subFilterLoop = function(value, callback) {
       param.string = param.column + ' ' + param.statement + ' (' + inList + ')';
       // Return
       callback(err, param);
+      connection.close();
     }).catch(function(err) {
       callback(err, null);
+      connection.close();
     });
   });
 };
@@ -418,6 +420,7 @@ exports.indexRequest = function(options, callback) {
       var err = null;
       // Send to the client
       callback(err, recordset);
+      connection.close();
     }).catch(function(err) {
       // Log the error
       exports.log({
@@ -428,6 +431,7 @@ exports.indexRequest = function(options, callback) {
         }
       });
       callback(err, recordset);
+      connection.close();
     });
   });
 };
@@ -462,6 +466,7 @@ exports.countQuery = function(options, callback) {
     var countRequest = new sql.Request(connection);
     countRequest.query(query).then(function(recordset) {
       callback(err, recordset);
+      connection.close();
     }).catch(function(err) {
       // Log the error
       exports.log({
@@ -474,6 +479,7 @@ exports.countQuery = function(options, callback) {
       });
       recordset = null;
       callback(err, recordset);
+      connection.close();
     });
   });
 };
@@ -576,7 +582,7 @@ exports.entityQuery = function(options, callback) {
       else {
         callback(err);
       }
-
+      connection.close();
     }).catch(function(err) {
       // Log the error
       exports.log({
@@ -589,6 +595,7 @@ exports.entityQuery = function(options, callback) {
       });
       recordset = null;
       callback(err, recordset);
+      connection.close();
     });
   });
 
@@ -632,6 +639,7 @@ exports.attach = function(entity, objects, callback) {
       var attachRequest = new sql.Request(connection);
       attachRequest.query(options.query).then(function(recordset) {
         cb(recordset, options);
+        connection.close();
       }).catch(function(err) {
         // Failure
         exports.log({
@@ -642,6 +650,7 @@ exports.attach = function(entity, objects, callback) {
             query: options.query
           }
         });
+        connection.close();
       });
 
     });
@@ -854,6 +863,7 @@ exports.updateEntity = function(options, callback) {
           }
         });
         callback(response);
+        connection.close();
       }).catch(function(err) {
         // Fail
         response.status = 400;
@@ -867,6 +877,7 @@ exports.updateEntity = function(options, callback) {
           }
         });
         callback(response);
+        connection.close();
       });
     });
 
@@ -962,20 +973,21 @@ exports.authenticate = function(username, password, callback) {
     userRequest.query(query).then(function(recordset) {
       // Bail if there is no match
       if (!recordset.length) {
-        return callback('Could not find user ' + username, null);
+        callback('Could not find user ' + username, null);
       }
       // Match found
       else {
         var user = recordset[0];
         // Wrong password
         if (user['Lösenord'] != password) {
-          return callback('Wrong password', null);
+          callback('Wrong password', null);
         }
         // Success
         else {
-          return callback(null, user);
+          callback(null, user);
         }
       }
+      connection.close();
     }).catch(function(err) {
       // Log the error
       exports.log({
@@ -986,7 +998,8 @@ exports.authenticate = function(username, password, callback) {
           query: query
         }
       });
-      return callback(err, null);
+      callback(err, null);
+      connection.close();
     });
   });
 
@@ -1031,8 +1044,10 @@ exports.query = function(options, callback) {
       response.response = recordset;
       response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
       callback(err, response);
+      connection.close();
     }).catch(function(err) {
       callback(err, null);
+      connection.close();
     });
   });
 };
