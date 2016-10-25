@@ -103,7 +103,8 @@ exports.report = function(req, res) {
       // Perform the query and return the data to the client
       helpers.query({
         query: queryString,
-        db: 'invoicing'
+        db: 'invoicing',
+        multiple: report.list ? true : false
       }, function(err, data) {
         if (!err) {
           data._metadata.params = report.parameters;
