@@ -1,4 +1,4 @@
-_Kalabalik_ is an **unofficial** REST API implementation for the Swedish ERP system [FDT Avance](http://fdt.se/affarssystem/). It currently supports version 8.5.X but will support 8.6.X.
+_Kalabalik_ is an **unofficial** REST API implementation for the Swedish ERP system [FDT Avance](http://fdt.se/affarssystem/).
 
 It exposes a number of entities that may be relevant to other systems, and makes it possible to build applications around it or connect FDT with external systems. Entities exposed are (among others):
 
