@@ -728,9 +728,6 @@ exports.updateEntity = function(options, callback) {
   var response = {};
   var amount = Object.keys(options.data).length;
 
-  // Purge the ID
-  options.id = exports.purger(options.baseProperty, options.id);
-
   // Bail if there are no updates to be made.
   if (!amount) {
     response.message = 'You haven\'t supplied any data';
@@ -807,6 +804,9 @@ exports.updateEntity = function(options, callback) {
 
   // Builds a SET query string based on the data
   var buildQuery = function() {
+
+    // Purge the ID
+    options.id = exports.purger(options.baseProperty, options.id);
 
     var set = 'SET ';
     var index = 0;
