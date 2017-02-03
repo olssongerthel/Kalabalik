@@ -897,6 +897,7 @@ exports.purger = function(property, value) {
   switch(property) {
     case 'KundNr':
     case 'Kundnr':
+    case 'Kundordernr':
     case 'ArtikelNr':
     case 'Artikelnr':
     case 'LevNr':
