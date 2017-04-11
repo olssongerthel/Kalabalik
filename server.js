@@ -1,7 +1,8 @@
 // Require modules
 var express = require('express'),
     passport = require('passport'),
-    ipfilter = require('express-ipfilter'),
+    ipfilter = require('express-ipfilter').IpFilter,
+    IpDeniedError = require('express-ipfilter').IpDeniedError,
     Strategy = require('passport-http').BasicStrategy,
     bodyParser = require('body-parser');
 
@@ -41,8 +42,24 @@ app.use(function (req, res, next) {
 if (settings.ipfilter.length > 0) {
   console.log('Restriced access mode enabled');
   app.use(ipfilter(settings.ipfilter, {
-    mode: 'allow'
+    mode: 'allow',
+    logLevel: 'deny'
   }));
+
+  app.use(function(err, req, res, _next) {
+    console.log('Error handler', err);
+    var status = 200;
+    if (err instanceof IpDeniedError){
+      status = 401;
+    }
+    else{
+      status = 500;
+    }
+    res.status(status).jsonp({
+      status: status,
+      message: 'You shall not pass',
+    });
+  });
 }
 
 // Configure Basic Authentication via Passport.

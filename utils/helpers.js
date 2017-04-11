@@ -889,6 +889,7 @@ exports.updateEntity = function(options, callback) {
  * Validates various entity IDs. Some system IDs in FDT are integers while some
  * are strings. This function helps keep track of which are which and silently
  * converts them to their proper type.
+ *
  * @param  {string}     property - The column name.
  * @param  {string/int} value - The value to be purged.
  * @return {string/int} The value as string or integer
