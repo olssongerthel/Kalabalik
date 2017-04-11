@@ -47,12 +47,11 @@ if (settings.ipfilter.length > 0) {
   }));
 
   app.use(function(err, req, res, _next) {
-    console.log('Error handler', err);
     var status = 200;
     if (err instanceof IpDeniedError){
       status = 401;
     }
-    else{
+    else {
       status = 500;
     }
     res.status(status).jsonp({
