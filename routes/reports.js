@@ -71,7 +71,7 @@ exports.report = function(req, res) {
   // Loop through available query parameters and replace default
   // values with them.
   for (var queryParam in req.query) {
-    if (typeof report.parameters[queryParam] != 'undefined') {
+    if (typeof report.parameters[queryParam] !== 'undefined' && req.query[queryParam] !== '') {
       report.parameters[queryParam].value = req.query[queryParam];
     }
   }
