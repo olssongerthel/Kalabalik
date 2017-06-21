@@ -8,7 +8,7 @@ var helpers = require('../utils/helpers'),
  */
 function validateQuery(query) {
   query = query.toUpperCase();
-  if (query.indexOf('DELETE') > 0 || query.indexOf('SET') > 0) {
+  if (query.indexOf('DELETE') > 0 || query.indexOf('UPDATE') > 0) {
     return false;
   } else {
     return true;
@@ -21,13 +21,18 @@ function validateQuery(query) {
  */
 function parameterPrepare(parameter) {
   var value = '';
-  switch(parameter.type) {
+
+  // Escape if value is null
+  if (parameter.value === null) return null;
+
+  switch (parameter.type) {
     case 'integer':
       value = parseInt(parameter.value);
       break;
     default:
       value = '\'' + parameter.value + '\'';
   }
+
   return value;
 }
 
@@ -68,6 +73,10 @@ exports.report = function(req, res) {
   var name = req.params.report;
   var report = require('../reports/' + name + '/' + name + '.report.js').report;
 
+  // Copy the report to prevent params from sticking between queries
+  // @TODO Switch to Node's _extend?
+  report = JSON.parse(JSON.stringify(report));
+
   // Loop through available query parameters and replace default
   // values with them.
   for (var queryParam in req.query) {
@@ -100,6 +109,7 @@ exports.report = function(req, res) {
         });
         return;
       }
+
       // Perform the query and return the data to the client
       helpers.query({
         query: queryString,
@@ -111,7 +121,10 @@ exports.report = function(req, res) {
           res.json(data);
         }
         else {
-          res.jsonp(err);
+          res.status(500).jsonp({
+            status: 500,
+            message: err.message
+          });
         }
 
       });

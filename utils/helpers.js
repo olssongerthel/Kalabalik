@@ -1031,7 +1031,6 @@ exports.query = function(options, callback) {
   var meta = {};
   response._metadata = exports.SingleMetadata();
 
-
   options.multiple = (options.multiple === true) ? true : false;
 
   // Connect to the database
