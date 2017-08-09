@@ -67,3 +67,18 @@ exports.findBySKU = function(req, res) {
   });
 
 };
+
+exports.update = function(req, res) {
+
+  helpers.updateEntity({
+    entity: 'Product',
+    db: 'invoicing',
+    table: 'Art',
+    baseProperty: 'ArtikelNr',
+    id: req.params.sku,
+    data: req.body
+  }, function(response) {
+    res.status(response.status).send(response);
+  });
+
+};

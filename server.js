@@ -157,7 +157,7 @@ var welcome = function(req, res) {
       {
         name: 'Product',
         url: baseUrl + '/products/:ArtikelNr',
-        type: 'GET'
+        type: 'GET, PUT'
       },
       {
         name: 'Stock status',
@@ -248,7 +248,9 @@ if (settings.mssql.databases.invoicing) {
     .get(customers.findById)
     .put(customers.update);
   app.get('/products', products.index);
-  app.get('/products/:sku', products.findBySKU);
+  app.route('/products/:sku')
+    .get(products.findBySKU)
+    .put(products.update);
   app.get('/stock', stock.index);
   app.get('/stock-history', stockHistory.index);
 }
