@@ -218,7 +218,7 @@ var welcome = function(req, res) {
       endPoints.push({
         name: 'Reports',
         type: 'GET',
-        urls: buildReportUrls(list)
+        endpoints: buildReportUrls(list)
       });
     }
 
