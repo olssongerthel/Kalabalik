@@ -23,7 +23,7 @@ if (!config.winstonTransport.module) {
 exports.log = function(data) {
   data.level = data.level ? data.level : 'info';
   data.meta = data.meta ? data.meta : null;
-  if ((data.level == 'info' && config.debug) || data.level == 'error') {
+  if ((data.level == 'info' && config.debug) || data.level == 'error' || data.level == 'notice') {
     winston.log(data.level, data.msg, data.meta);
   } else {
     return;
@@ -853,10 +853,10 @@ exports.updateEntity = function(options, callback) {
       request.query(query).then(function(recordset) {
         // Success
         response.status = 200;
-        response.message = 'Successfully updated ' + options.entity + ' ' + options.id;
+        response.message = 'Updated ' + options.entity + ' ' + options.id;
         response.response = recordset;
         exports.log({
-          level: 'info',
+          level: 'notice',
           msg: response.message,
           meta: {
             query: query
