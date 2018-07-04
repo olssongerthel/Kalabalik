@@ -19,6 +19,7 @@ var login = require('./routes/authentication').login,
     products = require('./routes/products'),
     stock = require('./routes/stock'),
     stockHistory = require('./routes/stock-history'),
+    stockRefillThresholds = require('./routes/stock-refill-thresholds'),
     suppliers = require('./routes/suppliers'),
     purchaseOrders = require('./routes/purchase-orders'),
     purchaseOrderLineItems = require('./routes/purchase-order-line-items'),
@@ -169,6 +170,11 @@ var welcome = function(req, res) {
         url: baseUrl + '/stock-history',
         type: 'GET',
         note: 'Params orderBy and direction not available.'
+      },
+      {
+        name: 'Stock refill thresholds',
+        url: baseUrl + '/stock-refill-thresholds',
+        type: 'GET'
       }
       );
     }
@@ -253,6 +259,7 @@ if (settings.mssql.databases.invoicing) {
     .put(products.update);
   app.get('/stock', stock.index);
   app.get('/stock-history', stockHistory.index);
+  app.get('/stock-refill-thresholds', stockRefillThresholds.index);
 }
 
 if (settings.mssql.databases.supplier) {
