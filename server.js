@@ -97,7 +97,7 @@ app.use(bodyParser.json())
  * Generates the front page welcome message and endpoints list.
  */
 var welcome = function (req, res) {
-  var message = 'Kalabalik is up and running.'
+  var message = 'Kalabalik is up and running on port ' + settings.port
   // Create an array that we can store all endpoints in
   var endPoints = []
   if (req) {
