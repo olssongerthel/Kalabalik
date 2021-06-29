@@ -87,7 +87,7 @@ exports.report = function (req, res) {
   // Make sure that all required parameters have been set
   for (var param in report.parameters) {
     if (report.parameters[param].required && !report.parameters[param].value) {
-      res.jsonp({
+      return res.jsonp({
         status: 500,
         message: 'Missing required query parameter.',
         param: param
