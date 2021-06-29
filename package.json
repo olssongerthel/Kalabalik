@@ -5,6 +5,9 @@
   "scripts": {
     "start": "node server.js"
   },
+  "engines": {
+    "node": ">= 10.3.0"
+  },
   "dependencies": {
     "body-parser": "^1.14.0",
     "express": "latest",
