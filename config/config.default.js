@@ -46,8 +46,7 @@ var winstonTransport = {
  * CORS settings
  * Set to true to allow cross-origin resource sharing.
  */
-var cors = false;
-
+var cors = false
 
 /**
  * IP Filter
@@ -56,18 +55,18 @@ var cors = false;
  * be allowed from the listed IP addresses. Use '::1' for localhost, i.e. the
  * client that is hosting Kalabalik.
  */
-var ipfilter = [];
+var ipfilter = []
 
 /**
  * Debug mode
  * Set to true to increase verbosity of the logging.
  */
-var debug = false;
+var debug = false
 
-exports.port = 3000; // Select the port to run Kalabalik on.
-exports.mssql = mssql;
-exports.simpleAuth = simpleAuth;
-exports.winstonTransport = winstonTransport;
-exports.cors = cors;
-exports.ipfilter = ipfilter;
-exports.debug = debug;
+exports.port = 3000 // Select the port to run Kalabalik on.
+exports.mssql = mssql
+exports.simpleAuth = simpleAuth
+exports.winstonTransport = winstonTransport
+exports.cors = cors
+exports.ipfilter = ipfilter
+exports.debug = debug

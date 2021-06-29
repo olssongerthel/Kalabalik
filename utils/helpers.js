@@ -1,13 +1,13 @@
 var config = require('../config/config'),
-    sql = require('mssql'),
-    pagination = require('pagination'),
-    winston = require('winston');
+  sql = require('mssql'),
+  pagination = require('pagination'),
+  winston = require('winston')
 
 // Default to using logfile if no other Winston transport has been selected.
 if (!config.winstonTransport.module) {
-  winston.add(winston.transports.File, { filename: 'log/kalabalik.log' });
+  winston.add(winston.transports.File, { filename: 'log/kalabalik.log' })
 } else {
-  winston.add(config.winstonTransport.module, config.winstonTransport.options);
+  winston.add(config.winstonTransport.module, config.winstonTransport.options)
 }
 
 /**
@@ -20,15 +20,15 @@ if (!config.winstonTransport.module) {
  * @param  {String} data.meta.plugin - The human readable name of your plugin,
  * i.e the same as exports.label from your plugin.
  */
-exports.log = function(data) {
-  data.level = data.level ? data.level : 'info';
-  data.meta = data.meta ? data.meta : null;
+exports.log = function (data) {
+  data.level = data.level ? data.level : 'info'
+  data.meta = data.meta ? data.meta : null
   if ((data.level == 'info' && config.debug) || data.level == 'error' || data.level == 'notice') {
-    winston.log(data.level, data.msg, data.meta);
+    winston.log(data.level, data.msg, data.meta)
   } else {
-    return;
+    return
   }
-};
+}
 
 /**
  * Produces a valid SQL filter string based on URL params.
@@ -36,47 +36,47 @@ exports.log = function(data) {
  * @return {object}   An object containing the filter string and information
  * about it.
  */
-exports.filter = function(params) {
-  var filter = {};
+exports.filter = function (params) {
+  var filter = {}
 
   // Turn the pipe delimited filter into an object for easier processing.
-  var result = [];
+  var result = []
 
-  params.split('|').forEach(function(x){
-    result.push(x);
-  });
-  params = result;
-  filter.params = params;
+  params.split('|').forEach(function (x) {
+    result.push(x)
+  })
+  params = result
+  filter.params = params
 
   // Bail if there are no filters
   if (params.length === 0) {
-    return;
+    return
   }
 
-  filter.string = 'WHERE ';
-  var amount = Object.keys(params).length;
-  var index = 0;
+  filter.string = 'WHERE '
+  var amount = Object.keys(params).length
+  var index = 0
 
   for (var i = 0; i < result.length; i++) {
-    index++;
+    index++
     // Sanitize single quotes to prevent unclosed quotation mark after the string '
-    result[i] = result[i].replace(/[']/g, "''");
+    result[i] = result[i].replace(/[']/g, "''")
 
-    filter.string = filter.string + result[i];
+    filter.string = filter.string + result[i]
     if (amount > 1 && index < amount) {
-      filter.string = filter.string + ' AND ';
+      filter.string = filter.string + ' AND '
     }
   }
 
   // Turn double quotes into singles quotes to avoid SQL errors.
-  filter.string = filter.string.replace(/"/gi, '\'');
+  filter.string = filter.string.replace(/"/gi, "'")
 
   // Replace $ with %. This is needed because using % in the URL
   // will break the filter.
-  filter.string = filter.string.replace(/\$/g, '%');
+  filter.string = filter.string.replace(/\$/g, '%')
 
-  return filter;
-};
+  return filter
+}
 
 /**
  * Callback for subFilter.
@@ -95,154 +95,183 @@ exports.filter = function(params) {
  * @param  {string} value - the URL query parameter from "subFilter" param.
  * @param  {subFilterCallback} callback
  */
-exports.subFilter = function(params, callback) {
-
+exports.subFilter = function (params, callback) {
   // Turn the pipe delimited filter into an object for easier processing.
-  var result = [];
+  var result = []
 
-  params.split('|').forEach(function(x){
-    result.push(x);
-  });
+  params.split('|').forEach(function (x) {
+    result.push(x)
+  })
 
   // Convert params into an object since we don't need the original
   // format any longer and we need something to attach things to.
   params = {
     subFilters: result,
     string: ''
-  };
+  }
 
   // Bail if there are no filters
   if (params.subFilters.length === 0) {
-    callback('Attempted to create a subfilter with no values supplied.', null);
+    callback('Attempted to create a subfilter with no values supplied.', null)
   }
 
   // Create a countdown integer
-  var countdown = params.subFilters.length;
-  var index = 0;
+  var countdown = params.subFilters.length
+  var index = 0
 
   // Loop through each subfilter parameter and create the 'where'
   // string for each one.
   for (var i = 0; i < params.subFilters.length; i++) {
-    exports.subFilterLoop(params.subFilters[i], combineSubFilters);
+    exports.subFilterLoop(params.subFilters[i], combineSubFilters)
   }
 
   function combineSubFilters(err, param) {
     if (!err) {
-      index++;
-      params.string = params.string + param.string;
+      index++
+      params.string = params.string + param.string
       if (countdown > 1 && index < countdown) {
-        params.string = params.string + ' AND ';
+        params.string = params.string + ' AND '
       }
       if (index === countdown) {
-        callback(null, params);
+        callback(null, params)
       }
     } else {
-      callback('An error occured within exports.subFilter()', null);
+      callback('An error occured within exports.subFilter()', null)
     }
   }
-};
+}
 
-exports.subFilterLoop = function(value, callback) {
-
+exports.subFilterLoop = function (value, callback) {
   var param = {
     statement: value.match(/.\!\[/) ? 'NOT IN' : 'IN',
     property: value.split('[')[0].replace('!', ''),
-    db: value.split('[')[1].split(":")[0],
-    table: value.split('[')[1].split(":")[1],
-    column: value.split(']')[0].split(":")[2],
-    where: value.match(/\[(.*?)\]/g)[1].replace(']', '').replace('[', '')
-  };
+    db: value.split('[')[1].split(':')[0],
+    table: value.split('[')[1].split(':')[1],
+    column: value.split(']')[0].split(':')[2],
+    where: value
+      .match(/\[(.*?)\]/g)[1]
+      .replace(']', '')
+      .replace('[', '')
+  }
 
   // Turn double quotes into singles quotes to avoid SQL errors.
-  param.where = param.where.replace(/"/gi, '\'');
+  param.where = param.where.replace(/"/gi, "'")
 
   // Replace $ with %. This is needed because using % in the URL
   // will break the filter.
-  param.where = param.where.replace(/\$/g, '%');
+  param.where = param.where.replace(/\$/g, '%')
 
   // Assemble the query string
-  var query = 'SELECT ' + param.column + ' FROM ' + param.table + ' WHERE ' + param.where + ' GROUP BY ' + param.column;
+  var query =
+    'SELECT ' +
+    param.column +
+    ' FROM ' +
+    param.table +
+    ' WHERE ' +
+    param.where +
+    ' GROUP BY ' +
+    param.column
 
   // Connect to the database
-  var connection = new sql.Connection(exports.credentials(param.db), function(err) {
+  var connection = new sql.Connection(exports.credentials(param.db), function (err) {
     // Fetch the requested data
-    var request = new sql.Request(connection);
-    request.query(query).then(function(recordset) {
-      var err = null;
-      // Convert the result into an array of single values
-      var inList = [];
-      for (var i = 0; i < recordset.length; i++) {
-        inList.push(exports.purger(param.column, recordset[i][param.column]));
-      }
-      // If the result is empty, default to '' otherwise join the values
-      inList = inList.length ? inList.join() : '\'\'';
-      // Convert the array to a string query
-      param.string = param.column + ' ' + param.statement + ' (' + inList + ')';
-      // Return
-      callback(err, param);
-      connection.close();
-    }).catch(function(err) {
-      callback(err, null);
-      connection.close();
-    });
-  });
-};
+    var request = new sql.Request(connection)
+    request
+      .query(query)
+      .then(function (recordset) {
+        var err = null
+        // Convert the result into an array of single values
+        var inList = []
+        for (var i = 0; i < recordset.length; i++) {
+          inList.push(exports.purger(param.column, recordset[i][param.column]))
+        }
+        // If the result is empty, default to '' otherwise join the values
+        inList = inList.length ? inList.join() : "''"
+        // Convert the array to a string query
+        param.string = param.column + ' ' + param.statement + ' (' + inList + ')'
+        // Return
+        callback(err, param)
+        connection.close()
+      })
+      .catch(function (err) {
+        callback(err, null)
+        connection.close()
+      })
+  })
+}
 
-exports.ListMetadata = function(req) {
-  var metadata = {};
-  metadata.responseTime = new Date().getTime();
-  metadata.totalCount = false;
-  metadata.from = false;
-  metadata.to = false;
-  metadata.currentPage = req.query.page ? parseInt(req.query.page) : 1;
-  metadata.previousPage = false;
-  metadata.nextPage = false;
-  metadata.lastPage = false;
-  metadata.perPage = (req.query.perPage <= 10000) ? parseInt(req.query.perPage) : 25;
-  metadata.links = {};
-  metadata.params = req.query;
-  return metadata;
-};
+exports.ListMetadata = function (req) {
+  var metadata = {}
+  metadata.responseTime = new Date().getTime()
+  metadata.totalCount = false
+  metadata.from = false
+  metadata.to = false
+  metadata.currentPage = req.query.page ? parseInt(req.query.page) : 1
+  metadata.previousPage = false
+  metadata.nextPage = false
+  metadata.lastPage = false
+  metadata.perPage = req.query.perPage <= 10000 ? parseInt(req.query.perPage) : 25
+  metadata.links = {}
+  metadata.params = req.query
+  return metadata
+}
 
-exports.ListMetadata.buildPager = function(metadata, req, results) {
-  var baseUrl = req.protocol + '://' + req.get('host');
+exports.ListMetadata.buildPager = function (metadata, req, results) {
+  var baseUrl = req.protocol + '://' + req.get('host')
 
   if (!req.query.page) {
-    req.query.page = 1;
-    req.url = (req.query.filter || req.query.perPage || req.query.orderBy || req.query.subFilter || req.query.fields) ? req.url + '&page=1' : req.url + '?page=1';
+    req.query.page = 1
+    req.url =
+      req.query.filter ||
+      req.query.perPage ||
+      req.query.orderBy ||
+      req.query.subFilter ||
+      req.query.fields
+        ? req.url + '&page=1'
+        : req.url + '?page=1'
   }
 
   var paginator = pagination.create('search', {
-    prelink:'/',
+    prelink: '/',
     current: req.query.page,
     rowsPerPage: metadata.perPage,
     totalResult: metadata.totalCount
-  });
+  })
 
-  pageData = paginator.getPaginationData();
+  pageData = paginator.getPaginationData()
 
-  metadata.from = pageData.fromResult;
-  metadata.to = pageData.toResult;
-  metadata.previousPage = pageData.previous;
-  metadata.nextPage = pageData.next;
-  metadata.lastPage = pageData.pageCount;
+  metadata.from = pageData.fromResult
+  metadata.to = pageData.toResult
+  metadata.previousPage = pageData.previous
+  metadata.nextPage = pageData.next
+  metadata.lastPage = pageData.pageCount
 
   metadata.links = {
-    self: pageData.current ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.current) : false,
-    first: pageData.first ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.first) : baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + 1),
-    previous: pageData.previous ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.previous) : false,
-    next: pageData.next ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.next) : false,
-    last: pageData.pageCount ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.pageCount) : false,
-  };
+    self: pageData.current
+      ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.current)
+      : false,
+    first: pageData.first
+      ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.first)
+      : baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + 1),
+    previous: pageData.previous
+      ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.previous)
+      : false,
+    next: pageData.next
+      ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.next)
+      : false,
+    last: pageData.pageCount
+      ? baseUrl + req.url.replace(/\page=[0-9]+/, 'page=' + pageData.pageCount)
+      : false
+  }
 
-  return metadata;
-};
+  return metadata
+}
 
-exports.SingleMetadata = function() {
-  var metadata = {};
-  metadata.responseTime = new Date().getTime();
-  return metadata;
-};
+exports.SingleMetadata = function () {
+  var metadata = {}
+  metadata.responseTime = new Date().getTime()
+  return metadata
+}
 
 /**
  * Produces a valid SQL select column string.
@@ -250,25 +279,36 @@ exports.SingleMetadata = function() {
  * @param  {string}   string - A Kalabalik URL field string (pipe delimited)
  * @return {string}   - A valid SQL select column string.
  */
-exports.fieldStringToSQL = function(fields) {
-  var sqlString = fields.split('|');
-  return sqlString;
-};
+exports.fieldStringToSQL = function (fields) {
+  var sqlString = fields.split('|')
+  return sqlString
+}
 
-exports.PaginatedQuery = function(options) {
-  options.filter = options.filter ? options.filter : '';
-  options.fields = options.fields ? exports.fieldStringToSQL(options.fields) : '*';
-  var query = 'SELECT ' + options.fields + ' ' +
-              'FROM (' +
-                'SELECT ROW_NUMBER() OVER (ORDER BY ' + options.orderBy + ' ' + options.orderDirection +') AS RowNum, *' +
-                'FROM ' + options.table + ' ' +
-                options.filter +
-                ') AS RowConstrainedResult' +
-              ' WHERE RowNum >' + options.meta.perPage * (options.meta.currentPage - 1) +
-                ' AND RowNum <= ' + options.meta.perPage * options.meta.currentPage +
-              ' ORDER BY RowNum';
-  return query;
-};
+exports.PaginatedQuery = function (options) {
+  options.filter = options.filter ? options.filter : ''
+  options.fields = options.fields ? exports.fieldStringToSQL(options.fields) : '*'
+  var query =
+    'SELECT ' +
+    options.fields +
+    ' ' +
+    'FROM (' +
+    'SELECT ROW_NUMBER() OVER (ORDER BY ' +
+    options.orderBy +
+    ' ' +
+    options.orderDirection +
+    ') AS RowNum, *' +
+    'FROM ' +
+    options.table +
+    ' ' +
+    options.filter +
+    ') AS RowConstrainedResult' +
+    ' WHERE RowNum >' +
+    options.meta.perPage * (options.meta.currentPage - 1) +
+    ' AND RowNum <= ' +
+    options.meta.perPage * options.meta.currentPage +
+    ' ORDER BY RowNum'
+  return query
+}
 
 /**
  * Callback for createIndex.
@@ -293,20 +333,19 @@ exports.PaginatedQuery = function(options) {
  * @param  {object}   options.request - An Express req object.
  * @param  {createIndexCallback} callback
  */
-exports.createIndex = function(options, callback) {
-
+exports.createIndex = function (options, callback) {
   // Default to DESC ordering
-  options.orderDirection = options.orderDirection ? options.orderDirection : 'DESC';
+  options.orderDirection = options.orderDirection ? options.orderDirection : 'DESC'
 
-  var index = {};
-  var filter = options.request.query.filter ? exports.filter(options.request.query.filter) : {};
-  var subFilter = options.request.query.subFilter ? options.request.query.subFilter : '';
+  var index = {}
+  var filter = options.request.query.filter ? exports.filter(options.request.query.filter) : {}
+  var subFilter = options.request.query.subFilter ? options.request.query.subFilter : ''
 
-  var meta = exports.ListMetadata(options.request);
+  var meta = exports.ListMetadata(options.request)
 
   // Add filter parameters to the response metadata
-  if (filter) meta.params.filter = filter.params;
-  if (subFilter) meta.params.subFilter = subFilter.split('|');
+  if (filter) meta.params.filter = filter.params
+  if (subFilter) meta.params.subFilter = subFilter.split('|')
 
   // Log the request
   exports.log({
@@ -316,29 +355,32 @@ exports.createIndex = function(options, callback) {
       ip: options.request.ip,
       query: options.request.query
     }
-  });
+  })
 
   // Performs a count request in order to get the total
   // amount of results.
-  var countQuery = function() {
-    exports.countQuery({
+  var countQuery = function () {
+    exports.countQuery(
+      {
         db: options.db,
         table: options.table,
-        where: filter.string,
-      }, function(err, recordset) {
+        where: filter.string
+      },
+      function (err, recordset) {
         if (!err) {
           // Add the results to the metadata.
-          meta.totalCount = recordset[0][''];
+          meta.totalCount = recordset[0]['']
           // Continue
-          paginatedReq();
+          paginatedReq()
         } else {
-          callback(err, index);
+          callback(err, index)
         }
-      });
-  };
+      }
+    )
+  }
 
   // Creates a paginated query string
-  var query = function() {
+  var query = function () {
     return exports.PaginatedQuery({
       table: options.table,
       orderBy: options.orderBy,
@@ -346,51 +388,55 @@ exports.createIndex = function(options, callback) {
       fields: options.fields,
       filter: filter.string,
       meta: meta
-    });
-  };
+    })
+  }
 
   // Performs a paginated request
-  var paginatedReq = function() {
-    exports.indexRequest({
-      db: options.db,
-      query: query()
-    }, function(err, recordset) {
-      if (!err) {
-        httpBody(recordset);
-      } else {
-        callback(err, index);
+  var paginatedReq = function () {
+    exports.indexRequest(
+      {
+        db: options.db,
+        query: query()
+      },
+      function (err, recordset) {
+        if (!err) {
+          httpBody(recordset)
+        } else {
+          callback(err, index)
+        }
       }
-    });
-  };
+    )
+  }
 
   // Combines everything in one index object and return it
-  var httpBody = function(data) {
+  var httpBody = function (data) {
     // Add metadata
-    index._metadata = exports.ListMetadata.buildPager(meta, options.request, data);
-    index._metadata.responseTime = new Date().getTime() - index._metadata.responseTime + ' ms';
+    index._metadata = exports.ListMetadata.buildPager(meta, options.request, data)
+    index._metadata.responseTime = new Date().getTime() - index._metadata.responseTime + ' ms'
     // Add the data to the index.
-    index.response = data;
-    var err = null;
-    callback(err, index);
-  };
+    index.response = data
+    var err = null
+    callback(err, index)
+  }
 
   // Initialize sequence
   if (subFilter) {
-    exports.subFilter(subFilter, function(error, list) {
+    exports.subFilter(subFilter, function (error, list) {
       if (!error) {
         // Add the subfilter to the existing filter string. Create it from
         // scratch if there is no other filter.
-        filter.string = filter.string ? filter.string + ' AND ' + list.string : 'WHERE ' + list.string;
-        countQuery();
+        filter.string = filter.string
+          ? filter.string + ' AND ' + list.string
+          : 'WHERE ' + list.string
+        countQuery()
       } else {
-        countQuery();
+        countQuery()
       }
-    });
+    })
   } else {
-    countQuery();
+    countQuery()
   }
-
-};
+}
 
 /**
  * Callback for indexRequest.
@@ -408,33 +454,35 @@ exports.createIndex = function(options, callback) {
  * @param  {String}   options.query - The complete paginated db query.
  * @param  {indexRequestCallback} callback
  */
-exports.indexRequest = function(options, callback) {
-
-  var cred = exports.credentials(options.db);
+exports.indexRequest = function (options, callback) {
+  var cred = exports.credentials(options.db)
 
   // Connect to the database
-  var connection = new sql.Connection(cred, function(err) {
+  var connection = new sql.Connection(cred, function (err) {
     // Fetch the requested data
-    var request = new sql.Request(connection);
-    request.query(options.query).then(function(recordset) {
-      var err = null;
-      // Send to the client
-      callback(err, recordset);
-      connection.close();
-    }).catch(function(err) {
-      // Log the error
-      exports.log({
-        level: 'error',
-        msg: 'Error when requesting data: ' + err,
-        meta: {
-          query: options.query
-        }
-      });
-      callback(err, recordset);
-      connection.close();
-    });
-  });
-};
+    var request = new sql.Request(connection)
+    request
+      .query(options.query)
+      .then(function (recordset) {
+        var err = null
+        // Send to the client
+        callback(err, recordset)
+        connection.close()
+      })
+      .catch(function (err) {
+        // Log the error
+        exports.log({
+          level: 'error',
+          msg: 'Error when requesting data: ' + err,
+          meta: {
+            query: options.query
+          }
+        })
+        callback(err, recordset)
+        connection.close()
+      })
+  })
+}
 
 /**
  * Callback for countQuery.
@@ -453,36 +501,38 @@ exports.indexRequest = function(options, callback) {
  * @param  {String}   [options.filter] - A possible 'WHERE' clause.
  * @param  {countCallback} callback
  */
-exports.countQuery = function(options, callback) {
-
-  var query = 'SELECT COUNT(*) FROM ' + options.table;
+exports.countQuery = function (options, callback) {
+  var query = 'SELECT COUNT(*) FROM ' + options.table
   // Add the 'WHERE' clause to the query if it's there.
-  query = options.where ? query + ' ' + options.where : query;
-  var cred = exports.credentials(options.db);
+  query = options.where ? query + ' ' + options.where : query
+  var cred = exports.credentials(options.db)
 
   // Connect to the database
-  var connection = new sql.Connection(cred, function(err) {
+  var connection = new sql.Connection(cred, function (err) {
     // Perform a total row count in order to create a paginated result.
-    var countRequest = new sql.Request(connection);
-    countRequest.query(query).then(function(recordset) {
-      callback(err, recordset);
-      connection.close();
-    }).catch(function(err) {
-      // Log the error
-      exports.log({
-        level: 'error',
-        msg: 'Error when counting: ' + err,
-        meta: {
-          error: err,
-          query: query
-        }
-      });
-      recordset = null;
-      callback(err, recordset);
-      connection.close();
-    });
-  });
-};
+    var countRequest = new sql.Request(connection)
+    countRequest
+      .query(query)
+      .then(function (recordset) {
+        callback(err, recordset)
+        connection.close()
+      })
+      .catch(function (err) {
+        // Log the error
+        exports.log({
+          level: 'error',
+          msg: 'Error when counting: ' + err,
+          meta: {
+            error: err,
+            query: query
+          }
+        })
+        recordset = null
+        callback(err, recordset)
+        connection.close()
+      })
+  })
+}
 
 /**
  * Callback for entityQuery.
@@ -519,17 +569,16 @@ exports.countQuery = function(options, callback) {
  * entity before it is returned in the callback.
  * @param  {entityQueryCallback} callback
  */
-exports.entityQuery = function(options, callback) {
-
-  var response = {};
-  var meta = {};
-  response._metadata = exports.SingleMetadata();
+exports.entityQuery = function (options, callback) {
+  var response = {}
+  var meta = {}
+  response._metadata = exports.SingleMetadata()
 
   if (options.request) {
     meta = {
       ip: options.request.ip ? options.request.ip : '',
       query: options.request.query ? options.request.query : ''
-    };
+    }
   }
 
   // Log the request
@@ -537,69 +586,78 @@ exports.entityQuery = function(options, callback) {
     level: 'info',
     msg: 'Request for single ' + options.entity,
     meta: meta ? meta : ''
-  });
+  })
 
-  options.multiple = (options.multiple === true) ? true : false;
+  options.multiple = options.multiple === true ? true : false
 
-  var cred = exports.credentials(options.db);
-  var id = exports.purger(options.baseProperty, options.id);
+  var cred = exports.credentials(options.db)
+  var id = exports.purger(options.baseProperty, options.id)
 
   // Manage which fields to fetch on the main entity
-  options.fields = options.fields ? options.fields : [];
-  options.fields.push(options.baseProperty);
-  var fields = options.fields.length > 1 ? options.fields.join() : '*';
+  options.fields = options.fields ? options.fields : []
+  options.fields.push(options.baseProperty)
+  var fields = options.fields.length > 1 ? options.fields.join() : '*'
 
-  var query = 'SELECT ' + fields + ' FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id;
+  var query =
+    'SELECT ' + fields + ' FROM ' + options.table + ' WHERE ' + options.baseProperty + '=' + id
 
   // Add secondary query param
-  query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
+  query =
+    options.secondaryProperty && options.secondaryValue
+      ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue
+      : query
 
   // Connect to the database
-  var connection = new sql.Connection(cred, function(err) {
-    var request = new sql.Request(connection);
-    request.query(query).then(function(recordset) {
-      // Fetch additonal data if requested.
-      if (options.attach && recordset.length > 0) {
-        exports.attach(recordset[0], options.attach, function(entity){
-          response.response = entity;
-          response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-          callback(err, response);
-        });
-      }
-      // Return multiple entities as array
-      else if (recordset.length > 1 || options.multiple) {
-        response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-        response.response = recordset;
-        callback(err, response);
-      }
-      // Single entity
-      else if (recordset.length === 1) {
-        response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-        response.response = recordset[0];
-        callback(err, response);
-      }
-      // No results
-      else {
-        callback(err);
-      }
-      connection.close();
-    }).catch(function(err) {
-      // Log the error
-      exports.log({
-        level: 'error',
-        msg: 'Error when fetching single entity: ' + err,
-        meta: {
-          error: err,
-          query: query
+  var connection = new sql.Connection(cred, function (err) {
+    var request = new sql.Request(connection)
+    request
+      .query(query)
+      .then(function (recordset) {
+        // Fetch additonal data if requested.
+        if (options.attach && recordset.length > 0) {
+          exports.attach(recordset[0], options.attach, function (entity) {
+            response.response = entity
+            response._metadata.responseTime =
+              new Date().getTime() - response._metadata.responseTime + ' ms'
+            callback(err, response)
+          })
         }
-      });
-      recordset = null;
-      callback(err, recordset);
-      connection.close();
-    });
-  });
-
-};
+        // Return multiple entities as array
+        else if (recordset.length > 1 || options.multiple) {
+          response._metadata.responseTime =
+            new Date().getTime() - response._metadata.responseTime + ' ms'
+          response.response = recordset
+          callback(err, response)
+        }
+        // Single entity
+        else if (recordset.length === 1) {
+          response._metadata.responseTime =
+            new Date().getTime() - response._metadata.responseTime + ' ms'
+          response.response = recordset[0]
+          callback(err, response)
+        }
+        // No results
+        else {
+          callback(err)
+        }
+        connection.close()
+      })
+      .catch(function (err) {
+        // Log the error
+        exports.log({
+          level: 'error',
+          msg: 'Error when fetching single entity: ' + err,
+          meta: {
+            error: err,
+            query: query
+          }
+        })
+        recordset = null
+        callback(err, recordset)
+        connection.close()
+      })
+  })
+}
 
 /**
  * Callback for attach.
@@ -626,71 +684,75 @@ exports.entityQuery = function(options, callback) {
  * a single entity and want to avoid useless arrays. Defaults to true.
  * @param  {attachCallback} callback
  */
-exports.attach = function(entity, objects, callback) {
+exports.attach = function (entity, objects, callback) {
+  var countdown = objects.length
 
-  var countdown = objects.length;
-
-  var request = function(options, cb) {
-    var cred = exports.credentials(options.database);
+  var request = function (options, cb) {
+    var cred = exports.credentials(options.database)
 
     // Connect to the database
-    var connection = new sql.Connection(cred, function(err) {
-
-      var attachRequest = new sql.Request(connection);
-      attachRequest.query(options.query).then(function(recordset) {
-        cb(recordset, options);
-        connection.close();
-      }).catch(function(err) {
-        // Failure
-        exports.log({
-          level: 'error',
-          msg: 'Error when attaching: ' + err,
-          meta: {
-            error: err,
-            query: options.query
-          }
-        });
-        connection.close();
-      });
-
-    });
-  };
+    var connection = new sql.Connection(cred, function (err) {
+      var attachRequest = new sql.Request(connection)
+      attachRequest
+        .query(options.query)
+        .then(function (recordset) {
+          cb(recordset, options)
+          connection.close()
+        })
+        .catch(function (err) {
+          // Failure
+          exports.log({
+            level: 'error',
+            msg: 'Error when attaching: ' + err,
+            meta: {
+              error: err,
+              query: options.query
+            }
+          })
+          connection.close()
+        })
+    })
+  }
 
   // Loop through all of the requested extra data and query the database,
   // then add the content to the entity and return it via callback.
   for (var i = 0; i < objects.length; i++) {
     // Default to TRUE for multiple
-    objects[i].multiple = objects[i].multiple === undefined ? true : objects[i].multiple;
+    objects[i].multiple = objects[i].multiple === undefined ? true : objects[i].multiple
     // Use value instead of base property if supplied
-    var key = objects[i].value ? objects[i].value : objects[i].baseProperty;
+    var key = objects[i].value ? objects[i].value : objects[i].baseProperty
     // Purge the entity ID
-    var id = exports.purger(objects[i].baseProperty, entity[key]);
+    var id = exports.purger(objects[i].baseProperty, entity[key])
     // Create the query string
-    var query = 'SELECT * FROM ' + objects[i].table + ' WHERE ' + objects[i].baseProperty + ' = ' + id;
+    var query =
+      'SELECT * FROM ' + objects[i].table + ' WHERE ' + objects[i].baseProperty + ' = ' + id
     // Perform asynchronous DB requests to fetch the data
-    request({
-      query: query,
-      attachTo: objects[i].attachTo,
-      database: objects[i].db,
-      multiple: objects[i].multiple
-    }, attach);
+    request(
+      {
+        query: query,
+        attachTo: objects[i].attachTo,
+        database: objects[i].db,
+        multiple: objects[i].multiple
+      },
+      attach
+    )
   }
 
   function attach(data, options) {
     // Attach as array if multiple is true, otherwise as an object.
     if (options.multiple) {
-      entity[options.attachTo] = data;
+      entity[options.attachTo] = data
     } else {
-      entity[options.attachTo] = data[0];
+      entity[options.attachTo] = data[0]
     }
-    countdown--;
+    countdown--
     // Make sure that all reqests have been performed.
     if (countdown === 0) {
       // Return the entity in a callback
-      callback(entity);
+      callback(entity)
     }
   }
-};
+}
 
 /**
  * Callback for updateEntity.
@@ -723,112 +785,123 @@ exports.attach = function(entity, objects, callback) {
  * @param  {object}   options.data - An object containing the new data to save.
  * @param  {updateEntityCallback} callback
  */
-exports.updateEntity = function(options, callback) {
-
-  var response = {};
-  var amount = Object.keys(options.data).length;
+exports.updateEntity = function (options, callback) {
+  var response = {}
+  var amount = Object.keys(options.data).length
 
   // Bail if there are no updates to be made.
   if (!amount) {
-    response.message = 'You haven\'t supplied any data';
-    response.status = 400;
-    return callback(response);
+    response.message = "You haven't supplied any data"
+    response.status = 400
+    return callback(response)
   }
 
-  var properties = function() {
-    array = [];
+  var properties = function () {
+    array = []
     for (var key in options.data) {
-      array.push(key);
+      array.push(key)
     }
-    return array;
-  };
+    return array
+  }
 
-  var compareExisting = function(entity, cb) {
-    var equal = true;
-    var err = 'The properties are identical to the existing entity data. No update has been performed.';
+  var compareExisting = function (entity, cb) {
+    var equal = true
+    var err =
+      'The properties are identical to the existing entity data. No update has been performed.'
     for (var key in options.data) {
       // Check if the values are dates, since they might not be identically
       // formatted if they are. If so, convert them before comparing values.
       if (!isNaN(Date.parse(entity[key]))) {
         if (Date.parse(options.data[key]) !== Date.parse(entity[key])) {
-          equal = false;
-          return cb(null);
+          equal = false
+          return cb(null)
         }
       }
       // Treat all other types of values the same, i.e as strings.
       else {
         if (options.data[key] !== entity[key]) {
-          equal = false;
-          return cb(null);
+          equal = false
+          return cb(null)
         }
       }
     }
-    return cb(err);
-  };
+    return cb(err)
+  }
 
   // Retrieve the existing entity in order to compare the existing data with the
   // new data. If there are no changes to be made, we'll abort the procedure.
-  exports.entityQuery({
-    entity: options.entity,
-    db: options.db,
-    table: options.table,
-    baseProperty: options.baseProperty,
-    id: options.id,
-    secondaryProperty: options.secondaryProperty,
-    secondaryValue: options.secondaryValue,
-    fields: properties()
-  }, function(err, entity){
-    if (!err && entity) {
-      compareExisting(entity.response, function(error) {
-        // Bail
-        if (error) {
-          response.status = 202;
-          response.message = error;
-          exports.log({
-            level: 'info',
-            msg: response.message
-          });
-          callback(response);
-        }
-        // Continue
-        else {
-          buildQuery(entity);
-        }
-      });
+  exports.entityQuery(
+    {
+      entity: options.entity,
+      db: options.db,
+      table: options.table,
+      baseProperty: options.baseProperty,
+      id: options.id,
+      secondaryProperty: options.secondaryProperty,
+      secondaryValue: options.secondaryValue,
+      fields: properties()
+    },
+    function (err, entity) {
+      if (!err && entity) {
+        compareExisting(entity.response, function (error) {
+          // Bail
+          if (error) {
+            response.status = 202
+            response.message = error
+            exports.log({
+              level: 'info',
+              msg: response.message
+            })
+            callback(response)
+          }
+          // Continue
+          else {
+            buildQuery(entity)
+          }
+        })
+      } else {
+        callback(err, null)
+      }
     }
-    else {
-      callback(err, null);
-    }
-  });
-
+  )
 
   // Builds a SET query string based on the data
-  var buildQuery = function() {
-
+  var buildQuery = function () {
     // Purge the ID
-    options.id = exports.purger(options.baseProperty, options.id);
+    options.id = exports.purger(options.baseProperty, options.id)
 
-    var set = 'SET ';
-    var index = 0;
+    var set = 'SET '
+    var index = 0
 
     for (var key in options.data) {
       if (options.data.hasOwnProperty(key)) {
-        index++;
-        var value = (typeof options.data[key] == 'string') ? '\'' + options.data[key] + '\'' : options.data[key];
-        set = set + key + " = " + value;
+        index++
+        var value =
+          typeof options.data[key] == 'string' ? "'" + options.data[key] + "'" : options.data[key]
+        set = set + key + ' = ' + value
         if (amount > 1 && index < amount) {
-          set = set + ', ';
+          set = set + ', '
         }
       }
     }
 
-    var query = 'UPDATE ' + options.table + ' ' +
-                set + ' ' +
-                ", Ändrad = Ändrad + 1 " + // Update the Ändrad value in order to prevent clashes with other updates.
-                'WHERE ' + options.baseProperty + ' = ' + options.id;
+    var query =
+      'UPDATE ' +
+      options.table +
+      ' ' +
+      set +
+      ' ' +
+      ', Ändrad = Ändrad + 1 ' + // Update the Ändrad value in order to prevent clashes with other updates.
+      'WHERE ' +
+      options.baseProperty +
+      ' = ' +
+      options.id
 
     // Add secondary query param if needed
-    query = (options.secondaryProperty && options.secondaryValue) ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue : query;
+    query =
+      options.secondaryProperty && options.secondaryValue
+        ? query + ' AND ' + options.secondaryProperty + '=' + options.secondaryValue
+        : query
 
     // If we're updating a sub-entity such as a line item, we need to update the
     // 'Ändrad' value of its parent as well to prevent the changes from being
@@ -836,54 +909,61 @@ exports.updateEntity = function(options, callback) {
     // Kalabalik is editing the same entity, this keeps the last edit from being
     // permitted as it would have erased the initial change.
     if (options.parent) {
-      var parentQuery = 'UPDATE ' + options.parent.table + ' ' +
-                        'SET Ändrad = Ändrad + 1 ' +
-                        'WHERE ' + options.parent.baseProperty + ' = ' + options.parent.id;
-      query = exports.transaction(query, parentQuery);
+      var parentQuery =
+        'UPDATE ' +
+        options.parent.table +
+        ' ' +
+        'SET Ändrad = Ändrad + 1 ' +
+        'WHERE ' +
+        options.parent.baseProperty +
+        ' = ' +
+        options.parent.id
+      query = exports.transaction(query, parentQuery)
     }
 
-    update(query);
-  };
+    update(query)
+  }
 
-  var update = function(query) {
-    var cred = exports.credentials(options.db);
+  var update = function (query) {
+    var cred = exports.credentials(options.db)
     // Perform the update
-    var connection = new sql.Connection(cred, function(err) {
-      var request = new sql.Request(connection);
-      request.query(query).then(function(recordset) {
-        // Success
-        response.status = 200;
-        response.message = 'Updated ' + options.entity + ' ' + options.id;
-        response.response = recordset;
-        exports.log({
-          level: 'notice',
-          msg: response.message,
-          meta: {
-            query: query
-          }
-        });
-        callback(response);
-        connection.close();
-      }).catch(function(err) {
-        // Fail
-        response.status = 400;
-        response.message = 'Error when updating ' + options.entity + ' ' + options.id;
-        response.error = err;
-        exports.log({
-          level: 'error',
-          msg: response.message,
-          meta: {
-            query: query
-          }
-        });
-        callback(response);
-        connection.close();
-      });
-    });
-
-  };
-
-};
+    var connection = new sql.Connection(cred, function (err) {
+      var request = new sql.Request(connection)
+      request
+        .query(query)
+        .then(function (recordset) {
+          // Success
+          response.status = 200
+          response.message = 'Updated ' + options.entity + ' ' + options.id
+          response.response = recordset
+          exports.log({
+            level: 'notice',
+            msg: response.message,
+            meta: {
+              query: query
+            }
+          })
+          callback(response)
+          connection.close()
+        })
+        .catch(function (err) {
+          // Fail
+          response.status = 400
+          response.message = 'Error when updating ' + options.entity + ' ' + options.id
+          response.error = err
+          exports.log({
+            level: 'error',
+            msg: response.message,
+            meta: {
+              query: query
+            }
+          })
+          callback(response)
+          connection.close()
+        })
+    })
+  }
+}
 
 /**
  * Validates various entity IDs. Some system IDs in FDT are integers while some
@@ -894,8 +974,8 @@ exports.updateEntity = function(options, callback) {
  * @param  {string/int} value - The value to be purged.
  * @return {string/int} The value as string or integer
  */
-exports.purger = function(property, value) {
-  switch(property) {
+exports.purger = function (property, value) {
+  switch (property) {
     case 'KundNr':
     case 'Kundnr':
     case 'Kundordernr':
@@ -903,23 +983,23 @@ exports.purger = function(property, value) {
     case 'Artikelnr':
     case 'LevNr':
     case 'Levnr':
-      return '\'' + value + '\'';
+      return "'" + value + "'"
     default:
-      return value;
+      return value
   }
-};
+}
 
 /**
  * Helper for a common need: To get the database credentials from the config
  * file by using the name of the database.
  */
-exports.credentials = function(dbName) {
+exports.credentials = function (dbName) {
   // Copy the db credentials object
-  var options = JSON.parse(JSON.stringify(config.mssql));
+  var options = JSON.parse(JSON.stringify(config.mssql))
   // Add the database name
-  options.database = options.databases[dbName];
-  return options;
-};
+  options.database = options.databases[dbName]
+  return options
+}
 
 /**
  * Helper that wraps two SQL queries into a single transaction.
@@ -930,13 +1010,10 @@ exports.credentials = function(dbName) {
  * @param  {string} queryTwo - The second query string
  * @return {string} The complete transaction string.
  */
-exports.transaction = function(queryOne, queryTwo) {
-  var transaction = 'BEGIN TRANSACTION ' +
-                    queryOne + ' ' +
-                    queryTwo + ' ' +
-                    'COMMIT';
-  return transaction;
-};
+exports.transaction = function (queryOne, queryTwo) {
+  var transaction = 'BEGIN TRANSACTION ' + queryOne + ' ' + queryTwo + ' ' + 'COMMIT'
+  return transaction
+}
 
 /**
  * Callback for authenticate.
@@ -955,57 +1032,59 @@ exports.transaction = function(queryOne, queryTwo) {
  * @param  {string}   password
  * @param  {authenticateCallback} callback
  */
-exports.authenticate = function(username, password, callback) {
-  var query = 'SELECT * FROM Använd WHERE Användare = \'' + username + '\'';
-  var cred = exports.credentials('license');
+exports.authenticate = function (username, password, callback) {
+  var query = "SELECT * FROM Använd WHERE Användare = '" + username + "'"
+  var cred = exports.credentials('license')
 
   if (!username) {
-    return callback('No username supplied', null);
+    return callback('No username supplied', null)
   }
 
   if (!password) {
-    return callback('No password supplied', null);
+    return callback('No password supplied', null)
   }
 
-  password = password.toUpperCase(); // FDT Stores all passwords in uppercase
+  password = password.toUpperCase() // FDT Stores all passwords in uppercase
 
   // Connect to the database to get the user
-  var connection = new sql.Connection(cred, function(err) {
-    var userRequest = new sql.Request(connection);
-    userRequest.query(query).then(function(recordset) {
-      // Bail if there is no match
-      if (!recordset.length) {
-        callback('Could not find user ' + username, null);
-      }
-      // Match found
-      else {
-        var user = recordset[0];
-        // Wrong password
-        if (user['Lösenord'] != password) {
-          callback('Wrong password', null);
+  var connection = new sql.Connection(cred, function (err) {
+    var userRequest = new sql.Request(connection)
+    userRequest
+      .query(query)
+      .then(function (recordset) {
+        // Bail if there is no match
+        if (!recordset.length) {
+          callback('Could not find user ' + username, null)
         }
-        // Success
+        // Match found
         else {
-          callback(null, user);
+          var user = recordset[0]
+          // Wrong password
+          if (user['Lösenord'] != password) {
+            callback('Wrong password', null)
+          }
+          // Success
+          else {
+            callback(null, user)
+          }
         }
-      }
-      connection.close();
-    }).catch(function(err) {
-      // Log the error
-      exports.log({
-        level: 'error',
-        msg: 'Error when authenticating: ' + err,
-        meta: {
-          error: err,
-          query: query
-        }
-      });
-      callback(err, null);
-      connection.close();
-    });
-  });
-
-};
+        connection.close()
+      })
+      .catch(function (err) {
+        // Log the error
+        exports.log({
+          level: 'error',
+          msg: 'Error when authenticating: ' + err,
+          meta: {
+            error: err,
+            query: query
+          }
+        })
+        callback(err, null)
+        connection.close()
+      })
+  })
+}
 
 /**
  * Callback for query.
@@ -1025,30 +1104,33 @@ exports.authenticate = function(username, password, callback) {
  * rows (i.e. an array), this settings should be set to true.
  * @param  {queryCallback} callback
  */
-exports.query = function(options, callback) {
+exports.query = function (options, callback) {
+  var response = {}
+  var meta = {}
+  response._metadata = exports.SingleMetadata()
 
-  var response = {};
-  var meta = {};
-  response._metadata = exports.SingleMetadata();
-
-  options.multiple = (options.multiple === true) ? true : false;
+  options.multiple = options.multiple === true ? true : false
 
   // Connect to the database
-  var connection = new sql.Connection(exports.credentials(options.db), function(err) {
+  var connection = new sql.Connection(exports.credentials(options.db), function (err) {
     // Perform the query
-    var request = new sql.Request(connection);
-    request.query(options.query).then(function(recordset) {
-      var err = null;
-      if (!options.multiple) {
-        recordset = recordset[0];
-      }
-      response.response = recordset;
-      response._metadata.responseTime = new Date().getTime() - response._metadata.responseTime + ' ms';
-      callback(err, response);
-      connection.close();
-    }).catch(function(err) {
-      callback(err, null);
-      connection.close();
-    });
-  });
-};
+    var request = new sql.Request(connection)
+    request
+      .query(options.query)
+      .then(function (recordset) {
+        var err = null
+        if (!options.multiple) {
+          recordset = recordset[0]
+        }
+        response.response = recordset
+        response._metadata.responseTime =
+          new Date().getTime() - response._metadata.responseTime + ' ms'
+        callback(err, response)
+        connection.close()
+      })
+      .catch(function (err) {
+        callback(err, null)
+        connection.close()
+      })
+  })
+}
