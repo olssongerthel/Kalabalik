@@ -3,7 +3,8 @@
   "version": "0.6.0",
   "private": "true",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "format": "prettier '{routes,reports,config,utils}/**/*.js' server.js --write"
   },
   "engines": {
     "node": ">= 10.3.0"
@@ -17,5 +18,8 @@
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
     "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "prettier": "2.3.2"
   }
 }
