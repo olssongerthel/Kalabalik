@@ -955,7 +955,8 @@ exports.updateEntity = function (options, callback) {
             level: 'error',
             msg: response.message,
             meta: {
-              query: query
+              query: query,
+              error: err
             }
           })
           callback(response)
