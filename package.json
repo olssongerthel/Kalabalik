@@ -17,7 +17,8 @@
     "pagination": "^0.4.3",
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "winston-sentry": "^0.2.1"
   },
   "devDependencies": {
     "prettier": "2.3.2"
